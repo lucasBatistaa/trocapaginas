@@ -1,4 +1,5 @@
 import Slogan from './src/pages/Slogan'
+import Login from './src/pages/Login'
 import { useFonts, EBGaramond_400Regular, EBGaramond_700Bold } from '@expo-google-fonts/eb-garamond'
 // import * as SplashScreen from 'expo-splash-screen'
 
@@ -21,6 +22,6 @@ export default function App() {
   }
 
   return (
-    <Slogan/>
+    <Login/>
   )
 }

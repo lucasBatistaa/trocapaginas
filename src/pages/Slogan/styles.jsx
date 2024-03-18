@@ -1,6 +1,6 @@
 import { StyleSheet, StatusBar } from "react-native"
 
-const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 60 : 64
+const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 
 export const styles = StyleSheet.create ({
     container: {
@@ -16,10 +16,11 @@ export const styles = StyleSheet.create ({
         fontSize: 20,
         textAlign: 'center',
         fontFamily: "EBGaramond_400Regular",
+        marginTop: 20,
     },
 
     viewButtons: {
-        marginTop: 70,
+        marginTop: 60,
         display: 'flex',
         gap: 12,
     },
