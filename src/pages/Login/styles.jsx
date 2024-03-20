@@ -1,4 +1,3 @@
-import { EBGaramond_700Bold, EBGaramond_400Regular } from "@expo-google-fonts/eb-garamond"
 import { StyleSheet, StatusBar } from "react-native"
 
 const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
@@ -16,4 +15,15 @@ export const styles = StyleSheet.create({
         fontSize: 24,
         marginBottom: 150,
     },
+
+    formInput: {
+        gap: 8,
+        marginBottom: 4,
+    },
+
+    resetPassword: {
+        // fontSize: 14,
+        fontFamily: 'EBGaramond_500Medium',
+        color: '#826059',
+    }, 
 })

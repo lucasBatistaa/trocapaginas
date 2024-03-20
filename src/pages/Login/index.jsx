@@ -24,36 +24,41 @@ export default function Login () {
         <View style={styles.container}>
             <Text style={styles.h1}>LOGIN</Text>
             
-            <Input 
-                label={"E-mail"}
-                placeholder={"Insira seu email"}
-                value={email}
-                onChangeText={setEmail}
-                
-            />
+            <View
+                    style={styles.formInput}
+                >
+                    <Input 
+                        label={"E-mail"}
+                        placeholder={"Insira seu email"}
+                        value={email}
+                        onChangeText={setEmail}
+                    />
 
-            <Input 
-                label={"Senha"}
-                placeholder={"Insira sua senha"}
-                value={password}
-                onChangeText={setPassword}
-                icon={'eye'}
-                secureTextEntry={true}
-            />
+                    <Input 
+                        label={"Senha"}
+                        placeholder={"Insira sua senha"}
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
+            </View>
 
-            <Text>Esqueci minha senha</Text>
+            <TouchableOpacity>
+                <Text style={styles.resetPassword}>Esqueci minha senha</Text>
+            </TouchableOpacity>
 
-            <Button 
-                style={styles.button}
-                onPress={handleSubmit}
-                title='ACESSAR'
-                color={'brownDark'}         
-            />
+            <View style={styles.main}>
+                <Button 
+                    style={styles.button}
+                    onPress={handleSubmit}
+                    title='ACESSAR'
+                    color={'brownDark'}         
+                />
 
-            <Text>
-                Não possui conta? Criar conta
-            </Text>
-
+                <Text>
+                    Não possui conta? Criar conta
+                </Text>
+            </View>
         </View>
     )
 }
