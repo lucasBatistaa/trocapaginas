@@ -1,2 +1,0 @@
-# 📚 Troca Páginas
-🚧`em construção`🚧
