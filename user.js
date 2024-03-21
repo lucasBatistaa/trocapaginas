@@ -45,3 +45,9 @@ let userPassword = '456';
 const userLogin = new User(null, null, userEmail, userPassword, null);
 
 userLogin.login();
+
+const crypto = require("crypto");
+
+//acessar banco de dados
+//coletar dados dos usuários cadastrados
+//salvar dados em um array
