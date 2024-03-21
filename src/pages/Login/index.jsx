@@ -3,7 +3,6 @@ import { Text, View, TextInput, TouchableOpacity } from "react-native";
 
 import Button from "../../components/Button";
 
-
 import { styles } from "./styles";
 import Input from "../../components/Input";
 
@@ -24,28 +23,28 @@ export default function Login () {
         <View style={styles.container}>
             <Text style={styles.h1}>LOGIN</Text>
             
-            <View
-                    style={styles.formInput}
-                >
-                    <Input 
-                        label={"E-mail"}
-                        placeholder={"Insira seu email"}
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+            <View style={styles.formInput}>
+                <Input 
+                    label={"E-mail"}
+                    placeholder={"Insira seu email"}
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType='email-address'
 
-                    <Input 
-                        label={"Senha"}
-                        placeholder={"Insira sua senha"}
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
-                    />
+                />
+
+                <Input 
+                    label={"Senha"}
+                    placeholder={"Insira sua senha"}
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+
+                <TouchableOpacity>
+                    <Text style={styles.resetPassword}>Esqueci minha senha</Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity>
-                <Text style={styles.resetPassword}>Esqueci minha senha</Text>
-            </TouchableOpacity>
 
             <View style={styles.main}>
                 <Button 
@@ -56,7 +55,7 @@ export default function Login () {
                 />
 
                 <Text>
-                    Não possui conta? Criar conta
+                    Não possui conta? <Text style={{color: '#826059'}}>Criar conta</Text>
                 </Text>
             </View>
         </View>
