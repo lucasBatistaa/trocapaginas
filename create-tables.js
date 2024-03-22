@@ -1,6 +1,6 @@
 import {sql} from './database.js'
 
-sql `
+/*sql `
 DROP TABLE IF EXISTS users`.then(() => {
     console.log('Tabela apagada')
 });
@@ -120,4 +120,14 @@ create table exchange (
 	foreign key(id_book) references books(id_book)
 );`.then(() => {
     console.log('tabela troca criada')
+})*/
+
+sql `
+insert into users (name, email, senha)
+values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
+	('Stephanie', 'stephanie.victoria@gmail.com', 'Stephanie$123'),
+	('Túlio', 'tulio.turuda@gmail.com', 'tuLio!123'),
+	('Lucas', 'lucas.batista@gmail.com', 'lucAs%123');`
+	.then(() => {
+		console.log('usuários inseridos');
 })
