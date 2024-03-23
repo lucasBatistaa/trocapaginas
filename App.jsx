@@ -1,28 +1,23 @@
-import Slogan from './src/pages/Slogan'
-import Login from './src/pages/Login'
-import { useFonts, EBGaramond_400Regular, EBGaramond_500Medium, EBGaramond_700Bold } from '@expo-google-fonts/eb-garamond'
-// import * as SplashScreen from 'expo-splash-screen'
-
-// SplashScreen.preventAutoHideAsync()
+import { useFonts } from 'expo-font'
+import { EBGaramond_400Regular, EBGaramond_600SemiBold, EBGaramond_500Medium, EBGaramond_700Bold } from '@expo-google-fonts/eb-garamond'
+import { NavigationContainer } from '@react-navigation/native'
+import StackRoutes from './routes/stack.routes'
 
 export default function App() {
   const [ fontsLoaded ] = useFonts({
     EBGaramond_400Regular, 
     EBGaramond_500Medium,
-    EBGaramond_700Bold
+    EBGaramond_600SemiBold,
+    EBGaramond_700Bold,
   })
-
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (fontsLoaded || fontError) {
-  //     await SplashScreen.hideAsync()
-  //   }
-  // }, [fontsLoaded, fontError])
 
   if (!fontsLoaded) {
     return null
   }
 
   return (
-    <Login/>
+    <NavigationContainer>
+      <StackRoutes />
+    </NavigationContainer>
   )
 }

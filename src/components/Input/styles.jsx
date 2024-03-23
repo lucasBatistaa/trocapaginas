@@ -20,6 +20,10 @@ export const styles = StyleSheet.create ({
         fontSize: 16,
     },
 
+    error: {
+        borderColor: '#CE1F1F',
+    },
+
     icon: {
         position: 'absolute',
         right: 16,

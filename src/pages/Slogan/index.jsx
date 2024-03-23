@@ -5,7 +5,7 @@ import Logo from '../../../assets/logo.svg'
 
 import { styles } from './styles'
 
-export default function Slogan () {
+export default function Slogan ({navigation}) {
     return (
         <View style={styles.container}>
             <Logo width={180} height ={180} />
@@ -15,8 +15,18 @@ export default function Slogan () {
             </Text>
 
             <View style={styles.viewButtons}>
-                <Button title={'REGISTRE-SE'} color={'brownDark'}/>
-                <Button title={'LOGIN'} color={'brownLight'}/>
+                <Button 
+                    title={'REGISTRE-SE'} 
+                    color={'brownDark'} 
+                    name={'Login'}
+                    onPress={() => navigation.navigate('Login')}
+                />
+                <Button 
+                    title={'LOGIN'} 
+                    color={'brownLight'}
+                    name={'Login'}
+                    onPress={() => navigation.navigate('Login')}
+                />
             </View>
 
         </View>

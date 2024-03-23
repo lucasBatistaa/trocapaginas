@@ -1,4 +1,5 @@
 import { StyleSheet, StatusBar } from "react-native"
+import { THEME } from "../../styles/Theme"
 
 const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 
@@ -12,27 +13,26 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
 
-    h1: {
-        fontFamily: 'EBGaramond_700Bold',
-        fontSize: 24,
-    },
-
     formInput: {
         gap: 8,
-        marginBottom: 4,
+        marginVertical: 12,
+    },
+
+    inputError: {
+        borderColor: THEME.colors.red,
+    },
+
+    textError: {
+        color: THEME.colors.red,
+        textAlign: 'center',
     },
 
     resetPassword: {
-        // fontSize: 14,
-        marginTop: 4,
-        fontFamily: 'EBGaramond_500Medium',
-        color: '#826059',
+        color: THEME.colors.brownMedium,
     }, 
 
-    main: {
-        // flex: 1,
+    access: {
         alignItems: 'center',
-        // justifyContent: 'flex-end',
         gap: 36,
     }
 })
