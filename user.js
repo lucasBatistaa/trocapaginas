@@ -1,3 +1,5 @@
+import {getUsers} from './database.js'
+
 class User {
     constructor(idUser, name, email, password, photo) {
         this.idUser = idUser;
@@ -7,13 +9,13 @@ class User {
         this.photo = photo;
     }
 
-    login() {
+    login(users) {
         let userCheck = false;
 
         for(let i = 0; i < users.length; i++) {
             if(users[i].email === this.email) {
 
-                if(users[i].password === this.password) {
+                if(users[i].senha === this.password) {
                     console.log('Você está logado!');
                     userCheck = true;
                     break;
@@ -28,25 +30,24 @@ class User {
     }
 }
 
-let id = 0;
+const userLogin = new User(null, null, 'tulio.turuda@gmail.com', 'tuLio!123', null);
 
-//criando usuários para teste
-const users = [new User(++id, 'Túlio', 'tulio.master@gmail.com', '123', null),
-new User(++id, 'Maria', 'maria.faria@gmail.com', '456', null),
-new User(++id, 'Stephanie', 'stephanie.victoria@gmail.com', '789', null),
-new User(++id, 'Lucas', 'lucas@gmail.com', '5623', null)
-];
+getUsers().then( users => {
+    const arrayUsers = users;
 
-//console.log(users);
+    userLogin.login(arrayUsers);
+});
+
+//const arrayUsers = getUsers().then(users => {return users});
+//console.log(arrayUsers);
 
 let userEmail = 'maria.faria@gmail.com';
 let userPassword = '456';
 
-const userLogin = new User(null, null, userEmail, userPassword, null);
 
-userLogin.login();
+//userLogin.login();
 
-const crypto = require("crypto");
+//const crypto = require("crypto");
 
 //acessar banco de dados
 //coletar dados dos usuários cadastrados

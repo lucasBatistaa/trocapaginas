@@ -39,9 +39,9 @@ export const sql = postgres({
   },
 });
 
-async function getPgVersion() {
-  const result = await sql`select version()`;
-  console.log(result);
+export async function getUsers() {
+  const users = await sql`select * from users`;
+  return users;
 }
 
-getPgVersion();
+//function exportar((asy)=> {module.exports = async function getUsers});

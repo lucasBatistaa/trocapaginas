@@ -122,7 +122,7 @@ create table exchange (
     console.log('tabela troca criada')
 })*/
 
-sql `
+/*sql `
 insert into users (name, email, senha)
 values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
 	('Stephanie', 'stephanie.victoria@gmail.com', 'Stephanie$123'),
@@ -130,4 +130,9 @@ values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
 	('Lucas', 'lucas.batista@gmail.com', 'lucAs%123');`
 	.then(() => {
 		console.log('usuários inseridos');
+})*/
+
+sql `
+select * from users;`.then(() => {
+	console.log('ok')
 })
