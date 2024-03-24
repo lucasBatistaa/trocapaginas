@@ -11,9 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "latest",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "pg": "^8.11.3",
-    "postgres": "^3.4.4"
+    "postgres": "^3.4.4",
+    "sequelize": "^6.37.1"
   }
 }
