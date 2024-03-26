@@ -1,38 +1,41 @@
 import { useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
-
-import Button from "../../components/Button";
-
-import { styles } from "./styles";
-import Input from "../../components/Input";
-import { THEME } from "../../styles/Theme";
+import { Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function Login () {
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+
+import { styles } from "./styles";
+import { THEME } from "../../styles/Theme";
+
+export default function Login ({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorEmail, setErrorEmail] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false)
     const [textError, setTextError] = useState('')
 
-    const navigation = useNavigation()
+
+    const validateDataForms = () => {
+        if (email.trim() === '') {
+            setErrorEmail(true)
+        } else {
+            setErrorEmail(false)
+        }
+       
+        if (password.trim() === '') {
+            setErrorPassword(true) 
+        } else {
+            setErrorPassword(false)
+        }
+    
+        if (email.trim() != '' && password.trim() != '') {            
+            return true
+        }
+    }
 
     const handleSubmit = () => {    
-        {email.trim() === '' ? 
-            setErrorEmail(true) 
-            : 
-            setErrorEmail(false)
-        }
-        
-        {password.trim() === '' ? 
-            setErrorPassword(true) 
-            :
-            setErrorPassword(false)
-        }
-        
-        if (email.trim() != '' && password.trim() != '') {
-            setErrorEmail(false)
-            setErrorPassword(false)
+        if (validateDataForms()) {
             navigation.navigate('Slogan')
         } else {
             setTextError('Insira todos os campos!')
@@ -41,7 +44,7 @@ export default function Login () {
 
     return (
         <View style={styles.container}>
-            <Text style={THEME.h1}>LOGIN</Text>
+            <Text style={THEME.fonts.h1}>LOGIN</Text>
             
             <View style={styles.formInput}>
                 <Input 
@@ -62,25 +65,46 @@ export default function Login () {
                     secureTextEntry
                 />
 
-                <Text style={[THEME.text, styles.textError]}>{textError}</Text>
+                {
+                    textError && 
+                    <Text 
+                      style={[THEME.fonts.text, styles.textError]}
+                    >
+                        {textError}
+                    </Text>
+                }
 
                 <TouchableOpacity
                     activeOpacity={0.8}
+                    onPress={() => navigation.navigate('Slogan')}
                 >
-                    <Text style={[THEME.link, styles.resetPassword]}>Esqueci minha senha</Text>
+                    <Text 
+                        style={[THEME.fonts.link, styles.resetPassword]}
+                    >
+                        Esqueci minha senha
+                    </Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.access}>
                 <Button 
-                    style={styles.button}
-                    onPress={handleSubmit}
                     title='ACESSAR'
-                    color={'brownDark'}         
+                    color={THEME.colors.brownDark}         
+                    onPress={handleSubmit}
                 />
 
                 <Text>
-                    Não possui conta? <Text style={[THEME.link, {color: THEME.colors.brownMedium}]}>Criar conta</Text>
+                    Não possui conta?{' '}
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => navigation.navigate('Slogan')}
+                    >
+                    <Text 
+                        style={[THEME.fonts.link, styles.resetPassword]}
+                    >
+                        Criar conta
+                    </Text>
+                </TouchableOpacity>
                 </Text>
             </View>
         </View>

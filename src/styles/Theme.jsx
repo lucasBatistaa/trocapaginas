@@ -11,33 +11,35 @@ export const THEME = {
         red: '#CE1F1F',
     },
 
-    h1: {
-        fontFamily: 'EBGaramond_700Bold',
-        fontSize: 24,
-       
-        // medium: {
-        //     fontFamily: 'EBGaramond_700Medium',
-        //     fontSize: 24,
-        // },
-
-        // light: {
-        //     fontFamily: 'EBGaramond_700Medium',
-        //     fontSize: 24,
-        // }
-    },
-
-    h2: {
-        fontFamily: 'EBGaramond_600SemiBold',
-        fontSize: 20,
-    },
+    fonts: {
+        h1: {
+            fontFamily: 'EBGaramond_700Bold',
+            fontSize: 24,
+        },
     
-    link: {
-        fontFamily: 'EBGaramond_700Bold',
-        fontSize: 16,
-    },
-
-    text: {
-        fontFamily: 'EBGaramond_400Regular',
-        fontSize: 16,
-    },
+        h2: {
+            fontFamily: 'EBGaramond_600SemiBold',
+            fontSize: 20,
+        },
+    
+        h3: {
+            fontFamily: 'EBGaramond_400Regular',
+            fontSize: 20,
+        },
+        
+        link: {
+            fontFamily: 'EBGaramond_700Bold',
+            fontSize: 16,
+        },
+    
+        text: {
+            fontFamily: 'EBGaramond_400Regular',
+            fontSize: 16,
+        },
+    
+        textButton: {
+            fontFamily: 'EBGaramond_700Bold',
+            fontSize: 20,
+        }
+    }
 }
