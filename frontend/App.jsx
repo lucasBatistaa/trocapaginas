@@ -3,6 +3,7 @@ import { EBGaramond_400Regular, EBGaramond_600SemiBold, EBGaramond_500Medium, EB
 import { NavigationContainer } from '@react-navigation/native'
 import StackRoutes from './routes/stack.routes'
 
+
 export default function App() {
   const [ fontsLoaded ] = useFonts({
     EBGaramond_400Regular, 

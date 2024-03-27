@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
 
     formInput: {
         gap: 8,
-        marginVertical: 20,
+        marginVertical: 12,
     },
 
     inputError: {
@@ -29,7 +29,6 @@ export const styles = StyleSheet.create({
 
     resetPassword: {
         color: THEME.colors.brownMedium,
-        textAlign: 'right'
     }, 
 
     access: {

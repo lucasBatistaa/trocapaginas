@@ -12,14 +12,16 @@ export const styles = StyleSheet.create ({
     },
     
     slogan: {
-        marginTop: 20,
-        textAlign: 'center',
         color: '#0A080D',
+        fontSize: 20,
+        textAlign: 'center',
+        fontFamily: "EBGaramond_400Regular",
+        marginTop: 20,
     },
 
     viewButtons: {
+        marginTop: 60,
         display: 'flex',
         gap: 12,
-        marginTop: 60,
     },
 })
