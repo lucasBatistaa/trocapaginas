@@ -101,6 +101,7 @@ export default function Login () {
                 
                 <TouchableOpacity
                     activeOpacity={0.8}
+                    onPress={() => navigation.navigate('Reset')}
                 >
                     <Text style={[THEME.link, styles.resetPassword]}>Esqueci minha senha</Text>
                 </TouchableOpacity>
