@@ -1,4 +1,4 @@
-import 'dotenv/config';
+//import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser'; 
@@ -11,7 +11,7 @@ app.use(cors()); // Presumindo que você deseja permitir todas as origens
 app.use(bodyParser.urlencoded({ extended: false })); // Analisa corpos de solicitação codificados por URL
 app.use(routes);
 
-const port = process.env.PORT;
+const port = 4000;
 
 app.listen(port, () => { // Função de seta para sintaxe mais limpa
   console.log(`Servidor rodando na porta ${port}`);
