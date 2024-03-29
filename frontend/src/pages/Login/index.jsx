@@ -110,7 +110,6 @@ export default function Login () {
             <View style={styles.access}>
                 <Button 
                     type='submit'
-                    style={styles.button}
                     onPress={handleSubmit}
                     title='ACESSAR'
                     color={'brownDark'}         

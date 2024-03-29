@@ -8,10 +8,7 @@ export default function Input(props) {
     const [ secure, setSecure ] = useState(props.secureTextEntry)
     
     return (
-        <View 
-            style={styles.container}
-            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
+        <View style={styles.container}>
             <Text style={styles.label}>{props.label}</Text>
 
             <TextInput
