@@ -4,6 +4,7 @@ import {Database} from '../database.js';
 const routes = express.Router();
 const database = new Database();
 
+//login
 database.getUsers().then(users => {
     routes.post('/login', (req, res) => {
         const {email, password} = req.body;
