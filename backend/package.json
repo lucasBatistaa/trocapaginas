@@ -6,12 +6,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/controller.js"
+    "dev": "nodemon src/controller/controller.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "latest",
+    "aws-sdk": "^2.1587.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
