@@ -1,44 +1,34 @@
-import AWS from 'aws-sdk';
+import nodemailer from 'nodemailer';
 import 'dotenv/config';
 
 export class ResetSenha {
-    constructor(destinatario) {
-        this.destinatario = destinatario;
+    constructor(email) {
+        this.email = email;
     }
 
-    enviarEmail(){
-        const assunto = 'Solicitação de alteração de senha';
-        const mensagem = 'Olá, recebemos sua solicitação para redefinir sua senha. Clique no link abaixo para redefinir a senha:';
-
-        AWS.config.update({});
-
-        const params = {
-            Destination: {CcAddressess: [this.destinatario]},
-            Message: {
-
-                Body: {
-
-                    Html: {
-                        Charset: 'UTF-8',
-                        Data: mensagem
-                    },
-
-                    Subject: {
-                        Charset: 'UTF-8',
-                        Data: assunto
-                    }
-                }
-            },
-            Source: 'maduhfaria452@gmail.com'
-        }
-
-        const sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
-
-        sendPromise.then(function(data) {
-            console.log('Mensagem '+ data.MessageId + ' enviada com sucesso!')
-
-        }).catch( function(err) { 
-            console.error(err, err.stack);
+    sendEmail() {
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            auth: {
+                user: process.env.USER_EMAIL,
+                pass: process.env.PASS_EMAIL
+            }
         });
+    
+        transporter.sendMail({
+            from: "Troca Páginas <process.env.USER_EMAIL>",
+            to: this.email, 
+            subject: "Solicitação de alteração de senha",
+            html: "Olá, recebemos sua solicitação para redefinir sua senha. Clique no link abaixo para redefinir a senha: <br> <a href='http://localhost:8081/'>Redefinir minha senha</a>"
+        }).then(message => {
+            console.log(message);
+        
+        }).catch(err => {
+            console.log(err);
+        });
+
+        return this.email;
     }
 }
+

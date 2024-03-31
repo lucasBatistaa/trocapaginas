@@ -139,3 +139,9 @@ values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
 		console.log('usuários inseridos');
 })
 
+sql `
+insert into users (name, email, password)
+values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123');`
+	.then(() => {
+		console.log('usuários inseridos');
+})

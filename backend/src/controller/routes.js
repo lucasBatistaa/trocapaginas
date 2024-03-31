@@ -24,7 +24,7 @@ database.getUsers().then(users => {
 //Esqueci minha senha
 database.getUsers().then(users => {
     routes.post('/esqueciMinhaSenha', (req, res) => {
-        const email = req.body; //receber um e-mail
+        const {email} = req.body; //receber um e-mail
     
         const emailExists = users.find(user => user.email === email); //verificar se o e-mail existe no database
     
@@ -32,7 +32,9 @@ database.getUsers().then(users => {
             //se e-mail existe -> enviar link de reset
             const reset = new ResetSenha(email);
     
-            console.log(reset.destinatario);
+            console.log(reset.sendEmail());
+
+            return res.status(200).send('E-mail de reset enviado!');
     
         }else {
             return res.status(401).send('Usuário não encontrado! Tente novamente'); //se e-mail não existe -> informar usuário
