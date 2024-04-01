@@ -14,21 +14,22 @@ export const styles = StyleSheet.create({
     },
 
     formInput: {
+        marginVertical: 20,
         gap: 8,
-        marginVertical: 12,
     },
 
     inputError: {
         borderColor: THEME.colors.red,
     },
 
-    textError: {
+    messageError: {
         color: THEME.colors.red,
         textAlign: 'center',
     },
 
     resetPassword: {
         color: THEME.colors.brownMedium,
+        textAlign: 'right'
     }, 
 
     access: {

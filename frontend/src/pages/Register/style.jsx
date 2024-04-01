@@ -16,8 +16,8 @@ export const styles = StyleSheet.create({
     steps: {
         alignItems: 'center', 
         gap: 8,
-        paddingHorizontal: 80,
-        marginBottom: 28,
+        paddingHorizontal: 80, 
+        marginTop: 28,
     },
 
     stepsBarContainer: {
@@ -34,16 +34,17 @@ export const styles = StyleSheet.create({
 
     formInput: {
         gap: 8,
-        marginVertical: 12,
+        marginVertical: 20,
     },
 
     inputError: {
         borderColor: THEME.colors.red,
     },
 
-    textError: {
+    messageError: {
         color: THEME.colors.red,
         textAlign: 'center',
+        marginBottom: 20,
     },
 
     access: {

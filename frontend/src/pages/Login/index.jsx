@@ -1,47 +1,45 @@
 import { useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
+import api from '../../services/api';
+import IsFormEmpty from "../../utils/isFormEmpty";
+
 import Button from "../../components/Button";
+import Input from "../../components/Input";
 
 import { styles } from "./styles";
-import Input from "../../components/Input";
 import { THEME } from "../../styles/Theme";
-import { useNavigation } from "@react-navigation/native";
-
-import api from '../../../services/api';
 
 export default function Login () {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
-    const [textError, setTextError] = useState('');
+    const [messageError, setMessageError] = useState('');
     const [user, setUser] = useState(null);
-    const [error, setError] = useState('');
 
     const navigation = useNavigation()
+    
+    // useEffect(() => {
+    //     api.get('Login').then(({data}) => {
+    //         setEmail(data.email);
+    //     })
+    // })
 
     const handleSubmit = async () => {    
-        setError('');
 
-        email.trim() === '' ? 
-            setErrorEmail(true) 
-            : 
-            setErrorEmail(false)
-        
-        
-        password.trim() === '' ? 
-            setErrorPassword(true) 
-            :
-            setErrorPassword(false)
-        
-        
-        if (email.trim() != '' && password.trim() != '') {
-            setErrorEmail(false)
-            setErrorPassword(false)
-            setTextError('');
+        const isEmptyEmail =  IsFormEmpty(email)
+        setErrorEmail(isEmptyEmail)
 
+        const isEmptyPassword =  IsFormEmpty(password)
+        setErrorPassword(isEmptyPassword)
+        
+        if (!isEmptyEmail && !isEmptyPassword) {
+            setMessageError('')
+
+            console.log('ENTROU', errorEmail, errorPassword)
             try {
                 const response = await axios.post('http://localhost:4000/login',
                 JSON.stringify({email, password}),
@@ -54,28 +52,23 @@ export default function Login () {
                 navigation.navigate('Slogan');
 
             } catch (error) {
-                if(!error?.response) {
-                    setError('Erro ao acessar a página');
+                if (!error?.response) {
+                    setMessageError('Erro ao acessar a página');
                 
-                }else if(error.response?.status === 401) {
-                    setError('Usuário e/ou senha inválidos');
+                } else if (error.response?.status === 401) {
+                    setMessageError('Usuário e/ou senha inválidos');
                 }
             }
 
         } else {
-            setTextError('Insira todos os campos!')
+            setMessageError('Insira todos os campos!')
         }
 
-        useEffect(() => {
-            api.get('Login').then(({data}) => {
-                setEmail(data.email);
-            })
-        })
     } 
 
     return (
         <View style={styles.container}>
-            <Text style={THEME.h1}>LOGIN</Text>
+            <Text style={THEME.fonts.h1}>LOGIN</Text>
             
             <View style={styles.formInput}>
                 <Input 
@@ -96,27 +89,31 @@ export default function Login () {
                     secureTextEntry
                 />
 
-                <Text style={[THEME.text, styles.textError]}>{textError}</Text>
-                <Text style={[THEME.text, styles.textError]}>{error}</Text>
+                {messageError && <Text style={[THEME.fonts.text, styles.messageError]}>{messageError}</Text>}
                 
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigation.navigate('Reset')}
                 >
-                    <Text style={[THEME.link, styles.resetPassword]}>Esqueci minha senha</Text>
+                    <Text style={[THEME.fonts.link, styles.resetPassword]}>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.access}>
                 <Button 
-                    type='submit'
                     onPress={handleSubmit}
                     title='ACESSAR'
                     color={'brownDark'}         
                 />
 
                 <Text>
-                    Não possui conta? <Text style={[THEME.link, {color: THEME.colors.brownMedium}]}>Criar conta</Text>
+                    Não possui conta? 
+                    <Text 
+                        onPress={() => navigation.navigate('Register')} 
+                        style={[
+                            THEME.fonts.link, 
+                            {color: THEME.colors.brownMedium}
+                        ]}> Criar conta</Text>
                 </Text>
             </View>
         </View>

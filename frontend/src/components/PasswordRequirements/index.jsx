@@ -41,7 +41,6 @@ export default function PasswordRequirements (props) {
                 
                 </View>
                 )}
-        
         </View>
         
 
