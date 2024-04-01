@@ -20,7 +20,7 @@ export class ResetSenha {
             from: "Troca Páginas <process.env.USER_EMAIL>",
             to: this.email, 
             subject: "Solicitação de alteração de senha",
-            html: "Olá, recebemos sua solicitação para redefinir sua senha. Clique no link abaixo para redefinir a senha: <br> <a href='http://localhost:8081/'>Redefinir minha senha</a>"
+            html: "Olá, recebemos sua solicitação para redefinir sua senha. Clique no link abaixo para redefinir a senha: <br><br> <a href='http://localhost:8081/'>Redefinir minha senha</a>"
         }).then(message => {
             console.log(message);
         
