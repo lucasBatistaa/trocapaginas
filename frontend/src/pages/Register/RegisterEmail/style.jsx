@@ -1,5 +1,5 @@
 import { StatusBar, StyleSheet } from "react-native"
-import { THEME } from "../../styles/Theme"
+import { THEME } from "../../../styles/Theme"
 
 const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 

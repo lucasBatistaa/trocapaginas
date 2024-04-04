@@ -7,6 +7,7 @@ import api from '../../services/api';
 import IsFormEmpty from "../../utils/isFormEmpty";
 
 import Button from "../../components/Button";
+import ButtonWithIcon from "../../components/ButtonWithIcon";
 import Input from "../../components/Input";
 
 import { styles } from "./styles";
@@ -71,6 +72,12 @@ export default function Login () {
             <Text style={THEME.fonts.h1}>LOGIN</Text>
             
             <View style={styles.formInput}>
+                <ButtonWithIcon
+                    title={'Continuar com Google'}
+                />
+                
+                <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
+
                 <Input 
                     label={"E-mail"}
                     placeholder={"Insira seu email"}

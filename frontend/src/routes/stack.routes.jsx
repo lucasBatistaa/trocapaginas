@@ -4,6 +4,7 @@ import Slogan from "../pages/Slogan"
 import Login from "../pages/Login"
 import Reset from '../pages/Reset/confirmUser'
 import Register from '../pages/Register'
+import RegisterEmail from '../pages/Register/RegisterEmail'
 
 const Stack = createNativeStackNavigator()
 
@@ -13,6 +14,7 @@ export default function StackRoutes() {
             <Stack.Screen name='Slogan' component={Slogan} />
             <Stack.Screen name='Login' component={Login} />
             <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='RegisterEmail' component={RegisterEmail} />
             <Stack.Screen name='Reset' component={Reset}/>
         </Stack.Navigator>
     )
