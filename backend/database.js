@@ -10,4 +10,10 @@ export class Database {
     async updatePassword(email, password) {
         await sql `update users set password = ${password} where email = ${email}`;
     }
+
+    //criar função async para cadastrar usuário
+    //receber objeto user como parâmetro
+    //await sql (esperar o processo)
+    //fazer insert no banco com os atributos do objeto
+
 }
