@@ -38,5 +38,17 @@ export const THEME = {
             fontFamily: 'EBGaramond_400Regular',
             fontSize: 16,
         },
-    }
+    },
+
+    errors: {
+        
+        message: {
+            color: '#CE1F1F',
+            textAlign: 'center',
+        },
+
+        input: {
+            borderColor: '#CE1F1F',
+        },
+    },
 }

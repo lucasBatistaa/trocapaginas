@@ -25,7 +25,7 @@ export default function PasswordRequirements (props) {
     const hasLetterCase = /^(?=.*[a-z])(?=.*[A-Z]).+$/
     const hasSimbol = /\W|_/
 
-    function validPassword (password) {
+    function requirements (password) {
         setCaracters(minimum.test(password))
         setLetterCase(hasLetterCase.test(password))
         setNumbers(hasNumber.test(password))
@@ -71,7 +71,7 @@ export default function PasswordRequirements (props) {
                 value={password}
                 onChangeText={(password) => {
                     setPassword(password)
-                    validPassword(password)
+                    requirements(password)
                 }}
                 style={passwordError && THEME.errors.input}
                 secureTextEntry

@@ -84,7 +84,7 @@ export default function Login () {
                     value={email}
                     onChangeText={setEmail}
                     keyboardType='email-address'
-                    style={errorEmail && styles.inputError}
+                    style={errorEmail && THEME.errors.input}
                 />
 
                 <Input 
@@ -92,11 +92,11 @@ export default function Login () {
                     placeholder={"Insira sua senha"}
                     value={password}
                     onChangeText={setPassword}
-                    style={errorPassword && styles.inputError}
+                    style={errorPassword && THEME.errors.input}
                     secureTextEntry
                 />
 
-                {messageError && <Text style={[THEME.fonts.text, styles.messageError]}>{messageError}</Text>}
+                {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
                 
                 <TouchableOpacity
                     activeOpacity={0.8}
