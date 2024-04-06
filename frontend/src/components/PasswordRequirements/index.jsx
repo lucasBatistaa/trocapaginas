@@ -20,16 +20,19 @@ export default function PasswordRequirements (props) {
     const [letterCase, setLetterCase] = useState(false)
     const [numbers, setNumbers] = useState(false)
     const [ simbols, setSimbols ] = useState(false)
-    const minimum = /^.{8,}$/
-    const hasNumber = /(?=.*\d)/
-    const hasLetterCase = /^(?=.*[a-z])(?=.*[A-Z]).+$/
-    const hasSimbol = /\W|_/
 
-    function requirements (password) {
-        setCaracters(minimum.test(password))
-        setLetterCase(hasLetterCase.test(password))
-        setNumbers(hasNumber.test(password))
-        setSimbols(hasSimbol.test(password))
+    const requirements = {
+        minimum: /^.{8,}$/,
+        hasNumber: /(?=.*\d)/,
+        hasLetterCase: /^(?=.*[a-z])(?=.*[A-Z]).+$/,
+        hasSimbol: /\W|_/
+    }
+    
+    function validateRequirements (password) {
+        setCaracters(requirements.minimum.test(password))
+        setLetterCase(requirements.hasLetterCase.test(password))
+        setNumbers(requirements.hasNumber.test(password))
+        setSimbols(requirements.hasSimbol.test(password))
     }
 
     const handleSubmit = () => {
@@ -64,14 +67,14 @@ export default function PasswordRequirements (props) {
     } 
 
     return (
-        <View>
+        <View style={THEME.fonts.text}>
             <Input
                 label={"Senha"}
                 placeholder={"Insira sua senha"}
                 value={password}
                 onChangeText={(password) => {
                     setPassword(password)
-                    requirements(password)
+                    validateRequirements(password)
                 }}
                 style={passwordError && THEME.errors.input}
                 secureTextEntry
@@ -80,16 +83,16 @@ export default function PasswordRequirements (props) {
             {
                 <View>
                     {caracters ? <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"}/> : <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"}/>}
-                    <Text>Pelo menos oito caracteres</Text>
+                    <Text style={THEME.fonts.text}>Pelo menos oito caracteres</Text>
 
                     {letterCase ? <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"}/> : <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"}/>}
-                    <Text>Letras maiúsculas e minúsculas</Text>     
+                    <Text style={THEME.fonts.text}>Letras maiúsculas e minúsculas</Text>     
 
                     {numbers ? <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"}/> : <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"}/>}
-                    <Text>Pelo menos um número</Text>
+                    <Text style={THEME.fonts.text}>Pelo menos um número</Text>
 
                     {simbols ? <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"}/> : <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"}/>}
-                    <Text>Pelo menos um símbolo especial (Ex.: @ # $ ! *)</Text>
+                    <Text style={THEME.fonts.text}>Pelo menos um símbolo especial (Ex.: @ # $ ! *)</Text>
                 </View>
             }
 
