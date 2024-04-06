@@ -10,6 +10,8 @@ export class ResetSenha {
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
+            secure: false,
+            requireTLS: true,
             auth: {
                 user: process.env.USER_EMAIL,
                 pass: process.env.PASS_EMAIL
