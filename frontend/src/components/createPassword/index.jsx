@@ -86,7 +86,7 @@ export default CreatePassword = (props) => {
                 placeholder={"Confirme sua senha"}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-                //style={confirmPasswordError && THEME.errors.input}
+                style={confirmPasswordError && THEME.errors.input}
                 secureTextEntry
             />
 

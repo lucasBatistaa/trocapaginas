@@ -9,6 +9,7 @@ import PasswordRequirements from "../../../components/PasswordRequirements";
 import { THEME } from "../../../styles/Theme";
 import { styles } from "./style";
 import IsFormEmpty from "../../../utils/isFormEmpty";
+import CreatePassword from "../../../components/CreatePassword";
 
 export default function RegisterEmail() {
     const [ email, setEmail ] = useState('')
@@ -83,7 +84,7 @@ export default function RegisterEmail() {
                             style={errorUsername && styles.inputError}
                         />
                     </View>
-                    : <PasswordRequirements validate />}
+                    : <CreatePassword buttonText={"CADASTRAR"}/>}
 
                 {messageError && <Text style={[THEME.fonts.text, styles.messageError]}>{messageError}</Text>}
             </View>
