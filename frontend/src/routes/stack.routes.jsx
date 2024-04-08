@@ -2,9 +2,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Slogan from "../pages/Slogan"
 import Login from "../pages/Login"
-import Reset from '../pages/Reset/resetPassword'
 import Register from '../pages/Register'
 import RegisterEmail from '../pages/Register/RegisterEmail'
+import Reset from '../pages/Reset'
 
 const Stack = createNativeStackNavigator()
 

@@ -4,12 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
-import PasswordRequirements from "../../../components/PasswordRequirements";
+import CreatePassword from "../../../components/CreatePassword";
 
 import { THEME } from "../../../styles/Theme";
 import { styles } from "./style";
 import IsFormEmpty from "../../../utils/isFormEmpty";
-import CreatePassword from "../../../components/CreatePassword";
 
 export default function RegisterEmail() {
     const [ email, setEmail ] = useState('')
