@@ -7,6 +7,7 @@ import Input from '../../components/Forms/Input';
 import SimpleButton from '../../components/Button/SimpleButton';
 
 import IsFormEmpty from '../../utils/isFormEmpty.jsx';
+import isEmail from '../../utils/isEmail.jsx';
 import { THEME } from '../../styles/Theme.jsx';
 
 export default function Reset (){
@@ -15,7 +16,7 @@ export default function Reset (){
     const [messageError, setMessageError] = useState('')
     const [nextPage, setNextPage] = useState(false)
 
-    const isEmail = /.+@.+/
+    const validEmail = isEmail (email)
 
     const handleSubmit = () => {
         const isEmptyEmail =  IsFormEmpty(email)
@@ -24,7 +25,7 @@ export default function Reset (){
         if (!isEmptyEmail) {
             setMessageError('')
 
-            if (isEmail.test(email)){
+            if (validEmail){
                 //verificar se o email existe
                 //mandar email com o link da página
                 setNextPage(true)
