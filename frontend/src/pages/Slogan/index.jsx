@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import Button from '../../components/Button'
+import SimpleButton from '../../components/SimpleButton'
 import Logo from '../../assets/logo.svg'
 
 import { styles } from './styles'
@@ -19,13 +19,14 @@ export default function Slogan () {
             </Text>
 
             <View style={styles.viewButtons}>
-                <Button 
+                <SimpleButton 
                     title={'CADASTRE-SE'} 
                     color={'brownDark'} 
                     name={'Login'}
                     onPress={() => navigation.navigate('Register')}
                 />
-                <Button 
+                
+                <SimpleButton 
                     title={'LOGIN'} 
                     color={'brownLight'}
                     name={'Login'}

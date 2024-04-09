@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native"
 
 import { styles } from "./styles"
 
-export default function Button (props) {
+export default function SimpleButton (props) {
     return (
         <TouchableOpacity 
             {...props}   

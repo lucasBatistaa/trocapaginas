@@ -6,9 +6,10 @@ import axios from "axios";
 import api from '../../services/api';
 import IsFormEmpty from "../../utils/isFormEmpty";
 
-import Button from "../../components/Button";
+import SimpleButton from "../../components/Button/SimpleButton";
 import ButtonWithIcon from "../../components/ButtonWithIcon";
-import Input from "../../components/Input";
+import Input from "../../components/Forms/Input";
+import Links from "../../components/Links";
 
 import { styles } from "./styles";
 import { THEME } from "../../styles/Theme";
@@ -107,21 +108,18 @@ export default function Login () {
             </View>
 
             <View style={styles.access}>
-                <Button 
+                <SimpleButton 
                     onPress={handleSubmit}
                     title='ACESSAR'
                     color={'brownDark'}         
                 />
 
-                <Text>
-                    Não possui conta? 
-                    <Text 
-                        onPress={() => navigation.navigate('Register')} 
-                        style={[
-                            THEME.fonts.link, 
-                            {color: THEME.colors.brownMedium}
-                        ]}> Criar conta</Text>
-                </Text>
+                <Links 
+                    text={"Não possui conta?"}
+                    title={"Criar conta"}
+                    screen={"Register"}
+                />
+            
             </View>
         </View>
     )

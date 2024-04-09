@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import { styles } from "./styles";
 
-import GoogleLogo from '../../assets/googleLogo.svg'
+import GoogleLogo from '../../../assets/googleLogo.svg'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function ButtonWithIcon(props) {

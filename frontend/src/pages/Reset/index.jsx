@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import CreatePassword from '../../components/CreatePassword/index.jsx';
 import Input from '../../components/Input/index.jsx';
-import Button from '../../components/Button/index.jsx';
+import SimpleButton from '../../components/SimpleButton/index.jsx';
 
 import IsFormEmpty from '../../utils/isFormEmpty.jsx';
 import { THEME } from '../../styles/Theme.jsx';
@@ -56,7 +56,7 @@ export default function Reset (){
 
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                    <Button 
+                    <SimpleButton 
                         type='submit'
                         onPress={handleSubmit}
                         title={"RECUPERAR"}

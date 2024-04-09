@@ -1,11 +1,11 @@
 import { View, Text } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 
-import ButtonWithIcon from "../../components/ButtonWithIcon"
+import ButtonWithIcon from "../../components/Button/ButtonWithIcon"
+import Links from "../../components/Links"
 
 import { THEME } from '../../styles/Theme'
-import { useNavigation } from "@react-navigation/native"
 import { styles } from "./styles"
-import Links from "../../components/Links"
 
 export default function Register() {
 

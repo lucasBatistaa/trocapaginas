@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import IsFormEmpty from "../../../utils/isFormEmpty";
+
 import Input from "../../../components/Input";
-import Button from "../../../components/Button";
+import SimpleButton from "../../../components/SimpleButton";
 import CreatePassword from "../../../components/CreatePassword";
+import Links from "../../../components/Links";
 
 import { THEME } from "../../../styles/Theme";
 import { styles } from "./styles";
-import IsFormEmpty from "../../../utils/isFormEmpty";
-import Links from "../../../components/Links";
 
 export default function RegisterEmail() {
     const [ email, setEmail ] = useState('')
@@ -92,7 +93,7 @@ export default function RegisterEmail() {
                         {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
                         <View style={styles.button}>
-                            <Button
+                            <SimpleButton
                                 type='submit'
                                 onPress={handleNextScreen}
                                 title={'CADASTRAR'}
