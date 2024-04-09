@@ -13,7 +13,7 @@ export default function Register() {
 
     return (
         <View style={styles.container}>
-            <Text style={THEME.fonts.h1}>CADASTRO</Text>
+            <Text style={THEME.fonts.h1.bold}>CADASTRO</Text>
 
             <View style={styles.buttonsView}>
                 <ButtonWithIcon

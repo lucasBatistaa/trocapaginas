@@ -1,5 +1,4 @@
 import { StyleSheet, StatusBar } from "react-native"
-import { THEME } from "../../styles/Theme"
 
 const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 
@@ -15,6 +14,21 @@ export const styles = StyleSheet.create ({
         marginVertical: 20,
         height: '65%',
         justifyContent: 'center',
-        gap: 50
     },
+
+    alert: {
+        marginBottom: 24,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8
+    },
+
+    buttonStyle: {
+        marginTop: 50,
+        alignItems: 'center'
+    },
+
+    componentContainer: {
+        marginTop: 94
+    }
 })

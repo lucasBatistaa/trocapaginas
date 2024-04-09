@@ -31,21 +31,25 @@ export default function Reset (){
                 //mandar email com o link da página
                 setNextPage(true)
             }
-            else setMessageError('E-mail incorreto')
+            else { 
+                setMessageError('E-mail incorreto')
+                setErrorEmail(true)
+            }
         } else {
             setMessageError('O campo precisa ser preenchido')
+            setMessageError(true)
         }
     }
 
     return (
         <View style={styles.container}>
-            <Text style={[THEME.fonts.h1, THEME.colors.black]}> ALTERAR SENHA </Text>
+            <Text style={[THEME.fonts.h1.bold, THEME.colors.black]}> ALTERAR SENHA </Text>
 
             {!nextPage ? 
                 <View style={styles.containerEmailPage}>
-                    <View>
-                        <Ionicons name="alert-circle-outline"/>
-                        <Text>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
+                    <View style={styles.alert}>
+                        <Ionicons name="alert-circle-outline" size={32} color={THEME.colors.brownMedium}/>
+                        <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownMedium}]}>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
                     </View>
         
                     <Input
@@ -58,16 +62,21 @@ export default function Reset (){
 
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                    <SimpleButton 
-                        type='submit'
-                        onPress={handleSubmit}
-                        title={"RECUPERAR"}
-                        color={'brownDark'} 
-                    />
-
+                    <View style={styles.buttonStyle}>
+                        <SimpleButton 
+                            type='submit'
+                            onPress={handleSubmit}
+                            title={"RECUPERAR"}
+                            color={'brownDark'} 
+                        />
+                    </View>
+                    
                 </View>
             
-                : <CreatePassword buttonText={"ALTERAR"}/>
+                : 
+                <View style={styles.componentContainer}> 
+                    <CreatePassword buttonText={"ALTERAR"}/>
+                </View>
             }
             
         </View>

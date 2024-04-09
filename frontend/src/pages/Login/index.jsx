@@ -70,7 +70,7 @@ export default function Login () {
 
     return (
         <View style={styles.container}>
-            <Text style={THEME.fonts.h1}>LOGIN</Text>
+            <Text style={THEME.fonts.h1.bold}>LOGIN</Text>
             
             <View style={styles.formInput}>
                 <ButtonWithIcon
