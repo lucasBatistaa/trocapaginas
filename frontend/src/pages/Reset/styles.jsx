@@ -8,10 +8,13 @@ export const styles = StyleSheet.create ({
         flex: 1,
         paddingTop: paddingTopValue,
         paddingHorizontal: 28,
-        paddingBottom: 40,
+        gap: 20
     },
 
-    buttonsView: {
-        gap: 12,
-    }
+    containerEmailPage: {
+        marginVertical: 20,
+        height: '65%',
+        justifyContent: 'center',
+        gap: 50
+    },
 })

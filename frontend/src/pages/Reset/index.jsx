@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import { styles } from './styles.jsx';
 import CreatePassword from '../../components/Forms/CreatePassword';
 import Input from '../../components/Forms/Input';
 import SimpleButton from '../../components/Button/SimpleButton';
@@ -16,11 +17,11 @@ export default function Reset (){
     const [messageError, setMessageError] = useState('')
     const [nextPage, setNextPage] = useState(false)
 
-    const validEmail = isEmail (email)
-
     const handleSubmit = () => {
         const isEmptyEmail =  IsFormEmpty(email)
         setErrorEmail(isEmptyEmail)
+
+        const validEmail = isEmail (email)
         
         if (!isEmptyEmail) {
             setMessageError('')
@@ -37,11 +38,11 @@ export default function Reset (){
     }
 
     return (
-        <View style={THEME.container}>
-            <Text> ALTERAR SENHA </Text>
+        <View style={styles.container}>
+            <Text style={[THEME.fonts.h1, THEME.colors.black]}> ALTERAR SENHA </Text>
 
             {!nextPage ? 
-                <View>
+                <View style={styles.containerEmailPage}>
                     <View>
                         <Ionicons name="alert-circle-outline"/>
                         <Text>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
