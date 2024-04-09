@@ -4,10 +4,10 @@
     "slug": "trocapaginas",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./src/assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./src/assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
@@ -19,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./src/assets/logo.png",
         "backgroundColor": "#000"
       }
     },
     "web": {
-      "favicon": "./assets/logo.png"
+      "favicon": "./src/assets/logo.png"
     },
     "plugins": [
       "expo-font" 

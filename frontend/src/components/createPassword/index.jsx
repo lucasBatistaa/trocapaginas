@@ -10,6 +10,7 @@ import validatePassword  from "../../utils/validatePassword";
 import IsFormEmpty from "../../utils/isFormEmpty";
 
 import {THEME} from '../../styles/Theme'
+import { styles } from './styles'
 
 export default CreatePassword = (props) => {
     const [password, setPassword] = useState('');
@@ -58,7 +59,7 @@ export default CreatePassword = (props) => {
     }        
 
     return (
-        <View>
+        <View style={styles.container}>
             <Input
                 label={"Senha"}
                 placeholder={"Insira sua senha"}
@@ -69,16 +70,23 @@ export default CreatePassword = (props) => {
             />
 
             {/*para cada chave do objeto requirements, testar a regex e exebir a mensagem do requisito*/}
-            {Object.keys(requirements).map((label) => (
-                <View key={label}>
-                    {requirements[label].regex.test(password) ? (
-                        <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"} />
-                    ) : (
-                        <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"} />
-                    )}
-                    <Text>{requirements[label].message}</Text>
-                </View>
-            ))}
+            <View style={styles.requirementsContainer}>
+                {Object.keys(requirements).map((label) => (
+                    <View 
+                        key={label}
+                        style={styles.requirementAlert}
+                    >
+                        <View>
+                            {requirements[label].regex.test(password) ? (
+                                <Ionicons name="checkmark-circle-outline" size={20} color={"#196805"} />
+                            ) : (
+                                <Ionicons name="close-circle-outline" size={20} color={"#CE1F1F"} />
+                            )}
+                        </View>
+                        <Text>{requirements[label].message}</Text>
+                    </View>
+                ))}
+            </View>
         
 
             <Input
@@ -90,9 +98,15 @@ export default CreatePassword = (props) => {
                 secureTextEntry
             />
 
-            {messageError && <Text>{messageError}</Text>}
+            {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-            <Button title={props.buttonText} onPress={handleSubmit} color="brownDark" />
+            <View style={styles.button}>
+                <Button
+                    title={props.buttonText}
+                    onPress={handleSubmit}
+                    color="brownDark"
+                />
+            </View>
         </View>
     );
 }

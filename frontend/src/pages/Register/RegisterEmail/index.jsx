@@ -7,8 +7,9 @@ import Button from "../../../components/Button";
 import CreatePassword from "../../../components/CreatePassword";
 
 import { THEME } from "../../../styles/Theme";
-import { styles } from "./style";
+import { styles } from "./styles";
 import IsFormEmpty from "../../../utils/isFormEmpty";
+import Links from "../../../components/Links";
 
 export default function RegisterEmail() {
     const [ email, setEmail ] = useState('')
@@ -18,6 +19,7 @@ export default function RegisterEmail() {
     const [ messageError, setMessageError ] = useState('')
     const [ nextPage, setNextPage ] = useState(false)
     
+    const isEmail = /.+@.+/
     const navigation = useNavigation()
 
     const handleNextScreen = () => {
@@ -28,8 +30,12 @@ export default function RegisterEmail() {
         setErrorUsername(isEmptyPassword)
         
         if (!isEmptyEmail && !isEmptyPassword) {
-            setMessageError('')
-            setNextPage(!nextPage)
+            if (isEmail.test(email)){
+                setNextPage(true)
+            }
+            else 
+                setMessageError('E-mail inválido!')
+                
         } else {
             setMessageError('Insira todos os campos!')
         }
@@ -40,7 +46,7 @@ export default function RegisterEmail() {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={THEME.container}>
             <View>
                 <Text style={THEME.fonts.h1}>CADASTRO</Text>
 
@@ -72,7 +78,7 @@ export default function RegisterEmail() {
                             placeholder={'Insira seu email'}
                             value={email}
                             onChangeText={setEmail}
-                            style={errorEmail && styles.inputError}
+                            style={errorEmail && THEME.errors.input}
                         />
 
                         <Input 
@@ -80,32 +86,28 @@ export default function RegisterEmail() {
                             placeholder={'Insira seu usuário'}
                             value={username}
                             onChangeText={setUsername}
-                            style={errorUsername && styles.inputError}
+                            style={errorUsername && THEME.errors.input}
                         />
+
+                        {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
+
+                        <View style={styles.button}>
+                            <Button
+                                type='submit'
+                                onPress={handleNextScreen}
+                                title={'CADASTRAR'}
+                                color={'brownDark'}
+                            />
+                        </View>
                     </View>
                     : <CreatePassword buttonText={"CADASTRAR"}/>}
-
-                {messageError && <Text style={[THEME.fonts.text, styles.messageError]}>{messageError}</Text>}
             </View>
             
-            <View style={styles.access}>
-                <Button 
-                    type='submit'
-                    onPress={handleNextScreen}
-                    title={nextPage ? 'CADASTRAR' : 'PRÓXIMO'}
-                    color={'brownDark'} 
-                />
-                <Text>
-                    Possui conta? 
-                    <Text 
-                        onPress={() => { navigation.navigate('Login')}}
-                        style={[
-                            THEME.fonts.link, 
-                            {color: THEME.colors.brownMedium}
-                        ]}> Realizar login
-                    </Text>
-                </Text>
-            </View>
+            <Links 
+                text={"Possui conta?"}
+                title={"Realizar login"}
+                screen={"Login"}
+            />
         </View>
     )
 }

@@ -1,3 +1,7 @@
+import { StatusBar } from "react-native"
+
+const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
+
 export const THEME = {
     colors: {
         white: '#F2F2F2',
@@ -45,10 +49,20 @@ export const THEME = {
         message: {
             color: '#CE1F1F',
             textAlign: 'center',
+            marginVertical: 8,
         },
 
         input: {
             borderColor: '#CE1F1F',
         },
+    }, 
+
+    container: {
+        flex: 1,
+        paddingTop: paddingTopValue,
+        paddingHorizontal: 28,
+        paddingBottom: 40,
+
+        justifyContent: 'space-between'
     },
 }

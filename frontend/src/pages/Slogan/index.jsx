@@ -20,7 +20,7 @@ export default function Slogan () {
 
             <View style={styles.viewButtons}>
                 <Button 
-                    title={'REGISTRE-SE'} 
+                    title={'CADASTRE-SE'} 
                     color={'brownDark'} 
                     name={'Login'}
                     onPress={() => navigation.navigate('Register')}

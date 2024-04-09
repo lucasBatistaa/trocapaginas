@@ -7,10 +7,10 @@ export default function validatePassword (password) {
     };
 
     for (const label in requirements) {
-        if (requirements[label].test(password)) {
-            return true;
+        if (!requirements[label].test(password)) {
+            return false;
         }
     }
 
-    return false;
+    return true;
 };
