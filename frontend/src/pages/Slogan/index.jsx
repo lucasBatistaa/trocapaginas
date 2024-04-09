@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import SimpleButton from '../../components/SimpleButton'
+import SimpleButton from '../../components/Button/SimpleButton'
 import Logo from '../../assets/logo.svg'
 
 import { styles } from './styles'

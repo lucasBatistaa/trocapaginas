@@ -7,7 +7,7 @@ import api from '../../services/api';
 import IsFormEmpty from "../../utils/isFormEmpty";
 
 import SimpleButton from "../../components/Button/SimpleButton";
-import ButtonWithIcon from "../../components/ButtonWithIcon";
+import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
 import Input from "../../components/Forms/Input";
 import Links from "../../components/Links";
 
@@ -58,7 +58,7 @@ export default function Login () {
                     setMessageError('Erro ao acessar a página');
                 
                 } else if (error.response?.status === 401) {
-                    setMessageError('Usuário e/ou senha inválidos');
+                    setMessageError('Email e/ou senha incorreto(s)!');
                 }
             }
 
@@ -80,7 +80,7 @@ export default function Login () {
                 <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
 
                 <Input 
-                    label={"E-mail"}
+                    label={"Email"}
                     placeholder={"Insira seu email"}
                     value={email}
                     onChangeText={setEmail}

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import CreatePassword from '../../components/CreatePassword/index.jsx';
-import Input from '../../components/Input/index.jsx';
-import SimpleButton from '../../components/SimpleButton/index.jsx';
+import CreatePassword from '../../components/Forms/CreatePassword';
+import Input from '../../components/Forms/Input';
+import SimpleButton from '../../components/Button/SimpleButton';
 
 import IsFormEmpty from '../../utils/isFormEmpty.jsx';
 import { THEME } from '../../styles/Theme.jsx';
@@ -36,7 +36,7 @@ export default function Reset (){
     }
 
     return (
-        <View>
+        <View style={THEME.container}>
             <Text> ALTERAR SENHA </Text>
 
             {!nextPage ? 

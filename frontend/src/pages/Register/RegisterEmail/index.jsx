@@ -4,9 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import IsFormEmpty from "../../../utils/isFormEmpty";
 
-import Input from "../../../components/Input";
-import SimpleButton from "../../../components/SimpleButton";
-import CreatePassword from "../../../components/CreatePassword";
+import Input from "../../../components/Forms/Input";
+import SimpleButton from "../../../components/Button/SimpleButton";
+import CreatePassword from "../../../components/Forms/CreatePassword";
 import Links from "../../../components/Links";
 
 import { THEME } from "../../../styles/Theme";
@@ -32,11 +32,20 @@ export default function RegisterEmail() {
         
         if (!isEmptyEmail && !isEmptyPassword) {
             if (isEmail.test(email)){
-                setNextPage(true)
-            }
-            else 
+
+                // Validar nome de usuário no banco
+                if (username === 'lucas') {
+                    setMessageError('Nome de usuário já existe, insira outro!')
+                    setErrorUsername(true)
+                    setUsername('')
+                } else {
+
+                    //registrar usuário
+                    setNextPage(true)
+                }
+            } else {
                 setMessageError('E-mail inválido!')
-                
+            }
         } else {
             setMessageError('Insira todos os campos!')
         }
@@ -74,20 +83,20 @@ export default function RegisterEmail() {
             <View>
                 {!nextPage ? 
                     <View style={styles.formInput}> 
+                        <Input 
+                            label={'Nome do usuário'}
+                            placeholder={'Insira seu usuário'}
+                            value={username}
+                            onChangeText={setUsername}
+                            style={errorUsername && THEME.errors.input}
+                        />
+
                         <Input
                             label={'Email'}
                             placeholder={'Insira seu email'}
                             value={email}
                             onChangeText={setEmail}
                             style={errorEmail && THEME.errors.input}
-                        />
-
-                        <Input 
-                            label={'Nome de usuário'}
-                            placeholder={'Insira seu usuário'}
-                            value={username}
-                            onChangeText={setUsername}
-                            style={errorUsername && THEME.errors.input}
                         />
 
                         {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}

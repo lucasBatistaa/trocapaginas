@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import Input from '../Input'
-import Button from '../Button';
+import SimpleButton from '../../Button/SimpleButton';
 
-import validatePassword  from "../../utils/validatePassword";
-import IsFormEmpty from "../../utils/isFormEmpty";
+import validatePassword  from "../../../utils/validatePassword";
+import IsFormEmpty from "../../../utils/isFormEmpty";
 
-import {THEME} from '../../styles/Theme'
+import {THEME} from '../../../styles/Theme'
 import { styles } from './styles'
 
 export default CreatePassword = (props) => {
@@ -90,7 +90,7 @@ export default CreatePassword = (props) => {
         
 
             <Input
-                label={"Confirmr senha"}
+                label={"Confirme sua senha"}
                 placeholder={"Confirme sua senha"}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
@@ -101,7 +101,7 @@ export default CreatePassword = (props) => {
             {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
             <View style={styles.button}>
-                <Button
+                <SimpleButton
                     title={props.buttonText}
                     onPress={handleSubmit}
                     color="brownDark"
