@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import Input from '../Input'
@@ -17,44 +16,48 @@ export default CreatePassword = (props) => {
     const [passwordError, setPasswordError] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState(false)
-    const [messageError, setMessageError] = useState('');
+    const [messageError, setMessageError] = useState('')
 
     const requirements = {
         minimum: { regex: /^.{8,}$/, message: 'Pelo menos oito caracteres' },
         hasNumber: { regex: /(?=.*\d)/, message: 'Pelo menos um número' },
         hasLetterCase: { regex: /^(?=.*[a-z])(?=.*[A-Z]).+$/, message: 'Letras maiúsculas e minúsculas' },
         hasSimbol: { regex: /\W|_/, message: 'Pelo menos um símbolo especial (Ex.: @ # $ ! *)' }
-    };
+    }
 
-    const navigation = useNavigation()
-
-    const handleSubmit = () => {
+    const validateForm = () => {
         const isEmptyPassword = IsFormEmpty(password) 
         setPasswordError(isEmptyPassword)
-
+    
         const isEmptyConfirmPassword = IsFormEmpty(confirmPassword) 
         setConfirmPasswordError(isEmptyConfirmPassword)
-
-        const valid = validatePassword(password)
-
-        if (valid){
-            if (!isEmptyPassword && !isEmptyConfirmPassword) {
+    
+        const validateData = validatePassword(password)
+    
+        if (validateData){
+            if (!isEmptyPassword) {
                 setMessageError("") 
                 
                 if (password === confirmPassword) {
-                    navigation.navigate('Slogan');
-                    //mandar para o banco
-                }
-                else {
+                    return true
+                } else {
                     setMessageError("As senhas não conferem")
                     setConfirmPasswordError(true)
                 }
-            }
-            else setMessageError("insira todos os campos!")
-        }
-        else {
-            setMessageError("A senha deve atender todos os requisitos.")
+            } else setMessageError("insira todos os campos!")
+        } else {
+            setMessageError("A senha deve atender todos os requisitos!")
             setPasswordError(true)
+        }
+
+        return false
+    }
+
+    const handleSubmit = () => {
+        if (validateForm()) {
+            // Função passada na página que chamou o componente
+            // Retorna a senha informada
+            props.onSubmit(password)
         }
     }        
 

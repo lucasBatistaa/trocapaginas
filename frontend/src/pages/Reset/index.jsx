@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native";
+
 
 import { styles } from './styles.jsx';
 import CreatePassword from '../../components/Forms/CreatePassword';
@@ -17,19 +19,21 @@ export default function Reset (){
     const [messageError, setMessageError] = useState('')
     const [nextPage, setNextPage] = useState(false)
 
-    const handleSubmit = () => {
+    const navigation = useNavigation()
+
+    const validateForm = () => {
         const isEmptyEmail =  IsFormEmpty(email)
         setErrorEmail(isEmptyEmail)
-
-        const validEmail = isEmail (email)
-        
+    
         if (!isEmptyEmail) {
-            setMessageError('')
 
-            if (validEmail){
+            if (isEmail(email)){
+                setMessageError('')
+
                 //verificar se o email existe
                 //mandar email com o link da página
-                setNextPage(true)
+
+                return true
             }
             else { 
                 setMessageError('E-mail incorreto')
@@ -37,8 +41,21 @@ export default function Reset (){
             }
         } else {
             setMessageError('O campo precisa ser preenchido')
-            setMessageError(true)
+            setErrorEmail(true)
         }
+
+        return false
+    }
+
+    const handleNextScreen = () => {
+        if (validateForm()) {
+            setNextPage(true)
+        }
+    }
+
+    const handleSubmitReset = (password) => {
+        console.log(password)
+        navigation.navigate('Slogan')
     }
 
     return (
@@ -62,10 +79,10 @@ export default function Reset (){
 
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                    <View style={styles.buttonStyle}>
+                    <View style={THEME.structure.viewButton}>
                         <SimpleButton 
                             type='submit'
-                            onPress={handleSubmit}
+                            onPress={handleNextScreen}
                             title={"RECUPERAR"}
                             color={'brownDark'} 
                         />
@@ -75,7 +92,10 @@ export default function Reset (){
             
                 : 
                 <View style={styles.componentContainer}> 
-                    <CreatePassword buttonText={"ALTERAR"}/>
+                    <CreatePassword 
+                        buttonText={"ALTERAR"}
+                        onSubmit={handleSubmitReset}
+                    />
                 </View>
             }
             

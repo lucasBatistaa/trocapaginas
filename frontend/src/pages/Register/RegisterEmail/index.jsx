@@ -23,25 +23,23 @@ export default function RegisterEmail() {
     const isEmail = /.+@.+/
     const navigation = useNavigation()
 
-    const handleNextScreen = () => {
+    const validateForm = () => {
+        const isEmptyUsername =  IsFormEmpty(username)
+        setErrorUsername(isEmptyUsername)
+
         const isEmptyEmail =  IsFormEmpty(email)
         setErrorEmail(isEmptyEmail)
         
-        const isEmptyPassword =  IsFormEmpty(username)
-        setErrorUsername(isEmptyPassword)
-        
-        if (!isEmptyEmail && !isEmptyPassword) {
+        if (!isEmptyEmail && !isEmptyUsername) {
             if (isEmail.test(email)){
-
-                // Validar nome de usuário no banco
+    
+                // Validar nome de usuário/email no banco
                 if (username === 'lucas') {
                     setMessageError('Nome de usuário já existe, insira outro!')
                     setErrorUsername(true)
                     setUsername('')
                 } else {
-
-                    //registrar usuário
-                    setNextPage(true)
+                    return true
                 }
             } else {
                 setMessageError('E-mail inválido!')
@@ -49,16 +47,27 @@ export default function RegisterEmail() {
         } else {
             setMessageError('Insira todos os campos!')
         }
+
+        return false
     }
 
-    const handleSubmit = () => {
-        
+    const handleNextScreen = () => {
+        if (validateForm()) {
+            setNextPage(true)
+        }
+    }
+
+    // Passada como parametro para o componente createPassword
+    const handleSubmitRegister = (password) => {
+        //ENVIAR PARA A API
+        console.log(username, email, password)
+        navigation.navigate('Slogan');
     }
 
     return (
         <View style={THEME.structure.container}>
             <View>
-                <Text style={THEME.fonts.h1}>CADASTRO</Text>
+                <Text style={THEME.fonts.h1.bold}>CADASTRO</Text>
 
                 <View style={styles.steps}>
                     <Text style={THEME.fonts.link}>ETAPA {nextPage ? 2 : 1}/2</Text>
@@ -110,7 +119,11 @@ export default function RegisterEmail() {
                             />
                         </View>
                     </View>
-                    : <CreatePassword buttonText={"CADASTRAR"}/>}
+                    : 
+                    <CreatePassword 
+                        buttonText={"CADASTRAR"}
+                        onSubmit={handleSubmitRegister}
+                    />}
             </View>
             
             <Links 
