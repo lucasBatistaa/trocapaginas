@@ -13,7 +13,6 @@ const user = new User();
 database.getUsers().then(users => {
     routes.post('/login', (req, res) => {
         const {email, password} = req.body;
-
         const userExists = users.find(user => user.email === email && user.password === password);
 
         if(userExists) {
@@ -25,6 +24,39 @@ database.getUsers().then(users => {
 
     })
 });
+
+
+// criação de conta
+
+database.getUsers().then(user => {
+    routes.post('/create', async (req, res) => {
+  
+    const {email, name, password, photo} = req.body;
+    
+    try{
+    // primeiro verificar se existe um email no banco de dados
+  
+        const existingUser = user.find(user => user.email === email);
+        if(existingUser){
+            return res.status(409).send('Já existe uma conta com esse email');
+        }
+  
+    // criptografar senha
+  
+        const passwordHash = await bcrypt.hash(password, salt); //criptografando senha
+  
+    //criando usuario no banco de dados
+         
+        await database.create(email, name, passwordHash, photo);
+  
+        res.status(201).send('Conta criada com sucesso');
+  
+    }   catch (error){
+        console.error(error);
+        res.status(500).send('Erro ao cadastrar usuário');
+    }
+  });
+  });
 
 //Esqueci minha senha
 database.getUsers().then(users => {
@@ -54,9 +86,10 @@ routes.post('/alterar-senha', (req, res) => {
     const passCript = bcrypt.hashSync(password, salt); //criptografando a senha
 
     //alterando no banco de dados
-    database.updatePassword(user.email, passCript);
+    database.updatePassword(user.email, passCript).then(() => {
+        return res.status(200).send("Senha alterada com sucesso!");
+    });
 
-    return res.status(200).send("Senha alterada com sucesso!");
 });
 
 export default routes;
