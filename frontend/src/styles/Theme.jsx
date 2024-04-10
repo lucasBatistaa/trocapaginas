@@ -17,10 +17,17 @@ export const THEME = {
 
     fonts: {
         h1: {
-            fontFamily: 'EBGaramond_700Bold',
-            fontSize: 24,
-        },
+            bold: {
+                fontFamily: 'EBGaramond_700Bold',
+                fontSize: 24,
+            },
 
+            normal: {
+                fontFamily: 'EBGaramond_400Regular',
+                fontSize: 24,
+            }
+        },
+        
         h2: {
             bold: {
                 fontFamily: 'EBGaramond_600SemiBold',
