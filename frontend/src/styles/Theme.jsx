@@ -57,12 +57,24 @@ export const THEME = {
         },
     }, 
 
-    container: {
-        flex: 1,
-        paddingTop: paddingTopValue,
-        paddingHorizontal: 28,
-        paddingBottom: 40,
+    structure: {
+        container: {
+            flex: 1,
+            paddingTop: paddingTopValue,
+            paddingHorizontal: 28,
+            paddingBottom: 40,
+    
+            justifyContent: 'space-between'
+        },
 
-        justifyContent: 'space-between'
-    },
+        viewForm: {
+            gap: 8,
+        },
+
+        viewButton: {
+            alignItems: 'center',
+            marginTop: 20,
+            gap: 36,
+        }
+    }
 }

@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native"
 
+import { THEME } from "../../../styles/Theme.jsx"
+
 export const styles = StyleSheet.create ({
     container: {
-        // fontSize: 16,
         gap: 4,
     },
 
@@ -13,7 +14,7 @@ export const styles = StyleSheet.create ({
 
     input: {
         borderWidth: 1,
-        borderColor: '#59372A', 
+        borderColor: THEME.colors.brownDark,
         borderRadius: 12,
         padding: 16,
         fontFamily: 'EBGaramond_400Regular',
@@ -21,7 +22,7 @@ export const styles = StyleSheet.create ({
     },
 
     error: {
-        borderColor: '#CE1F1F',
+        borderColor: THEME.colors.red,
     },
 
     icon: {

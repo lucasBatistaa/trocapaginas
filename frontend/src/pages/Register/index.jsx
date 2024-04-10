@@ -5,17 +5,16 @@ import ButtonWithIcon from "../../components/Button/ButtonWithIcon"
 import Links from "../../components/Links"
 
 import { THEME } from '../../styles/Theme'
-import { styles } from "./styles"
 
 export default function Register() {
 
     const navigation = useNavigation()
 
     return (
-        <View style={styles.container}>
+        <View style={THEME.structure.container}>
             <Text style={THEME.fonts.h1}>CADASTRO</Text>
 
-            <View style={styles.buttonsView}>
+            <View style={{gap: 12,}}>
                 <ButtonWithIcon
                     title={'Continuar com Google'}
                 />

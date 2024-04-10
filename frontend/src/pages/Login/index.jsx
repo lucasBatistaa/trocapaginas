@@ -69,10 +69,10 @@ export default function Login () {
     } 
 
     return (
-        <View style={styles.container}>
+        <View style={THEME.structure.container}>
             <Text style={THEME.fonts.h1}>LOGIN</Text>
             
-            <View style={styles.formInput}>
+            <View style={THEME.structure.viewForm}>
                 <ButtonWithIcon
                     title={'Continuar com Google'}
                 />
@@ -107,7 +107,7 @@ export default function Login () {
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.access}>
+            <View style={THEME.structure.viewButton}>
                 <SimpleButton 
                     onPress={handleSubmit}
                     title='ACESSAR'

@@ -23,10 +23,10 @@ export const styles = StyleSheet.create({
     },
 
     brownDark: {
-        color: '#59372A'
+        color: THEME.colors.brownDark
     },
     
     brownLight: {
-        backgroundColor: "#826059",
+        backgroundColor: THEME.colors.brownLight
     }
 })

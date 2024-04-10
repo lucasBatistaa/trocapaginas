@@ -1,39 +1,9 @@
-import { StyleSheet, StatusBar } from "react-native"
+import { StyleSheet } from "react-native"
 import { THEME } from "../../styles/Theme"
 
-const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
-
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: paddingTopValue,
-        paddingHorizontal: 28,
-        paddingBottom: 40,
-
-        justifyContent: 'space-between'
-    },
-
-    formInput: {
-        marginVertical: 20,
-        gap: 8,
-    },
-
-    inputError: {
-        borderColor: THEME.colors.red,
-    },
-
-    messageError: {
-        color: THEME.colors.red,
-        textAlign: 'center',
-    },
-
     resetPassword: {
         color: THEME.colors.brownMedium,
         textAlign: 'right'
     }, 
-
-    access: {
-        alignItems: 'center',
-        gap: 36,
-    }
 })

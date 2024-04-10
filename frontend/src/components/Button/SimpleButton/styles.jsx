@@ -1,24 +1,25 @@
 import { StyleSheet } from "react-native"
+import { THEME } from "../../../styles/Theme"
 
 export const styles = StyleSheet.create({
     button: {
-        borderRadius: 12,
         width: 200,
+        borderRadius: 12,
         paddingVertical: 12,
     },
     
     buttonText: {
         fontSize: 20,
-        color: '#F2F2F2',
+        color: THEME.colors.white,
         textAlign: 'center',
         fontFamily: 'EBGaramond_700Bold'
     },
 
     brownDark: {
-        backgroundColor: '#59372A'
+        backgroundColor: THEME.colors.brownDark
     },
     
     brownLight: {
-        backgroundColor: "#826059",
+        backgroundColor: THEME.colors.brownMedium
     }
 })

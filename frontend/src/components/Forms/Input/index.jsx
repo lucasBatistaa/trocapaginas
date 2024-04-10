@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import {View, TextInput, Text, TouchableOpacity, KeyboardAvoidingView } from "react-native"
 import Ionicons from '@expo/vector-icons/Ionicons';
+
 import { styles } from "./styles";
 
 export default function Input(props) {

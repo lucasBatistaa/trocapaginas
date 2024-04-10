@@ -56,7 +56,7 @@ export default function RegisterEmail() {
     }
 
     return (
-        <View style={THEME.container}>
+        <View style={THEME.structure.container}>
             <View>
                 <Text style={THEME.fonts.h1}>CADASTRO</Text>
 
@@ -82,7 +82,7 @@ export default function RegisterEmail() {
 
             <View>
                 {!nextPage ? 
-                    <View style={styles.formInput}> 
+                    <View style={THEME.structure.viewForm}> 
                         <Input 
                             label={'Nome do usuário'}
                             placeholder={'Insira seu usuário'}
@@ -101,7 +101,7 @@ export default function RegisterEmail() {
 
                         {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                        <View style={styles.button}>
+                        <View style={THEME.structure.viewButton}>
                             <SimpleButton
                                 type='submit'
                                 onPress={handleNextScreen}
