@@ -12,10 +12,8 @@ export const styles = StyleSheet.create ({
     },
     
     slogan: {
-        color: '#0A080D',
-        fontSize: 20,
         textAlign: 'center',
-        fontFamily: "EBGaramond_400Regular",
+        color: '#0A080D',
         marginTop: 20,
     },
 

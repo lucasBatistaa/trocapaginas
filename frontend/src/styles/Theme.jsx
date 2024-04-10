@@ -1,3 +1,7 @@
+import { StatusBar } from "react-native"
+
+const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
+
 export const THEME = {
     colors: {
         white: '#F2F2F2',
@@ -11,33 +15,73 @@ export const THEME = {
         red: '#CE1F1F',
     },
 
-    h1: {
-        fontFamily: 'EBGaramond_700Bold',
-        fontSize: 24,
-       
-        // medium: {
-        //     fontFamily: 'EBGaramond_700Medium',
-        //     fontSize: 24,
-        // },
+    fonts: {
+        h1: {
+            bold: {
+                fontFamily: 'EBGaramond_700Bold',
+                fontSize: 24,
+            },
 
-        // light: {
-        //     fontFamily: 'EBGaramond_700Medium',
-        //     fontSize: 24,
-        // }
+            normal: {
+                fontFamily: 'EBGaramond_400Regular',
+                fontSize: 24,
+            }
+        },
+        
+        h2: {
+            bold: {
+                fontFamily: 'EBGaramond_600SemiBold',
+                fontSize: 20,
+            },
+
+            normal: {
+                fontFamily: 'EBGaramond_400Regular',
+                fontSize: 20,
+            }
+        },
+        
+        link: {
+            fontFamily: 'EBGaramond_700Bold',
+            fontSize: 16,
+        },
+
+        text: {
+            fontFamily: 'EBGaramond_400Regular',
+            fontSize: 16,
+        },
     },
 
-    h2: {
-        fontFamily: 'EBGaramond_600SemiBold',
-        fontSize: 20,
-    },
+    errors: {
+        
+        message: {
+            color: '#CE1F1F',
+            textAlign: 'center',
+            marginVertical: 8,
+        },
+
+        input: {
+            borderColor: '#CE1F1F',
+        },
+    }, 
+
+    structure: {
+        container: {
+            flex: 1,
+            paddingTop: paddingTopValue,
+            paddingHorizontal: 28,
+            paddingBottom: 40,
     
-    link: {
-        fontFamily: 'EBGaramond_700Bold',
-        fontSize: 16,
-    },
+            justifyContent: 'space-between'
+        },
 
-    text: {
-        fontFamily: 'EBGaramond_400Regular',
-        fontSize: 16,
-    },
+        viewForm: {
+            gap: 8,
+        },
+
+        viewButton: {
+            alignItems: 'center',
+            marginTop: 20,
+            gap: 36,
+        }
+    }
 }

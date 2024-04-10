@@ -1,49 +1,48 @@
 import { useEffect, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
-import Button from "../../components/Button";
+import api from '../../services/api';
+import IsFormEmpty from "../../utils/isFormEmpty";
+
+import SimpleButton from "../../components/Button/SimpleButton";
+import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
+import Input from "../../components/Forms/Input";
+import Links from "../../components/Links";
 
 import { styles } from "./styles";
-import Input from "../../components/Input";
 import { THEME } from "../../styles/Theme";
-import { useNavigation } from "@react-navigation/native";
-
-import api from '../../../services/api';
 
 export default function Login () {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorEmail, setErrorEmail] = useState(false);
     const [errorPassword, setErrorPassword] = useState(false);
-    const [textError, setTextError] = useState('');
+    const [messageError, setMessageError] = useState('');
     const [user, setUser] = useState(null);
-    const [error, setError] = useState('');
 
     const navigation = useNavigation()
+    
+    // useEffect(() => {
+    //     api.get('Login').then(({data}) => {
+    //         setEmail(data.email);
+    //     })
+    // })
 
     const handleSubmit = async () => {    
-        setError('');
 
-        email.trim() === '' ? 
-            setErrorEmail(true) 
-            : 
-            setErrorEmail(false)
+        const isEmptyEmail =  IsFormEmpty(email)
+        setErrorEmail(isEmptyEmail)
+
+        const isEmptyPassword =  IsFormEmpty(password)
+        setErrorPassword(isEmptyPassword)
         
-        
-        password.trim() === '' ? 
-            setErrorPassword(true) 
-            :
-            setErrorPassword(false)
-        
-        
-        if (email.trim() != '' && password.trim() != '') {
-            setErrorEmail(false)
-            setErrorPassword(false)
-            setTextError('');
+        if (!isEmptyEmail && !isEmptyPassword) {
+            setMessageError('')
 
             try {
-                const response = await axios.post('http://localhost:4000/login',
+                const response = await axios.post('http://localhost:3000/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -54,37 +53,38 @@ export default function Login () {
                 navigation.navigate('Slogan');
 
             } catch (error) {
-                if(!error?.response) {
-                    setError('Erro ao acessar a página');
+                if (!error?.response) {
+                    setMessageError('Erro ao acessar a página');
                 
-                }else if(error.response?.status === 401) {
-                    setError('Usuário e/ou senha inválidos');
+                } else if (error.response?.status === 401) {
+                    setMessageError('Email e/ou senha incorreto(s)!');
                 }
             }
 
         } else {
-            setTextError('Insira todos os campos!')
+            setMessageError('Insira todos os campos!')
         }
 
-        useEffect(() => {
-            api.get('Login').then(({data}) => {
-                setEmail(data.email);
-            })
-        })
     } 
 
     return (
-        <View style={styles.container}>
-            <Text style={THEME.h1}>LOGIN</Text>
+        <View style={THEME.structure.container}>
+            <Text style={THEME.fonts.h1}>LOGIN</Text>
             
-            <View style={styles.formInput}>
+            <View style={THEME.structure.viewForm}>
+                <ButtonWithIcon
+                    title={'Continuar com Google'}
+                />
+                
+                <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
+
                 <Input 
-                    label={"E-mail"}
+                    label={"Email"}
                     placeholder={"Insira seu email"}
                     value={email}
                     onChangeText={setEmail}
                     keyboardType='email-address'
-                    style={errorEmail && styles.inputError}
+                    style={errorEmail && THEME.errors.input}
                 />
 
                 <Input 
@@ -92,32 +92,33 @@ export default function Login () {
                     placeholder={"Insira sua senha"}
                     value={password}
                     onChangeText={setPassword}
-                    style={errorPassword && styles.inputError}
+                    style={errorPassword && THEME.errors.input}
                     secureTextEntry
                 />
 
-                <Text style={[THEME.text, styles.textError]}>{textError}</Text>
-                <Text style={[THEME.text, styles.textError]}>{error}</Text>
+                {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
                 
                 <TouchableOpacity
                     activeOpacity={0.8}
+                    onPress={() => navigation.navigate('Reset')}
                 >
-                    <Text style={[THEME.link, styles.resetPassword]}>Esqueci minha senha</Text>
+                    <Text style={[THEME.fonts.link, styles.resetPassword]}>Esqueci minha senha</Text>
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.access}>
-                <Button 
-                    type='submit'
-                    style={styles.button}
+            <View style={THEME.structure.viewButton}>
+                <SimpleButton 
                     onPress={handleSubmit}
                     title='ACESSAR'
                     color={'brownDark'}         
                 />
 
-                <Text>
-                    Não possui conta? <Text style={[THEME.link, {color: THEME.colors.brownMedium}]}>Criar conta</Text>
-                </Text>
+                <Links 
+                    text={"Não possui conta?"}
+                    title={"Criar conta"}
+                    screen={"Register"}
+                />
+            
             </View>
         </View>
     )
