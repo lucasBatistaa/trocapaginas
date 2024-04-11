@@ -47,15 +47,49 @@ export default function Reset (){
         return false
     }
 
-    const handleNextScreen = () => {
+    const handleNextScreen = async () => {
         if (validateForm()) {
-            setNextPage(true)
+            try {
+                const response = await axios.post('http://localhost:3000/esqueciMinhaSenha',
+                JSON.stringify({email}),
+            
+                {
+                    headers: {'Content-Type': 'application/json'}
+                }) 
+
+                setNextPage(true)
+                
+            } catch (error) {
+                if (!error?.response) {
+                    setMessageError('Erro ao acessar a página');
+                
+                } else if (error.response?.status === 401) {
+                    setMessageError('Email inexistente');
+                    setNextPage(false)
+
+                }
+            }
         }
     }
 
-    const handleSubmitReset = (password) => {
-        console.log(password)
-        navigation.navigate('Slogan')
+    const handleSubmitReset = async (password) => {
+        try{
+            const response = await axios.post('http://192.168.1.65:3000/alterar-senha',
+            JSON.stringify({password}),
+
+            {
+                headers: {'Content-Type': 'application/json'}
+            })
+            
+            navigation.navigate('Login');
+    
+        }catch(error) {
+            
+            if (!error?.response) {
+                setMessageError('Erro ao acessar a página');
+            
+            }
+        }
     }
 
     return (

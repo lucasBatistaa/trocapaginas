@@ -43,7 +43,7 @@ export default function Login () {
 
             console.log('ENTROU', errorEmail, errorPassword)
             try {
-                const response = await axios.post('http://localhost:4000/login',
+                const response = await axios.post('http://localhost:3000/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}

@@ -6,7 +6,8 @@ sql `
 `.then(() => {
 	console.log('Tabela users alterada')
 })
-/*sql `
+
+sql `
 DROP TABLE IF EXISTS users`.then(() => {
     console.log('Tabela apagada')
 });
@@ -126,9 +127,9 @@ create table exchange (
 	foreign key(id_book) references books(id_book)
 );`.then(() => {
     console.log('tabela troca criada')
-})*/
+})
 
-/*sql `
+sql `
 insert into users (name, email, senha)
 values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
 	('Stephanie', 'stephanie.victoria@gmail.com', 'Stephanie$123'),
@@ -136,5 +137,11 @@ values ('Maria', 'maria.eduarda@gmail.com', 'mariA#123'),
 	('Lucas', 'lucas.batista@gmail.com', 'lucAs%123');`
 	.then(() => {
 		console.log('usuários inseridos');
-})*/
+})
 
+sql `
+insert into users (name, email, password)
+values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123');`
+	.then(() => {
+		console.log('usuários inseridos');
+})
