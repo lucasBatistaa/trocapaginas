@@ -41,7 +41,6 @@ export default function Login () {
         if (!isEmptyEmail && !isEmptyPassword) {
             setMessageError('')
 
-            console.log('ENTROU', errorEmail, errorPassword)
             try {
                 const response = await axios.post('http://localhost:3000/login',
                 JSON.stringify({email, password}),

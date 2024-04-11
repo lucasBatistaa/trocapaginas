@@ -19,6 +19,7 @@ export default function RegisterEmail() {
     const [ errorUsername, setErrorUsername ] = useState(false)
     const [ messageError, setMessageError ] = useState('')
     const [ nextPage, setNextPage ] = useState(false)
+    const [ photo, setPhoto] = useState(null)
     
     const isEmail = /.+@.+/
     const navigation = useNavigation()
@@ -58,10 +59,25 @@ export default function RegisterEmail() {
     }
 
     // Passada como parametro para o componente createPassword
-    const handleSubmitRegister = (password) => {
+    const handleSubmitRegister = async (password) => {
         //ENVIAR PARA A API
-        console.log(username, email, password)
-        navigation.navigate('Slogan');
+      
+        try {
+            const response = await axios.post('http://localhost:3000/create',
+            JSON.stringify({email, username, password, photo}),
+            {
+                headers: {'Content-Type': 'application/json'}
+            });
+
+            setUser(response.data);
+
+            navigation.navigate('Slogan');
+
+        } catch (error) {
+            if (!error?.response) {
+                setMessageError('Erro ao acessar a página');
+            } 
+        }
     }
 
     return (
