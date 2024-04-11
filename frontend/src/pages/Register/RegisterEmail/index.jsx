@@ -36,13 +36,11 @@ export default function RegisterEmail() {
             if (isEmail.test(email)){
     
                 try {
-                    const response = await axios.post('http://localhost:3000/verificar-email/',
+                    const response = await axios.post('http://192.168.43.70:3000/verificar-email/',
                     JSON.stringify({email}),
                     {
                         headers: {'Content-Type': 'application/json'}
                     });
-
-                    console.log(response.data)
 
                     return true
 
@@ -76,8 +74,8 @@ export default function RegisterEmail() {
         return false
     }
 
-    const handleNextScreen = () => {
-        if (validateForm()) {
+    const handleNextScreen = async () => {
+        if ( validateForm()) {
             setNextPage(true)
 
         }else {
@@ -90,7 +88,7 @@ export default function RegisterEmail() {
         //ENVIAR PARA A API
       
         try {
-            const response = await axios.post('http://localhost:3000/create',
+            const response = await axios.post('http://192.168.43.70:3000/create',
             JSON.stringify({email, username, password, photo}),
             {
                 headers: {'Content-Type': 'application/json'}
