@@ -50,7 +50,7 @@ export default function Reset (){
     const handleNextScreen = async () => {
         if (validateForm()) {
             try {
-                const response = await axios.post('http://localhost:3000/esqueciMinhaSenha',
+                const response = await axios.post('http://192.168.1.65:3000/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 import IsFormEmpty from "../../../utils/isFormEmpty";
 
@@ -24,7 +25,7 @@ export default function RegisterEmail() {
     const isEmail = /.+@.+/
     const navigation = useNavigation()
 
-    const validateForm = () => {
+    const validateForm = async () => {
         const isEmptyUsername =  IsFormEmpty(username)
         setErrorUsername(isEmptyUsername)
 
@@ -34,14 +35,37 @@ export default function RegisterEmail() {
         if (!isEmptyEmail && !isEmptyUsername) {
             if (isEmail.test(email)){
     
+                try {
+                    const response = await axios.post('http://localhost:3000/verificar-email/',
+                    JSON.stringify({email}),
+                    {
+                        headers: {'Content-Type': 'application/json'}
+                    });
+
+                    console.log(response.data)
+
+                    return true
+
+                }catch (error) {
+                    if (!error?.response) {
+                        setMessageError('Erro ao acessar a página');
+                        return false
+                    
+                    }else if(error.response?.status === 422) {
+                        setMessageError('Usuário já cadastrado!');
+                        setErrorUsername(true)
+                        setUsername('')
+                        return false
+                    }
+                }
                 // Validar nome de usuário/email no banco
-                if (username === 'lucas') {
+                /*if (username === 'lucas') {
                     setMessageError('Nome de usuário já existe, insira outro!')
                     setErrorUsername(true)
                     setUsername('')
                 } else {
                     return true
-                }
+                }*/
             } else {
                 setMessageError('E-mail inválido!')
             }
@@ -55,6 +79,9 @@ export default function RegisterEmail() {
     const handleNextScreen = () => {
         if (validateForm()) {
             setNextPage(true)
+
+        }else {
+            setNextPage(false)
         }
     }
 
@@ -69,14 +96,17 @@ export default function RegisterEmail() {
                 headers: {'Content-Type': 'application/json'}
             });
 
-            setUser(response.data);
+            console.log(response.data);
 
-            navigation.navigate('Slogan');
+            navigation.navigate('Login');
 
         } catch (error) {
             if (!error?.response) {
                 setMessageError('Erro ao acessar a página');
-            } 
+            
+            }else if(error.response?.status === 422) {
+                setMessageError('Usuário já cadastrado!');
+            }
         }
     }
 
@@ -135,7 +165,9 @@ export default function RegisterEmail() {
                             />
                         </View>
                     </View>
+
                     : 
+
                     <CreatePassword 
                         buttonText={"CADASTRAR"}
                         onSubmit={handleSubmitRegister}

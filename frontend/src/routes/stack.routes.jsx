@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator()
 
 export default function StackRoutes() {
     return (
-        <Stack.Navigator initialRouteName='InitialPage' screenOptions={{ headerShown: false}}>
+        <Stack.Navigator initialRouteName='Slogan' screenOptions={{ headerShown: false}}>
             <Stack.Screen name='Slogan' component={Slogan} />
             <Stack.Screen name='Login' component={Login} />
             <Stack.Screen name='Register' component={Register} />

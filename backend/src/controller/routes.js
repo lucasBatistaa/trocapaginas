@@ -13,7 +13,7 @@ const user = new User();
 database.getUsers().then(users => {
     routes.post('/login', (req, res) => {
         const {email, password} = req.body;
-        const validateUser = users.find(user => user.email === email && bcrypt.compare(password, user.password));
+        const validateUser = users.find(user => user.email === email && bcrypt.compareSync(password, user.password));
 
         if(validateUser) {
             return res.status(200).send('Login efetuado com sucesso!');
@@ -29,24 +29,43 @@ database.getUsers().then(users => {
 // criação de conta
 database.getUsers().then(users => {
     routes.post('/create', (req, res) => {
-        const {name, email, password, photo} = req.body;
 
+        const {username, email, password, photo} = req.body;
+        console.log(username, email, password, photo);
        //verificar se o e-mail existe no database
         const userExisting = users.find(user => user.email === email); 
 
         if(userExisting) {
-           return res.status(401).send('Usuário ja existe!');
+            console.log(userExisting);
+            return res.status(422).send('Usuário ja existe!');
 
         } else{
-
+            console.log('oi')
             const passwordHash = bcrypt.hashSync(password, salt); //criptografando a senha
 
-            database.create(name, email, passwordHash, photo); //criando o usuário no database
+            database.create(username, email, passwordHash, photo).then(() => {
+                return res.status(200).send('Usuário criado com sucesso!');
 
-            return res.status(200).send('Usuário criado com sucesso!');
+            }); //criando o usuário no database
+
         }
     });
 });
+
+//verificar se email existe
+database.getUsers().then(users => {
+    routes.post('/verificar-email', (req, res) => {
+        const {email} = req.body;
+        const emailExists = users.find(user => user.email === email);
+
+        if(emailExists) {
+            return res.status(422).send('E-mail já cadastrado!');
+
+        }else {
+            return res.status(200).send('E-mail disponível!');
+        }
+    })
+})
 
 //Esqueci minha senha
 database.getUsers().then(users => {
