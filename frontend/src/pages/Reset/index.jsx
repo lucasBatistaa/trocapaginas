@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
 
 
 import { styles } from './styles.jsx';
@@ -50,7 +51,7 @@ export default function Reset (){
     const handleNextScreen = async () => {
         if (validateForm()) {
             try {
-                const response = await axios.post('http://192.168.1.65:3000/esqueciMinhaSenha',
+                const response = await axios.post('http://192.168.43.70:3000/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {
@@ -74,7 +75,7 @@ export default function Reset (){
 
     const handleSubmitReset = async (password) => {
         try{
-            const response = await axios.post('http://192.168.1.65:3000/alterar-senha',
+            const response = await axios.post('http://192.168.43.70:3000/alterar-senha',
             JSON.stringify({password}),
 
             {
