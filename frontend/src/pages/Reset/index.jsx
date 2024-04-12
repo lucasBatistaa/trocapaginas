@@ -113,11 +113,11 @@ export default function Reset (){
 
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                    <View style={THEME.structure.viewButton}>
+                    <View style={[THEME.structure.viewButton, styles.buttonStyle]}>
                         <SimpleButton 
                             type='submit'
                             onPress={handleNextScreen}
-                            title={"RECUPERAR"}
+                            title={"AVANÇAR"}
                             color={'brownDark'} 
                         />
                     </View>

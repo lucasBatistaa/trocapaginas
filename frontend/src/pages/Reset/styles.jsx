@@ -17,14 +17,15 @@ export const styles = StyleSheet.create ({
     },
 
     alert: {
-        marginBottom: 24,
+        marginBottom: 36,
         flexDirection: 'row',
+        justifyContent:'center',
         alignItems: 'center',
         gap: 8
     },
 
     buttonStyle: {
-        marginTop: 50,
+        marginTop: 90,
         alignItems: 'center'
     },
 
