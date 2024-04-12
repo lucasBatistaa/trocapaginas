@@ -42,7 +42,7 @@ export default function Login () {
             setMessageError('')
 
             try {
-                const response = await axios.post('http://192.168.43.70:3000/login',
+                const response = await axios.post('http://192.168.1.64:3000/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}

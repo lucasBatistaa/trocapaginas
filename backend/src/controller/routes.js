@@ -10,8 +10,10 @@ const salt = bcrypt.genSaltSync(10);
 const user = new User();
 
 async function userExists(email) {
+    console.log('here:'  + email)
     await database.getUsers().then(users => {
-        return users.find(user => user.email === email);
+
+        return users.find(user => user.email === email)
     });
 }
 //login
@@ -32,14 +34,16 @@ routes.post('/login', (req, res) => {
 
 
 // criação de conta
-routes.post('/create', (req, res) => {
+routes.post('/create', async (req, res) => {
 
     const {username, email, password, photo} = req.body;
     //verificar se o e-mail existe no database
 
+    console.log(username, email)
+
     const passwordHash = bcrypt.hashSync(password, salt); //criptografando a senha
 
-    database.create(username, email, passwordHash, photo).then(() => {
+    await database.create(username, email, passwordHash, photo).then(() => {
         return res.status(200).send('Usuário criado com sucesso!');
     }); 
 });
@@ -48,7 +52,7 @@ routes.post('/create', (req, res) => {
 routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
-    if(await userExists(email)) {
+    if(await typeof(userExists(email)) != undefined) {
         return res.status(422).send('E-mail já cadastrado!');
 
     }else {
@@ -60,7 +64,7 @@ routes.post('/verificar-email', async (req, res) => {
 routes.post('/esqueciMinhaSenha', async (req, res) => {
     const {email} = req.body; //receber um e-mail
 
-    if(await userExists(email)) {
+    if(await typeof(userExists(email)) != undefined) {
         user.email = email;//setando email para usar depois
 
         //se e-mail existe -> enviar link de reset
