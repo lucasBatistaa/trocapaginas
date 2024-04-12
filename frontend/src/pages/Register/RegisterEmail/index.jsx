@@ -94,8 +94,6 @@ export default function RegisterEmail() {
                 headers: {'Content-Type': 'application/json'}
             });
 
-            console.log(response.data);
-
             navigation.navigate('Login');
 
         } catch (error) {

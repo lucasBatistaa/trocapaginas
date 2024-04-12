@@ -51,7 +51,7 @@ export default function Reset (){
     const handleNextScreen = async () => {
         if (validateForm()) {
             try {
-                const response = await axios.post('http://192.168.43.70:3000/esqueciMinhaSenha',
+                const response = await axios.post('http://192.168.1.64:3000/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {
@@ -75,7 +75,7 @@ export default function Reset (){
 
     const handleSubmitReset = async (password) => {
         try{
-            const response = await axios.post('http://192.168.43.70:3000/alterar-senha',
+            const response = await axios.post('http://192.168.1.64:3000/alterar-senha',
             JSON.stringify({password}),
 
             {

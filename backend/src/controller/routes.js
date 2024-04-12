@@ -45,10 +45,10 @@ routes.post('/create', (req, res) => {
 });
 
 //verificar se email existe
-routes.post('/verificar-email', (req, res) => {
+routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
-    if(userExists(email)) {
+    if(await userExists(email)) {
         return res.status(422).send('E-mail já cadastrado!');
 
     }else {
@@ -57,10 +57,10 @@ routes.post('/verificar-email', (req, res) => {
 })
 
 //Esqueci minha senha
-routes.post('/esqueciMinhaSenha', (req, res) => {
+routes.post('/esqueciMinhaSenha', async (req, res) => {
     const {email} = req.body; //receber um e-mail
 
-    if(userExists(email)) {
+    if(await userExists(email)) {
         user.email = email;//setando email para usar depois
 
         //se e-mail existe -> enviar link de reset
