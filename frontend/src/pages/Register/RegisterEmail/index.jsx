@@ -36,7 +36,7 @@ export default function RegisterEmail() {
             if (isEmail.test(email)){
     
                 try {
-                    const response = await axios.post('http://192.168.43.70:3000/verificar-email/',
+                    const response = await axios.post('http://192.168.1.64:3000/verificar-email/',
                     JSON.stringify({email}),
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -52,7 +52,6 @@ export default function RegisterEmail() {
                     }else if(error.response?.status === 422) {
                         setMessageError('Usuário já cadastrado!');
                         setErrorUsername(true)
-                        setUsername('')
                         return false
                     }
                 }
@@ -85,16 +84,15 @@ export default function RegisterEmail() {
 
     // Passada como parametro para o componente createPassword
     const handleSubmitRegister = async (password) => {
+
         //ENVIAR PARA A API
       
         try {
-            const response = await axios.post('http://192.168.43.70:3000/create',
-            JSON.stringify({email, username, password, photo}),
+            const response = await axios.post('http://192.168.1.64:3000/create',
+            JSON.stringify({username, email, password, photo}),
             {
                 headers: {'Content-Type': 'application/json'}
             });
-
-            console.log(response.data);
 
             navigation.navigate('Login');
 
