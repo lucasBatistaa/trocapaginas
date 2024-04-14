@@ -31,5 +31,5 @@ export const styles = StyleSheet.create ({
 
     componentContainer: {
         marginTop: 94
-    }
+    }  
 })
