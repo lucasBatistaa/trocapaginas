@@ -1,43 +1,70 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
 
-import SimpleButton from '../../components/Button/SimpleButton'
-import Input from '../../components/Forms/Input'
+
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useState } from 'react'
+import { ImageURI } from '../../utils/imageURI'
+import { ButtonAddImage } from './components/ButtonAddImage'
+import { RadioButtons } from './components/RadioButtons'
+import Review from './Review'
+import Post from './Post'
+
 
 export default function CreatePost() {
+    const [ isSelectedPost, setIsSelectedPost ] = useState(true)
+    
+    const [ imageURI, setImageURI ] = useState(null)
+    
+    const handleSelectAnImage = async () => {
+        const URI = await ImageURI()
+        setImageURI(URI)
+    }
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.viewAddImage}>
-                <Text>Adicionar imagem</Text>
+                {imageURI ? 
+                    <ImageBackground source={{ uri: imageURI }} style={styles.imageBackground}>
+                        <ButtonAddImage 
+                            onPress={handleSelectAnImage}
+                        />
+                    </ImageBackground>
+                : 
+                    <ButtonAddImage 
+                        onPress={handleSelectAnImage}
+                    />
+                }
             </View>
-            <View style={styles.viewPost}>
-                <View>
+
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.viewPost}
+            >
+                <View style={styles.viewUsername}>
                     <Image
                         source={require('../../assets/foto-perfil.png')}
                     />
-                    <Text>Nome da usuária</Text>
+                    <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark}]}>Nome da usuária</Text>
                 </View>
+
                 <View style={styles.viewRadioButtons}>
-                    <View style={styles.radioButton}>
-                        <Ionicons name='radio-button-off-outline' size={24} color={THEME.colors.brownDark}/>
-                        <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownDark}]}>Post</Text>
-                    </View>
-                    <View style={styles.radioButton}>
-                        <Ionicons name='radio-button-on-outline' size={24} color={THEME.colors.brownDark}/>
-                        <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownDark}]}>Resenha</Text>
-                    </View>
+                    <RadioButtons 
+                        label='Post'
+                        isSelectedPost={isSelectedPost}
+                        onPress={() => setIsSelectedPost(false)}
+                    />
+
+                    <RadioButtons 
+                        label='Resenha'
+                        isSelectedPost={!isSelectedPost}
+                        onPress={() => setIsSelectedPost(true)}
+                    />
                 </View>
-                <Input 
-                    placeholder={'Escolher livro'}
-                />
-                <SimpleButton 
-                    title={'PUBLICAR'}
-                    color={'brownDark'}
-                />
-            </View>
-        </View>
+
+                { isSelectedPost ? <Review /> : <Post/> }
+            </ScrollView>
+        </SafeAreaView>
     )
 }
