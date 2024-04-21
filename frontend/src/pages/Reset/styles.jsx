@@ -16,6 +16,18 @@ export const styles = StyleSheet.create ({
         justifyContent: 'center',
     },
 
+    containerCodePage: {
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 28,
+    },
+
+    text: {
+        textAlign: 'left', 
+        width: 370,
+        marginBottom: 90,
+    },
+
     alert: {
         marginBottom: 36,
         flexDirection: 'row',

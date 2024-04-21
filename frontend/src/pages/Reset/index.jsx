@@ -73,32 +73,14 @@ export default function Reset (){
         }
     }
 
-    const handleSubmitReset = async (password) => {
-        try{
-            const response = await axios.post('http://192.168.1.64:3000/alterar-senha',
-            JSON.stringify({password}),
-
-            {
-                headers: {'Content-Type': 'application/json'}
-            })
-            
-            navigation.navigate('Login');
-    
-        }catch(error) {
-            
-            if (!error?.response) {
-                setMessageError('Erro ao acessar a página');
-            
-            }
-        }
-    }
-
     return (
         <View style={styles.container}>
-            <Text style={[THEME.fonts.h1.bold, THEME.colors.black]}> ALTERAR SENHA </Text>
+            
 
             {!nextPage ? 
                 <View style={styles.containerEmailPage}>
+                    <Text style={[THEME.fonts.h1.bold, THEME.colors.black, styles.text]}> ALTERAR SENHA </Text>
+
                     <View style={styles.alert}>
                         <Ionicons name="alert-circle-outline" size={32} color={THEME.colors.brownMedium}/>
                         <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownMedium}]}>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
