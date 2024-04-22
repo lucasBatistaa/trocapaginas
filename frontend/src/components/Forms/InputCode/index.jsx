@@ -3,7 +3,7 @@ import { View, TextInput } from 'react-native';
 
 import { styles } from './styles';
 
-export default function InputCode () {
+export default function InputCode ({onSubmit}) {
   const [confirmationCode, setConfirmationCode] = useState('');
   const inputs = [];
 
@@ -12,6 +12,8 @@ export default function InputCode () {
     newConfirmationCode[index] = value;
     setConfirmationCode(newConfirmationCode.join(''));
   };
+
+  onSubmit(confirmationCode)
 
   for (let i = 0; i < 4; i++) {
     inputs.push(

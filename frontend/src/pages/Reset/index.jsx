@@ -6,8 +6,8 @@ import axios from 'axios';
 
 
 import { styles } from './styles.jsx';
-import CreatePassword from '../../components/Forms/CreatePassword';
 import Input from '../../components/Forms/Input';
+import ConfirmationCode from './confirmationCode.jsx';
 import SimpleButton from '../../components/Button/SimpleButton';
 
 import IsFormEmpty from '../../utils/isFormEmpty.jsx';
@@ -30,10 +30,6 @@ export default function Reset (){
 
             if (isEmail(email)){
                 setMessageError('')
-
-                //verificar se o email existe
-                //mandar email com o link da página
-
                 return true
             }
             else { 
@@ -76,7 +72,6 @@ export default function Reset (){
     return (
         <View style={styles.container}>
             
-
             {!nextPage ? 
                 <View style={styles.containerEmailPage}>
                     <Text style={[THEME.fonts.h1.bold, THEME.colors.black, styles.text]}> ALTERAR SENHA </Text>
@@ -108,12 +103,8 @@ export default function Reset (){
                 </View>
             
                 : 
-                <View style={styles.componentContainer}> 
-                    <CreatePassword 
-                        buttonText={"ALTERAR"}
-                        onSubmit={handleSubmitReset}
-                    />
-                </View>
+                
+                <ConfirmationCode/>
             }
             
         </View>

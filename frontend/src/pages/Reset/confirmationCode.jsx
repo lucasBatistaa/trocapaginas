@@ -12,13 +12,24 @@ import { THEME } from "../../styles/Theme";
 
 export default function ConfirmationCode () {
     const [nextPage, setNextPage] = useState(false)
+    const [messageError, setMessageError] = useState('')
+
+    let isCodeValid = false;
 
     const navigation = useNavigation()
 
-    const handleNextScreen = () => {
-        //validar se 
-        setNextPage(true)
+    const validateCode = (confirmationCode) => {
+        const code = confirmationCode.split('')
+
+        if (code.length == 4){
+            //conexao com o banco
+            isCodeValid = true
+        }
         
+    }
+
+    const handleNextScreen = () => {
+        isCodeValid ? setNextPage(true) : setNextPage(false)
     }
 
     const handleSubmitReset = async (password) => {
@@ -54,8 +65,10 @@ export default function ConfirmationCode () {
                         <Text style={[THEME.fonts.text, {color: THEME.colors.brownMedium}]}>Enviamos um código para o seu e-mail. Verifique sua caixa de entrada (ou spam) e digite abaixo os números informados.</Text>
                     </View>
     
-                    <InputCode/>
-    
+                    <InputCode
+                        onSubmit={validateCode}
+                    />
+
                     <SimpleButton
                         title={"CONFIRMAR"}
                         color={'brownDark'}
@@ -64,13 +77,13 @@ export default function ConfirmationCode () {
                 </View>
 
                 :
-                <View> 
-                    <CreatePassword 
-                        buttonText={"ALTERAR"}
-                        h1={"ALTERAR SENHA"}
-                        //onSubmit={handleSubmitReset}
-                    />
-                </View>
+                
+                <CreatePassword 
+                    buttonText={"ALTERAR"}
+                    h1={"ALTERAR SENHA"}
+                    //onSubmit={handleSubmitReset}
+                />
+               
 
             }
             
