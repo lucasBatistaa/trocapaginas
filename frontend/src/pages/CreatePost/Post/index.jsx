@@ -1,25 +1,46 @@
-import { View, TextInput } from "react-native"
+import { View, TextInput, Text } from "react-native"
 import { useState } from "react"
 
 import Input from "../../../components/Forms/Input"
 import SimpleButton from "../../../components/Button/SimpleButton"
 
 import { styles } from "./style"
+import { THEME } from "../../../styles/Theme"
+import IsFormEmpty from "../../../utils/isFormEmpty"
 
-export default function Post() {
+export default function Post({onSubmit}) {
     const [ text, setText ] = useState('')
+    const [ errorText, setErrorText ] = useState('')
+    const [ messageError, setMessageError ] = useState('')
     const [ nameBook, setNameBook ] = useState('')
+    const [ errorNameBook, setErrorNameBook ] = useState('')
 
-    const handleCreatePost = () => {
-        if (text && nameBook) {
-            console.log('POST CRIADO')
-        } 
+    const validateForm = () => {
+        const isEmptyText = IsFormEmpty(text)
+        setErrorText(isEmptyText)
+
+        const isEmptyNameBook = IsFormEmpty(nameBook)
+        setErrorNameBook(isEmptyNameBook)
+
+        if (!isEmptyText && !isEmptyNameBook) {
+            setMessageError('')
+            return true
+        } else {
+            setMessageError('Informe todos os campos!')
+        }
+    }
+
+
+    const handleValidatePost = () => {
+        if (validateForm()) {
+            onSubmit(text, nameBook)
+        }  
     }
 
     return (
         <View style={styles.container}>
             <TextInput
-                style={[styles.textInput, { textAlignVertical: 'top' }]}
+                style={[styles.textInput, { textAlignVertical: 'top'}, errorText && THEME.errors.input]}
                 multiline={true}
                 numberOfLines={6} // Adjust as needed
                 onChangeText={setText}
@@ -30,11 +51,23 @@ export default function Post() {
             />
 
             <Input
+                onChangeText={setNameBook}
+                value={nameBook}
                 placeholder={'Escolher livro'}
+                style={errorNameBook && THEME.errors.input}
             />
 
+            {
+                messageError && 
+                <Text 
+                    style={[THEME.fonts.text, THEME.errors.message]}
+                >
+                    {messageError}
+                </Text>
+            }
+
             <SimpleButton 
-                onPress={handleCreatePost}
+                onPress={handleValidatePost}
                 title={'PUBLICAR'}
                 color={'brownDark'}
             />

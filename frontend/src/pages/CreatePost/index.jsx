@@ -22,6 +22,14 @@ export default function CreatePost() {
         setImageURI(URI)
     }
 
+    const handleCreatePost = (text, nameBook, title = '', avaliation = 0) => {
+        if (imageURI) {
+            console.log(title, text, nameBook, avaliation, imageURI)
+        } else {
+            console.log('Sem imagem, validar ainda')
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewAddImage}>
@@ -52,18 +60,18 @@ export default function CreatePost() {
                 <View style={styles.viewRadioButtons}>
                     <RadioButtons 
                         label='Post'
-                        isSelectedPost={isSelectedPost}
-                        onPress={() => setIsSelectedPost(false)}
+                        isSelectedPost={!isSelectedPost}
+                        onPress={() => setIsSelectedPost(true)}
                     />
 
                     <RadioButtons 
                         label='Resenha'
-                        isSelectedPost={!isSelectedPost}
-                        onPress={() => setIsSelectedPost(true)}
+                        isSelectedPost={isSelectedPost}
+                        onPress={() => setIsSelectedPost(false)}
                     />
                 </View>
 
-                { isSelectedPost ? <Review /> : <Post/> }
+                { isSelectedPost ? <Post onSubmit={handleCreatePost}/> : <Review onSubmit={handleCreatePost}/>}
             </ScrollView>
         </SafeAreaView>
     )
