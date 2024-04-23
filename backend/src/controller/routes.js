@@ -14,12 +14,12 @@ const salt = bcrypt.genSaltSync(10);
 const user = new User();
 
 async function userExists(email) {
-    console.log('here:'  + email)
     await database.getUsers().then(users => {
 
         return users.find(user => user.email === email)
     });
 }
+
 //login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -94,35 +94,5 @@ routes.post('/alterar-senha', (req, res) => {
     });
 
 });
-
-//login com google
-
-/*passport.use(
-    new GoogleStrategy(
-        {
-            clientID: '466281999410-0fs5m0nbvs27cka5enoi6etev6ud039f.apps.googleusercontent.com',
-            clientSecret: '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',
-            callbackURL: 'http://localhost:3000/auth/google/callback',
-            scope: ['profile', 'email']
-        },
-        function (accessToken, refreshToken, profile, done) {
-            const userProfile = profile;
-            return done(null, userProfile);
-        }
-    )
-);
-
-routes.get('auth/google', (req, res) => {
-    passport.authenticate('google', { scope: ['profile', 'email'] })
-});
-
-routes.get('/auth/google/callback', 
-    passport.authenticate('google', {
-        session: false, 
-        failureRedirect: '/auth/error' }), 
-
-    (req, res) => {
-    res.send('Login efetuado com sucesso!');
-});*/
 
 export default routes;

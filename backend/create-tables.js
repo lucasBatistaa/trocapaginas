@@ -1,6 +1,6 @@
 import {sql} from './database-connect.js'
 
-sql `
+/*sql `
 	alter table users rename column
 	senha to password;
 `.then(() => {
@@ -144,4 +144,37 @@ insert into users (name, email, password)
 values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123');`
 	.then(() => {
 		console.log('usuários inseridos');
+})*/
+
+/*sql `
+	delete from users where email = 'santos.ze@gmail.com' or email = 'silva.ana@gmail.com' or email = 'jhon.elton@gmail.com' or email = 'teste6@gmail.com' or email = 'tes5@gmail.com';
+`.then(() => {
+	console.log('usuários apagados');
+})*/
+
+/*sql `
+	drop table posts;
+`.then(() => {
+	console.log('tabela posts apagada');
+})*/
+
+sql `
+create table publications (
+	id_publication serial not null,
+	id_user serial not null,
+	id_book serial not null,
+	content text not null,
+	type varchar(20) not null,
+	title varchar(50),
+	image bytea,
+	rating integer,
+	time_post timestamp not null,
+	likes integer not null,
+	
+	primary key(id_publication),
+	foreign key(id_user) references users(id_user),
+	foreign key(id_book) references books(id_book)
+
+);`.then(() => {
+    console.log('tabela publications criada')
 })

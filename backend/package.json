@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:3000",
   "type": "module",
   "name": "trocapaginas",
   "version": "1.0.0",

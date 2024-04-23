@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-
 import api from '../../services/api';
 import IsFormEmpty from "../../utils/isFormEmpty";
+import * as WebBrowser from 'expo-web-browser';
 
 import SimpleButton from "../../components/Button/SimpleButton";
 import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
@@ -22,42 +22,20 @@ export default function Login () {
     const [messageError, setMessageError] = useState('');
     const [user, setUser] = useState(null);
 
-    const navigation = useNavigation()
-    
-    // useEffect(() => {
-    //     api.get('Login').then(({data}) => {
-    //         setEmail(data.email);
-    //     })
-    // })
+    const navigation = useNavigation();
 
-    const[accessToken, setAccessToken] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const GoogleLogin =  async () => {
+        //window.open('http://localhost:6005/auth/google', '_self');
+        try {
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google', '_self');
+        
+            navigation.navigate('Slogan');
+            
+        }catch(error) {
+            console.log(error);
+        }
 
-    /*const [request, response, promptAsync] = Google.useAuthRequest({ 
-        webClientId: "466281999410-6mfko1jtgpipohep6pom97hhei34sbee.apps.googleusercontent.com",
-        anddroidClientId: "466281999410-hg5ni2eu171nct92kh4uai40rcmf2dr3.apps.googleusercontent.com"
-    });*/
-
-    const GoogleLogin = async () => {
-        await GoogleSignIn.hasPlayServices();
-        //const userInfo = await GoogleSignin.signIn();
-        //return userInfo;
     };
-
-    async function fetchUserInfo() {
-        let response = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-            headers: { 
-                Authorization: `Bearer ${accessToken}` 
-            }
-        });
-        let userInfo = await response.json();
-        setUser(userInfo);
-    }
-
-    const handlePress = async () => {
-        await promptAsync();
-    }
-
     const handleSubmit = async () => {    
 
         const isEmptyEmail =  IsFormEmpty(email)
@@ -93,23 +71,6 @@ export default function Login () {
 
     } 
 
-    /*const GoogleAuth = async () => {
-        try {
-            axios.get('http://localhost:3000/auth/google/callback').then(() => {
-                console.log('a');
-            })
-    
-            navigation.navigate('Slogan');
-
-        } catch (error) {
-            if (!error?.response) {
-                setMessageError('Erro ao acessar a página');
-            
-            } else if (error.response?.status === 401) {
-                setMessageError('Email e/ou senha incorreto(s)!');
-            }
-        }
-    }*/
     const GoogleAuth = async () => {
         try {
             //fetch('http:localhost:3000/auth/google/callback').then(res => console.log(res));
@@ -126,13 +87,14 @@ export default function Login () {
     return (
         <View style={THEME.structure.container}>
             <Text style={THEME.fonts.h1.bold}>LOGIN</Text>
-            
+        
             <View style={THEME.structure.viewForm}>
                 <ButtonWithIcon
                     title={'Continuar com Google'}
-                    onPress={GoogleAuth}
+                    onPress={GoogleLogin}
                 />
-                
+
+
                 <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
 
                 <Input 
@@ -174,8 +136,8 @@ export default function Login () {
                     text={"Não possui conta?"}
                     title={"Criar conta"}
                     screen={"Register"}
-                />
-            
+                /> 
+
             </View>
         </View>
     )

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "trocapaginas",
     "name": "trocapaginas",
     "slug": "trocapaginas",
     "version": "1.0.0",

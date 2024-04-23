@@ -4,7 +4,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 
-
 import { styles } from './styles.jsx';
 import CreatePassword from '../../components/Forms/CreatePassword';
 import Input from '../../components/Forms/Input';
