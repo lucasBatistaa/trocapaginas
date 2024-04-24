@@ -7,7 +7,6 @@ export const styles = StyleSheet.create ({
         justifyContent: 'center',
         gap: 14,
         marginTop: 40,
-        marginBottom: 138
       },
       
       input: {

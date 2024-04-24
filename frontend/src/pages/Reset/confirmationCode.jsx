@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { useState } from "react";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import { THEME } from "../../styles/Theme";
 export default function ConfirmationCode () {
     const [nextPage, setNextPage] = useState(false)
     const [messageError, setMessageError] = useState('')
+    let message;
 
     let isCodeValid = false;
 
@@ -25,11 +26,11 @@ export default function ConfirmationCode () {
             //conexao com o banco
             isCodeValid = true
         }
-        
+        else message = 'Por favor, preencha todos os campos.'
     }
 
     const handleNextScreen = () => {
-        isCodeValid ? setNextPage(true) : setNextPage(false)
+        isCodeValid ? setNextPage(true) : setMessageError(message)
     }
 
     const handleSubmitReset = async (password) => {
@@ -69,11 +70,16 @@ export default function ConfirmationCode () {
                         onSubmit={validateCode}
                     />
 
-                    <SimpleButton
-                        title={"CONFIRMAR"}
-                        color={'brownDark'}
-                        onPress={handleNextScreen}
-                    />
+                    {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
+
+                    <View style={{marginTop: 138}}>
+                        <SimpleButton
+                            title={"CONFIRMAR"}
+                            color={'brownDark'}
+                            onPress={handleNextScreen}
+                        />
+                    </View>
+
                 </View>
 
                 :

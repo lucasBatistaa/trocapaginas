@@ -41,7 +41,4 @@ export const styles = StyleSheet.create ({
         alignItems: 'center'
     },
 
-    componentContainer: {
-        marginTop: 94
-    }  
 })
