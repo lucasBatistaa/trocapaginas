@@ -15,4 +15,8 @@ export class Database {
         console.log(name)
         await sql `insert into users (name, email, password, photo) values (${name}, ${email}, ${password}, ${photo})`;	
     }
+
+    async createPost(content, timepost, likes, titleReview, textReview, image) {
+        await sql `insert into posts (content, time_post, likes, title_review, text_review, image) values (${content}, ${timepost}, ${likes}, ${titleReview}, ${textReview}, ${image})`;
+    }
 }
