@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 
 import { styles } from './styles.jsx';
-import CreatePassword from '../../components/Forms/CreatePassword';
 import Input from '../../components/Forms/Input';
+import ConfirmationCode from './confirmationCode.jsx';
 import SimpleButton from '../../components/Button/SimpleButton';
 
 import IsFormEmpty from '../../utils/isFormEmpty.jsx';
@@ -29,10 +29,6 @@ export default function Reset (){
 
             if (isEmail(email)){
                 setMessageError('')
-
-                //verificar se o email existe
-                //mandar email com o link da página
-
                 return true
             }
             else { 
@@ -72,32 +68,13 @@ export default function Reset (){
         }
     }
 
-    const handleSubmitReset = async (password) => {
-        try{
-            const response = await axios.post('http://192.168.1.64:3000/alterar-senha',
-            JSON.stringify({password}),
-
-            {
-                headers: {'Content-Type': 'application/json'}
-            })
-            
-            navigation.navigate('Login');
-    
-        }catch(error) {
-            
-            if (!error?.response) {
-                setMessageError('Erro ao acessar a página');
-            
-            }
-        }
-    }
-
     return (
         <View style={styles.container}>
-            <Text style={[THEME.fonts.h1.bold, THEME.colors.black]}> ALTERAR SENHA </Text>
-
+            
             {!nextPage ? 
                 <View style={styles.containerEmailPage}>
+                    <Text style={[THEME.fonts.h1.bold, THEME.colors.black, styles.text]}> ALTERAR SENHA </Text>
+
                     <View style={styles.alert}>
                         <Ionicons name="alert-circle-outline" size={32} color={THEME.colors.brownMedium}/>
                         <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownMedium}]}>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
@@ -113,11 +90,11 @@ export default function Reset (){
 
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-                    <View style={THEME.structure.viewButton}>
+                    <View style={[THEME.structure.viewButton, styles.buttonStyle]}>
                         <SimpleButton 
                             type='submit'
                             onPress={handleNextScreen}
-                            title={"RECUPERAR"}
+                            title={"AVANÇAR"}
                             color={'brownDark'} 
                         />
                     </View>
@@ -125,12 +102,8 @@ export default function Reset (){
                 </View>
             
                 : 
-                <View style={styles.componentContainer}> 
-                    <CreatePassword 
-                        buttonText={"ALTERAR"}
-                        onSubmit={handleSubmitReset}
-                    />
-                </View>
+                
+                <ConfirmationCode/>
             }
             
         </View>

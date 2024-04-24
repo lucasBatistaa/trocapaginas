@@ -12,7 +12,6 @@ export class Database {
     }
 
     async create(name, email, password, photo) {
-        console.log(name)
         await sql `insert into users (name, email, password, photo) values (${name}, ${email}, ${password}, ${photo})`;	
     }
 
