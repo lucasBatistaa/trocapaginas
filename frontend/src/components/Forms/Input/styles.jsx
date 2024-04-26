@@ -4,6 +4,7 @@ import { THEME } from "../../../styles/Theme.jsx"
 
 export const styles = StyleSheet.create ({
     container: {
+        width: '100%',
         gap: 4,
     },
 
