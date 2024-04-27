@@ -7,7 +7,6 @@ import RegisterEmail from '../pages/Register/RegisterEmail'
 import Reset from '../pages/Reset'
 import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
-import GoogleSuccess from '../components/GoogleSuccess'
 
 const Stack = createNativeStackNavigator()
 
@@ -21,7 +20,6 @@ export default function StackRoutes() {
             <Stack.Screen name='Reset' component={Reset}/>
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
-            <Stack.Screen name='GoogleSuccess' component={GoogleSuccess}/>
         </Stack.Navigator>
     )
 }

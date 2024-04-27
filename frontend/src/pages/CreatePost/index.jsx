@@ -4,10 +4,30 @@ import SimpleButton from '../../components/Button/SimpleButton'
 import Input from '../../components/Forms/Input'
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
+import { useNavigation } from "@react-navigation/native";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
-export default function CreatePost() {
+export default function CreatePost(props) {
+    const navigation = useNavigation();
+
+    const[userdata, setUserData] = useState({});
+
+        const getUser = async() => {
+            try {
+                const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success', {withCredentials: true})
+                console.log('response', response)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+    useEffect(() => {
+        getUser();
+    }, []);
+    
     return (
         <View style={styles.container}>
             <View style={styles.viewAddImage}>
@@ -18,7 +38,7 @@ export default function CreatePost() {
                     <Image
                         source={require('../../assets/foto-perfil.png')}
                     />
-                    <Text>Nome da usuária</Text>
+                    <Text>username</Text>
                 </View>
                 <View style={styles.viewRadioButtons}>
                     <View style={styles.radioButton}>

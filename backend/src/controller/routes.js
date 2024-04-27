@@ -3,10 +3,6 @@ import {Database} from '../../database.js';
 import {ResetSenha} from '../../reset-senha.js';
 import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
-import axios from 'axios';
-import passport from 'passport';
-import GoogleStrategy from 'passport-google-oauth2';
-import session from 'express-session';
 
 const routes = express.Router();
 const database = new Database();
@@ -26,9 +22,9 @@ routes.post('/login', (req, res) => {
 
     database.getUsers().then(users => {
         const validateUser = users.find(user => user.email === email && bcrypt.compareSync(password, user.password));
-    
-        if(validateUser) {
-            return res.status(200).send('Login efetuado com sucesso!');
+            
+        if(validateUser !== undefined) {
+            return res.status(200).json(validateUser);
         
         }else {
             return res.status(401).send('Usuário ou senha inválidos!');
@@ -42,8 +38,6 @@ routes.post('/create', async (req, res) => {
 
     const {username, email, password, photo} = req.body;
     //verificar se o e-mail existe no database
-
-    console.log(username, email)
 
     const passwordHash = bcrypt.hashSync(password, salt); //criptografando a senha
 

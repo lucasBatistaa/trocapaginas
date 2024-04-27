@@ -82,6 +82,19 @@ export const THEME = {
             alignItems: 'center',
             marginTop: 20,
             gap: 36,
+        },
+
+        modalContainer: {
+            flex: 1,
+            justifyContent: 'center',
+        },
+
+        modalContent: {
+            margin: 10,
+            padding: 40,
+            backgroundColor: 'white',
+            borderRadius: 8,
+            elevation: 10,
         }
     }
 }

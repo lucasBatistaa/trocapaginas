@@ -60,13 +60,13 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
         try {
 
+            console.log('teste:')
+            console.log(userExists(profile.emails[0].value))
             if(await userExists(profile.emails[0].value) === undefined) {
                 user.email = profile.emails[0].value;
                 user.name = profile.displayName;
                 user.password = '';
                 user.photo = profile.photos[0].value;
-
-                console.log(user.name);
 
                 await database.create(user.name, user.email, user.password, user.photo).then(() => {
                     console.log('user add');
@@ -93,7 +93,9 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res) => {
+  return res.json(user);
+});
 
 app.get('/auth/google/callback', passport.authenticate('google', {
 }), (req, res) => {
@@ -113,7 +115,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
         </html>
     `;
     res.send(htmlResponse);
-});
+  });
 
 
 app.listen(port, () => { 
