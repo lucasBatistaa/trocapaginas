@@ -1,55 +1,91 @@
-import { Modal, View, Text, Image, TextInput, ScrollView, TouchableOpacity } from "react-native";
+import { Modal, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Keyboard, PanResponder } from "react-native";
 import { styles } from "./style";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { FormatDate } from "../../utils/formatDate";
 
-export default function Comment({modalValue}) {
-    const [ modalVisible, setModalVisible ] = useState(true)
+export default function Comment({modalVisible, onPress}) {
     const [ textComment, setTextComment ] = useState('')
-    const [ allComments, setAllComments] = useState('')
+    const [ allComments, setAllComments] = useState([])
+    const inputRef = useRef(null)
 
-    setAllComments([
-        {
-            image: '../../assets/foto-perfil.png',
-            username: 'Nome da usuária',
-            time: '1h',
-            comment: 'sim amigaa, esse livro é maravilhoso'
-        }   
-    ])
+    useEffect(() => {
+        setAllComments([
+            {
+                idUser: '1',
+                image: require('../../assets/foto-perfil.png'),
+                username: 'Nome da usuária',
+                time: `${FormatDate()}`,
+                comment: 'sim amigaa, esse livro é maravilhoso'
+            },
+        ]);
+    }, [])
 
     const handleSendComment = () => {
-        if (textComment) {
+        if (textComment.trim()) {
             //id do usuario e comentário
+            
+            const newComment = {
+                idUser: '3',
+                image: require('../../assets/foto-perfil.png'),
+                username: 'Nome da usuária',
+                time: `${FormatDate()}`,
+                comment:`${textComment.trim()}`
+            }
+
+            setAllComments([...allComments, newComment])
+
+            inputRef.current.blur() 
+            Keyboard.dismiss()
+            setTextComment('')
             console.log('Enviado!')
         }
     }
 
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponderCapture: () => true,
+        onPanResponderMove: (event, gestureState) => {
+            // Detecta movimento para baixo (dy > 0)
+            if (gestureState.dy > 0) {
+                // Fecha o modal
+                onPress()
+            }
+        },
+    });
+
     return (
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
-            //onRequestClose
+            onRequestClose={() => setModalVisible(false)}
         >
             <View 
                 style={styles.principalView}
             >   
                 <TouchableOpacity
                     style={styles.clickClose}
-                    onPress={() => setModalVisible(false)}
+                    onPress={onPress}
                 >
 
                 </TouchableOpacity>
                 <View style={styles.commentView}>
-                    <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark, alignSelf: 'center' }]}>Comentários</Text>
+                    <View {...panResponder.panHandlers}>
+                        <View style={styles.gestureDropDown}></View>
+                        <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark, alignSelf: 'center' }]}>Comentários</Text>
+                    </View>
+
                     <ScrollView 
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.commentsList}
                     >
                         { 
-                            allComments.map((comment) => (
-                                <View style={styles.comment}>
+                            allComments?.map((comment) => (
+                                <View 
+                                    style={styles.comment}
+                                    key={comment.idUser}
+                                >
                                     <Image 
                                         source={comment.image}
                                         style={{width: 36, height: 36}}
@@ -69,6 +105,8 @@ export default function Comment({modalValue}) {
 
                     <View style={styles.textInputView}>
                         <TextInput
+                        
+                            ref={inputRef}
                             style={styles.textInput}
                             multiline={true}
                             numberOfLines={1}

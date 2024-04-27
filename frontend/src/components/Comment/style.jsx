@@ -17,10 +17,20 @@ export const styles = StyleSheet.create({
     commentView: {
         flex: 1,
         backgroundColor: THEME.colors.white,
+        // paddingTop: 12,
         padding: 20,
         gap: 20,
         borderTopStartRadius: 20,
         borderTopEndRadius: 20,
+    },
+
+    gestureDropDown: {
+        backgroundColor: THEME.colors.grayMedium,
+        width: 80,
+        height: 4,
+        borderRadius: 4,
+        alignSelf: 'center',
+        marginBottom: 8
     },
 
     commentsList: {
