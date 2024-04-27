@@ -45,7 +45,7 @@ export default function Publication({photo, username, textPost, isLike, bookImag
                     source={bookImage} />
             </View>
 
-            <Comment modalVisible={modalVisible} />
+            <Comment modalValue={modalVisible} />
         </View>
     )
 }

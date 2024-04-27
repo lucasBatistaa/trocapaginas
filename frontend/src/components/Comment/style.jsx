@@ -1,40 +1,41 @@
-import { StyleSheet } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 import { THEME } from "../../styles/Theme";
+
+
 
 export const styles = StyleSheet.create({
     principalView: {
         flex: 1,
-        justifyContent: 'center',
-        // alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        paddingTop: StatusBar.currentHeight,
+    },
+
+    clickClose: {
+        height: 160,
     },
 
     commentView: {
+        flex: 1,
         backgroundColor: THEME.colors.white,
         padding: 20,
         gap: 20,
-        marginTop: 160,
-        // alignItems: 'center'
+        borderTopStartRadius: 20,
+        borderTopEndRadius: 20,
     },
 
     commentsList: {
-        gap: 20
+        gap: 12,
     },  
 
     comment: {
         flexDirection: 'row',
-        gap: 16,
+        gap: 12,
         width: '100%',
-        alignSelf: 'flex-start',
-    },
-
-    commentContent: {
-        gap: 4,
     },
 
     commentHeader: {
         flexDirection: 'row',
-        alignItems: 'center',
-        
+        alignItems: 'flex-end',
         gap: 8,
     },
 

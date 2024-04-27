@@ -13,10 +13,7 @@ export default function InitialPage() {
                 textPost={'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.'}
                 bookImage={require('../../assets/foto-livro.png')}
                 isLike={true}
-
             />
-            
-            {/* <Comment modalVisible={true}/> */}
         </View>
     )
 }

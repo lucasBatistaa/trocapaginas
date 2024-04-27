@@ -1,13 +1,29 @@
-import { Modal, View, Text, Image, TextInput } from "react-native";
+import { Modal, View, Text, Image, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "./style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function Comment({modalVisible}) {
-
-    // const [ modalIsVisible, setModalIsVisible ] = useState(false)
+export default function Comment({modalValue}) {
+    const [ modalVisible, setModalVisible ] = useState(true)
     const [ textComment, setTextComment ] = useState('')
+    const [ allComments, setAllComments] = useState('')
+
+    setAllComments([
+        {
+            image: '../../assets/foto-perfil.png',
+            username: 'Nome da usuária',
+            time: '1h',
+            comment: 'sim amigaa, esse livro é maravilhoso'
+        }   
+    ])
+
+    const handleSendComment = () => {
+        if (textComment) {
+            //id do usuario e comentário
+            console.log('Enviado!')
+        }
+    }
 
     return (
         <Modal
@@ -16,24 +32,40 @@ export default function Comment({modalVisible}) {
             visible={modalVisible}
             //onRequestClose
         >
-            <View style={styles.principalView}>
+            <View 
+                style={styles.principalView}
+            >   
+                <TouchableOpacity
+                    style={styles.clickClose}
+                    onPress={() => setModalVisible(false)}
+                >
+
+                </TouchableOpacity>
                 <View style={styles.commentView}>
                     <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark, alignSelf: 'center' }]}>Comentários</Text>
-                    <View style={styles.commentsList}>
-                        <View style={styles.comment}>
-                            <Image 
-                                source={require('../../assets/foto-perfil.png')}
-                                style={{width: 40, height: 40}}
-                            />
-                            <View style={styles.commentContent}>
-                                <View style={styles.commentHeader}>
-                                    <Text style={[THEME.fonts.h2.normal, { color: THEME.colors.brownDark}]}>Nome da usuária</Text>
-                                    <Text style={[THEME.fonts.text, { color: THEME.colors.grayDark}]}>1h</Text>
-                                </View>
-                                <Text>sim amigaa, esse livro é maravilhoso</Text>
-                            </View>
-                        </View>
-                    </View>
+                    <ScrollView 
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.commentsList}
+                    >
+                        { 
+                            allComments.map((comment) => (
+                                <View style={styles.comment}>
+                                    <Image 
+                                        source={comment.image}
+                                        style={{width: 36, height: 36}}
+                                    />
+                                    <View style={styles.commentContent}>
+                                        <View style={styles.commentHeader}>
+                                            <Text style={[THEME.fonts.h2.normal, { color: THEME.colors.brownDark}]}>{comment.username}</Text>
+                                            <Text style={[THEME.fonts.text, { color: THEME.colors.grayDark}]}>{comment.time}</Text>
+                                        </View>
+                                        <Text style={THEME.fonts.text}>{comment.comment}</Text>
+                                    </View>
+                                </View>    
+                            ))
+                        
+                        }                    
+                    </ScrollView>
 
                     <View style={styles.textInputView}>
                         <TextInput
@@ -42,15 +74,16 @@ export default function Comment({modalVisible}) {
                             numberOfLines={1}
                             onChangeText={setTextComment}
                             value={textComment}
-                            placeholder="Informe o título"
+                            placeholder="Adicionar comentário"
                             placeholderTextColor={'#8B8B8B'}
                         />
 
                         <Ionicons 
                             name="send" 
                             style={styles.icon}
-                            size={24} 
+                            size={20} 
                             color={THEME.colors.grayDark}
+                            onPress={handleSendComment}
                         />
                     </View>
                 </View>
