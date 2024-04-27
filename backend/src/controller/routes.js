@@ -3,11 +3,20 @@ import {Database} from '../../database.js';
 import {ResetSenha} from '../../reset-senha.js';
 import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
+<<<<<<< HEAD
+=======
+import axios from 'axios';
+import passport from 'passport';
+import GoogleStrategy from 'passport-google-oauth2';
+import session from 'express-session';
+import { Post } from '../models/post.js';
+>>>>>>> 376640e54d2e04cf05b7726db87afa10a99f4092
 
 const routes = express.Router();
 const database = new Database();
 const salt = bcrypt.genSaltSync(10);
 const user = new User();
+const post = new Post();
 
 async function userExists(email) {
     await database.getUsers().then(users => {
@@ -89,4 +98,20 @@ routes.post('/alterar-senha', (req, res) => {
 
 });
 
+//criao da rota post
+
+routes.post('/post', async (req, res) => {
+    const {post:{content, timepost, likes, titleReview, textReview, image}} = req.body; // recebendo o objeto post
+
+    try{
+
+        await database.createPost(content, timepost, likes, titleReview, textReview, image).then(() => { //criando o post no banco de dados
+            return res.status(200).send('Post criado com sucesso!');
+        });
+    } catch (error) {   //retornando erro
+        console.log(error);
+        return res.status(500).send('Erro ao criar o post');
+    }
+
+})
 export default routes;

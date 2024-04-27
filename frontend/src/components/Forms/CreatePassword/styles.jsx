@@ -11,4 +11,14 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 4,
     },
+
+    text: {
+        textAlign: 'left', 
+        width: 370,
+        marginBottom: 90,
+    },
+
+    button: {
+        marginTop: 52
+    }
 })

@@ -63,6 +63,8 @@ export default CreatePassword = (props) => {
 
     return (
         <View>
+            <Text style={[THEME.fonts.h1.bold, THEME.colors.black, styles.text]}>{props.h1}</Text>
+
             <Input
                 label={"Senha"}
                 placeholder={"Insira sua senha"}
@@ -103,7 +105,7 @@ export default CreatePassword = (props) => {
 
             {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
-            <View style={THEME.structure.viewButton}>
+            <View style={[THEME.structure.viewButton, styles.button]}>
                 <SimpleButton
                     title={props.buttonText}
                     onPress={handleSubmit}
