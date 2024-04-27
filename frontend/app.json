@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "trocapaginas",
     "name": "trocapaginas",
     "slug": "trocapaginas",
     "version": "1.0.0",
@@ -17,6 +18,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.troca_paginas.trocapaginas",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F2F2F2"
@@ -26,8 +28,13 @@
       "favicon": "./src/assets/logo.png"
     },
     "plugins": [
-      "expo-font" 
-    
-    ]
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c3bac5ec-1edf-42ef-94a8-0fc6d650b617"
+      }
+    },
+    "owner": "troca_paginas"
   }
 }

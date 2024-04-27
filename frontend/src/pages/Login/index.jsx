@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Modal } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-
 import api from '../../services/api';
 import IsFormEmpty from "../../utils/isFormEmpty";
+import * as WebBrowser from 'expo-web-browser';
 
 import SimpleButton from "../../components/Button/SimpleButton";
 import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
@@ -22,14 +22,20 @@ export default function Login () {
     const [messageError, setMessageError] = useState('');
     const [user, setUser] = useState(null);
 
-    const navigation = useNavigation()
-    
-    // useEffect(() => {
-    //     api.get('Login').then(({data}) => {
-    //         setEmail(data.email);
-    //     })
-    // })
+    const navigation = useNavigation();
 
+    const GoogleLogin =  async () => {
+        //window.open('http://localhost:6005/auth/google', '_self');
+        try {
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google', '_self');
+        
+            navigation.navigate('Slogan');
+            
+        }catch(error) {
+            console.log(error);
+        }
+
+    };
     const handleSubmit = async () => {    
 
         const isEmptyEmail =  IsFormEmpty(email)
@@ -65,15 +71,30 @@ export default function Login () {
 
     } 
 
+    const GoogleAuth = async () => {
+        try {
+            //fetch('http:localhost:3000/auth/google/callback').then(res => console.log(res));
+            const url = 'http://localhost:3000/auth/google';
+            
+            const {data} = await axios.get(url, {withCredentials: false});
+            console.log(data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <View style={THEME.structure.container}>
             <Text style={THEME.fonts.h1.bold}>LOGIN</Text>
-            
+        
             <View style={THEME.structure.viewForm}>
                 <ButtonWithIcon
                     title={'Continuar com Google'}
+                    onPress={GoogleLogin}
                 />
-                
+
+
                 <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
 
                 <Input 
@@ -115,8 +136,8 @@ export default function Login () {
                     text={"Não possui conta?"}
                     title={"Criar conta"}
                     screen={"Register"}
-                />
-            
+                /> 
+
             </View>
         </View>
     )

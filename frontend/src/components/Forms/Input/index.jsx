@@ -10,7 +10,7 @@ export default function Input(props) {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>{props.label}</Text>
+            {props.label && <Text style={styles.label}>{props.label}</Text>}
 
             <TextInput
                 {...props}
@@ -19,7 +19,6 @@ export default function Input(props) {
                 underlineColorAndroid='transparent'
                 placeholderTextColor={'#8B8B8B'}    
                 secureTextEntry={secure}
-                // keyboardType=''
             />
 
             {props.secureTextEntry && 

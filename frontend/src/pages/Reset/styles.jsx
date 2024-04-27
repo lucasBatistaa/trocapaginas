@@ -16,19 +16,29 @@ export const styles = StyleSheet.create ({
         justifyContent: 'center',
     },
 
+    containerCodePage: {
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 28,
+    },
+
+    text: {
+        textAlign: 'left', 
+        width: 370,
+        marginBottom: 90,
+    },
+
     alert: {
-        marginBottom: 24,
+        marginBottom: 36,
         flexDirection: 'row',
+        justifyContent:'center',
         alignItems: 'center',
         gap: 8
     },
 
     buttonStyle: {
-        marginTop: 50,
+        marginTop: 90,
         alignItems: 'center'
     },
 
-    componentContainer: {
-        marginTop: 94
-    }
 })
