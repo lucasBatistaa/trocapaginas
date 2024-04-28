@@ -38,14 +38,39 @@ export default function CreatePost(props) {
         setImageURI(URI)
     }
 
-    const handleCreatePost = (text, nameBook, title = '', avaliation = 0) => {
+    const handleCreatePost = async (text, nameBook, title = '', avaliation = 0) => {
         if (imageURI) {
             console.log(title, text, nameBook, avaliation, imageURI)
         } else {
             console.log('Sem imagem, validar ainda')
         }
-    }
 
+        if(isSelectedPost){
+            try{
+                const response = await axios.post('http://localhost:3000/post', 
+                JSON.stringify({text, nameBook,imageURI}),{
+                    headers: {'Content-Type': 'application/json'}
+                });
+            } catch(error) {
+                if (!error?.response === 500) {
+                    setMessageError('Não foi possivel criar o post devido a um erro interno do servidor');
+                }
+            }   
+        }  else {
+            try{
+                const response = await axios.post('http://localhost:3000/resenha', 
+                JSON.stringify({text, nameBook, title, avaliation, imageURI}),{
+                    headers: {'Content-Type': 'application/json'}
+                });
+            } catch(error){
+                if (!error?.response === 500) {
+                    setMessageError('Não foi possivel criar o post devido a um erro interno do servidor');
+                }
+            }
+        }    
+    } 
+
+   
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewAddImage}>
