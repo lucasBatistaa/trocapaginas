@@ -9,16 +9,16 @@ import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
 
 const Stack = createNativeStackNavigator()
+//<Stack.Screen name='ConfirmationCode' component={ConfirmationCode}/>
 
 export default function StackRoutes() {
     return (
-        <Stack.Navigator initialRouteName='InitialPage' screenOptions={{ headerShown: false}}>
+        <Stack.Navigator initialRouteName='Slogan' screenOptions={{ headerShown: false}}>
             <Stack.Screen name='Slogan' component={Slogan} />
             <Stack.Screen name='Login' component={Login} />
             <Stack.Screen name='Register' component={Register} />
             <Stack.Screen name='RegisterEmail' component={RegisterEmail} />
             <Stack.Screen name='Reset' component={Reset}/>
-            <Stack.Screen name='ConfirmationCode' component={ConfirmationCode}/>
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
         </Stack.Navigator>

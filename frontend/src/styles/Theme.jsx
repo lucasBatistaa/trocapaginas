@@ -92,7 +92,7 @@ export const THEME = {
         modalContent: {
             margin: 10,
             padding: 40,
-            backgroundColor: 'white',
+            backgroundColor: '#F2F2F2',
             borderRadius: 8,
             elevation: 10,
         }

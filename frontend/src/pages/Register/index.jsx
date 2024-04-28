@@ -1,23 +1,30 @@
 import { View, Text } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import * as WebBrowser from 'expo-web-browser'
+import { useState } from "react"
 
 import ButtonWithIcon from "../../components/Button/ButtonWithIcon"
 import Links from "../../components/Links"
+import Info from "../../components/Info"
 
 import { THEME } from '../../styles/Theme'
 
 export default function Register() {
 
     const navigation = useNavigation();
+    const[modalVisible, setModalVisible] = useState(false);
 
     const GoogleLogin =  async () => {
-        //window.open('http://localhost:6005/auth/google', '_self');
         try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google', '_self');
+            WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google', '_self');
         
-            navigation.navigate('Slogan');
-            
+            setModalVisible(true);
+
+            setTimeout(() => {
+                navigation.navigate('CreatePost');
+                setModalVisible(false);
+            }, 18000);
+
         }catch(error) {
             console.log(error);
         }
@@ -25,7 +32,7 @@ export default function Register() {
     };
 
     return (
-        <View style={THEME.structure.container}>
+        <View style={[THEME.structure.container, modalVisible ? {opacity: 0.5 } : '']}>
             <Text style={THEME.fonts.h1.bold}>CADASTRO</Text>
 
             <View style={{gap: 12,}}>
@@ -46,6 +53,9 @@ export default function Register() {
                 title={'Realizar login'}
                 screen={'Login'}
             />
+
+            {modalVisible && <Info /> }
+
         </View>
     )
 }

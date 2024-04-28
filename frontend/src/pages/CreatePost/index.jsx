@@ -1,3 +1,11 @@
+import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from 'react';
+import axios from 'axios';
+
+import { THEME } from '../../styles/Theme'
+import { styles } from './style'
+
 import { useState } from 'react'
 import { ImageURI } from '../../utils/imageURI'
 import { ButtonAddImage } from './components/ButtonAddImage'
@@ -5,24 +13,26 @@ import { RadioButtons } from './components/RadioButtons'
 import Review from './Review'
 import Post from './Post'
 
-
 export default function CreatePost(props) {
+    const [ isSelectedPost, setIsSelectedPost ] = useState(true)
+    const [ imageURI, setImageURI ] = useState(null)
     const navigation = useNavigation();
-    
     const[userdata, setUserData] = useState({});
 
     const getUser = async() => {
         try {
-            const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success', {withCredentials: true})
-            console.log('response', response)
+            const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
+            setUserData(user.data);
+
         } catch (error) {
             console.log(error);
         }
     }
 
-useEffect(() => {
-    getUser();
-}, []);
+    useEffect(() => {
+        getUser();
+    }, []);
+
     const handleSelectAnImage = async () => {
         const URI = await ImageURI()
         setImageURI(URI)
@@ -58,10 +68,10 @@ useEffect(() => {
             >
                 <View style={styles.viewUsername}>
                     <Image
-                        source={require('../../assets/foto-perfil.png')}
+                        style={{width: 40, height: 40, borderRadius: 20}}
+                        source={{uri: userdata.photo}}
                     />
-                    <Text>username</Text>
-                    <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark}]}>Nome da usuária</Text>
+                    <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark}]}>{userdata.name}</Text>
                 </View>
 
                 <View style={styles.viewRadioButtons}>

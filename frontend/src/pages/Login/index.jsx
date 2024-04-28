@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, Modal, Button } from "react-native";
+import { Text, View, TouchableOpacity, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import api from '../../services/api';
@@ -11,6 +11,7 @@ import SimpleButton from "../../components/Button/SimpleButton";
 import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
 import Input from "../../components/Forms/Input";
 import Links from "../../components/Links";
+import Info from "../../components/Info";
 
 import { styles } from "./styles";
 import { THEME } from "../../styles/Theme";
@@ -27,30 +28,16 @@ export default function Login (props) {
     const navigation = useNavigation();
 
     const GoogleLogin =  async () => {
-        //window.open('http://localhost:6005/auth/google', '_self');
         try {
 
             WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google/callback', '_self');
 
             setModalVisible(true);
-            //await axios.get('https://trocapaginas-server-production.up.railway.app/auth/google')
-            
-            //setUser(true);
-
-            /*await fetch('https:trocapaginas-server-production.up.railway.app/auth/google', {mode: 'no-cors', headers: {
-                'Content-Type': 'text/html, charset=utf-8', 'Cache-Control': 'max-age=3600, must-revalidate'
-            }})*/
-
-            //fetch('https://trocapaginas-server-production.up.railway.app/auth/google')
-
-            /*const response = await axios.get('/auth/google', {
-                withCredentials: true
-            });*/
 
             setTimeout(() => {
                 navigation.navigate('CreatePost');
                 setModalVisible(false);
-            }, 15000);
+            }, 18000);
 
 
         }catch(error) {
@@ -155,18 +142,7 @@ export default function Login (props) {
 
             </View>
 
-            <Modal
-                visible={modalVisible}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={THEME.structure.modalContainer}>
-                    <View style={THEME.structure.modalContent}>
-                        <Text style={[THEME.fonts.h1.bold, {textAlign: 'center'}]}>Aguarde enquanto processamos suas informações...</Text>
-                    </View>
-                </View>
-            </Modal>
+            {modalVisible && <Info /> }
         </View>
     )
 }
