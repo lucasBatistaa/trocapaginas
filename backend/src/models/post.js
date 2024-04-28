@@ -4,7 +4,7 @@ import {Database} from '../../database.js'
 const database = new Database();
 
 export class Post {
-    constructor(idPost, idUser, content, timePost, image) {
+    constructor(idPost, idUser, content, timePost, ImageURI) {
         this.idPost = idPost;
         this.idUser = idUser;
         this.content = content;
