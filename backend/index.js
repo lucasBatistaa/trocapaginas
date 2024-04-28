@@ -53,20 +53,19 @@ passport.use(
     new oauth2strategy({
         clientID: clientid,
         clientSecret: clientsecret,
-        callbackURL: "https://trocapaginas-server-production.up.railway.app/auth/google/callback",
+        callbackURL: "/auth/google/callback",
         scope: ['profile', 'email']
     },
 
     async (accessToken, refreshToken, profile, done) => {
         try {
 
-            console.log('teste:')
-            console.log(userExists(profile.emails[0].value))
+            user.email = profile.emails[0].value;
+            user.name = profile.displayName;
+            user.password = '';
+            user.photo = profile.photos[0].value;
+
             if(await userExists(profile.emails[0].value) === undefined) {
-                user.email = profile.emails[0].value;
-                user.name = profile.displayName;
-                user.password = '';
-                user.photo = profile.photos[0].value;
 
                 await database.create(user.name, user.email, user.password, user.photo).then(() => {
                     console.log('user add');
@@ -76,7 +75,7 @@ passport.use(
                 console.log('Usuário já cadastrado!');
             }
 
-            return done(null, profile);
+            return done(null, user);
 
         } catch (error) {
             console.log(error);
@@ -93,13 +92,17 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}), (req, res) => {
-  return res.json(user);
-});
+app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+
 
 app.get('/auth/google/callback', passport.authenticate('google', {
-}), (req, res) => {
-    const htmlResponse = `
+  successRedirect: '/success',
+  failureRedirect: '/login/failed'
+}));
+
+
+app.get('/success', (req, res) => {
+  const htmlResponse = `
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -114,8 +117,33 @@ app.get('/auth/google/callback', passport.authenticate('google', {
         </body>
         </html>
     `;
-    res.send(htmlResponse);
-  });
+
+    res.status(200).send(htmlResponse);
+});
+
+app.get('/login/success', (req, res) => {
+  res.send(JSON.stringify(user));
+});
+
+app.get('/login/failed', (req, res) => {
+  const htmlResponse = `
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login efetuado!</title>
+        <body style="display: flex; flex-direction:column; align-items: center; margin-top: 40%; background: #f2f2f2; color: #170303; font-family: Roboto">
+            <img src="https://cdn4.iconfinder.com/data/icons/multimedia-75/512/multimedia-26-512.png" alt="error" style="width: 200px; height: 200px;">
+            <br>
+            <h2 style="font-size: 20px;">Autenticação com o Google falhou!</h2>
+            <p style="font-size: 18px">Feche o navegador para voltar ao aplicativo e tentar novamente!</p>
+        </body>
+        </html>
+    `;
+    
+    res.status(401).send(htmlResponse);
+});
 
 
 app.listen(port, () => { 
