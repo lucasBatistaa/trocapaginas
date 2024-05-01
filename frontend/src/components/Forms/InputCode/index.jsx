@@ -11,9 +11,8 @@ export default function InputCode ({onSubmit}) {
     const newConfirmationCode = confirmationCode.split('');
     newConfirmationCode[index] = value;
     setConfirmationCode(newConfirmationCode.join(''));
+    onSubmit(newConfirmationCode.join(''));
   };
-
-  onSubmit(confirmationCode)
 
   for (let i = 0; i < 4; i++) {
     inputs.push(

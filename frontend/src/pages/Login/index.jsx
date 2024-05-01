@@ -58,15 +58,13 @@ export default function Login (props) {
             setMessageError('')
 
             try {
-                const response = await axios.post('http://localhost:6005/login',
+                const response = await axios.post('http://192.168.1.65:6005/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
         
-                navigation.navigate('CreatePost', {
-                    user: response.data
-                });
+                props.navigation.navigate('CreatePost', {user: response.data});
 
             } catch (error) {
                 if (!error?.response) {

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
+import { useEffect } from "react";
 
 import InputCode from "../../components/Forms/InputCode";
 import SimpleButton from "../../components/Button/SimpleButton";
@@ -13,29 +14,53 @@ import { THEME } from "../../styles/Theme";
 export default function ConfirmationCode () {
     const [nextPage, setNextPage] = useState(false)
     const [messageError, setMessageError] = useState('')
-    let message;
-
-    let isCodeValid = false;
+    const[codeValid, setCodeValid] = useState(false)
+    const[code, setCode] = useState('');
 
     const navigation = useNavigation()
 
-    const validateCode = (confirmationCode) => {
-        const code = confirmationCode.split('')
+    const validateCode = async (confirmationCode) => {
+        setCode(confirmationCode);
 
-        if (code.length == 4){
-            //conexao com o banco
-            isCodeValid = true
+        if(confirmationCode.length != 4) {
+            setMessageError('Por favor, preencha todos os dígitos');
+        
+        }else {
+            setCodeValid(true);
+            setMessageError('');
         }
-        else message = 'Por favor, preencha todos os campos.'
     }
 
-    const handleNextScreen = () => {
-        isCodeValid ? setNextPage(true) : setMessageError(message)
+    const handleNextScreen = async() => {
+
+        if(code.length === 0) {
+            setMessageError('Por favor, preencha todos os dígitos');
+        
+        }else if(codeValid) {
+            try {
+
+                const response = await axios.get('http://192.168.1.65:6005/getCode', {
+                    params: {
+                        confirmationCode: code
+                    }
+                });
+
+                setNextPage(true);
+
+            }catch(error) {
+                if(!error?.response) {
+                    setMessageError('Erro ao acessar a página');
+                
+                }else if(error.response?.status === 401) {
+                    setMessageError('Código inválido, tente novamente');
+                }
+            }
+        }
     }
 
     const handleSubmitReset = async (password) => {
         try{
-            const response = await axios.post('http://192.168.1.64:3000/alterar-senha',
+            const response = await axios.post('http://192.168.1.65:6005/alterar-senha',
             JSON.stringify({password}),
 
             {
@@ -63,7 +88,7 @@ export default function ConfirmationCode () {
                    
                     <View style={styles.alert}>
                         <Ionicons name="alert-circle-outline" size={32} color={THEME.colors.brownMedium}/>
-                        <Text style={[THEME.fonts.text, {color: THEME.colors.brownMedium}]}>Enviamos um código para o seu e-mail. Verifique sua caixa de entrada (ou spam) e digite abaixo os números informados.</Text>
+                        <Text style={[THEME.fonts.text, {color: THEME.colors.brownMedium}]}>Enviaremos um código para o seu e-mail em um minuto! Verifique sua caixa de entrada (ou spam) e digite abaixo os números informados.</Text>
                     </View>
     
                     <InputCode
@@ -73,6 +98,7 @@ export default function ConfirmationCode () {
                     {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
 
                     <View style={{marginTop: 138}}>
+
                         <SimpleButton
                             title={"CONFIRMAR"}
                             color={'brownDark'}
@@ -83,13 +109,11 @@ export default function ConfirmationCode () {
                 </View>
 
                 :
-                
                 <CreatePassword 
                     buttonText={"ALTERAR"}
-                    h1={"ALTERAR SENHA"}
-                    //onSubmit={handleSubmitReset}
+                    h1={"ALTERAR A SUA SENHA"}
+                    onSubmit={handleSubmitReset}
                 />
-               
 
             }
             

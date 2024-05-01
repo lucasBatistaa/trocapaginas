@@ -13,7 +13,7 @@ import Links from "../../../components/Links";
 import { THEME } from "../../../styles/Theme";
 import { styles } from "./styles";
 
-export default function RegisterEmail() {
+export default function RegisterEmail(props) {
     const [ email, setEmail ] = useState('')
     const [ username, setUsername ] = useState('')
     const [ errorEmail, setErrorEmail ] = useState(false)
@@ -36,33 +36,26 @@ export default function RegisterEmail() {
             if (isEmail.test(email)){
     
                 try {
-                    const response = await axios.post('http://localhost:6005/verificar-email/',
+                    const response = await axios.post('http://192.168.1.65:6005/verificar-email/',
                     JSON.stringify({email}),
                     {
                         headers: {'Content-Type': 'application/json'}
                     });
 
-                    return true
+                    return true;
 
                 }catch (error) {
                     if (!error?.response) {
                         setMessageError('Erro ao acessar a página');
-                        return false
+                        return false;
                     
                     }else if(error.response?.status === 422) {
                         setMessageError('Usuário já cadastrado!');
                         setErrorUsername(true)
-                        return false
+                        return false;
                     }
                 }
-                // Validar nome de usuário/email no banco
-                /*if (username === 'lucas') {
-                    setMessageError('Nome de usuário já existe, insira outro!')
-                    setErrorUsername(true)
-                    setUsername('')
-                } else {
-                    return true
-                }*/
+
             } else {
                 setMessageError('E-mail inválido!')
             }
@@ -70,11 +63,11 @@ export default function RegisterEmail() {
             setMessageError('Insira todos os campos!')
         }
 
-        return false
+        return false;
     }
 
     const handleNextScreen = async () => {
-        if ( validateForm()) {
+        if (await validateForm()) {
             setNextPage(true)
 
         }else {
@@ -82,19 +75,15 @@ export default function RegisterEmail() {
         }
     }
 
-    // Passada como parametro para o componente createPassword
-    const handleSubmitRegister = async (password) => {
-
-        //ENVIAR PARA A API
-      
+    const handleSubmitRegister = async (password) => {      
         try {
-            const response = await axios.post('http://localhost:6005/create',
+            const user = await axios.post('http://192.168.1.65:6005/create',
             JSON.stringify({username, email, password, photo}),
             {
                 headers: {'Content-Type': 'application/json'}
             });
 
-            navigation.navigate('Login');
+            props.navigation.navigate('CreatePost', {user: user.data});
 
         } catch (error) {
             if (!error?.response) {

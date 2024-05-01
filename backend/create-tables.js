@@ -158,8 +158,8 @@ values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123'
 	console.log('tabela posts apagada');
 })*/
 
-sql `
-create table publications (
+//sql `
+/*create table publications (
 	id_publication serial not null,
 	id_user serial not null,
 	id_book serial not null,
@@ -177,4 +177,44 @@ create table publications (
 
 );`.then(() => {
     console.log('tabela publications criada')
+})*/
+/*sql `
+	delete from users where email = 'silva.kaio@gmail.com' or email = 'silva.ana@gmail.com' or email = 'jhon.elton@gmail.com' or email = 'teste6@gmail.com' or email = 'tes5@gmail.com';
+`.then(() => {
+	console.log('usuários apagados');
+})*/
+
+/*sql `
+create table posts (
+	id_post serial not null,
+	id_user serial not null,
+	content text not null,
+	nameBook text not null,
+	title varchar(50),
+	image bytea,
+	time_post timestamp not null,
+	likes integer not null,
+	
+	primary key(id_post),
+	foreign key(id_user) references users(id_user)
+);`.then(() => {
+    console.log('tabela posts criada')
+})*/
+
+sql `
+create table reviews (
+	id_review serial not null,
+	id_user serial not null,
+	rating integer not null,
+	content text not null,
+	nameBook text not null,
+	title varchar(50),
+	image bytea,
+	time_post timestamp not null,
+	likes integer not null,
+	
+	primary key(id_review),
+	foreign key(id_user) references users(id_user)
+);`.then(() => {
+    console.log('tabela posts criada')
 })

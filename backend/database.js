@@ -11,8 +11,8 @@ export class Database {
         await sql `update users set password = ${password} where email = ${email}`;
     }
 
-    async create(name, email, password, photo) {
-        await sql `insert into users (name, email, password, photo) values (${name}, ${email}, ${password}, ${photo})`;	
+    async create(user) {
+        await sql `insert into users (name, email, password, photo) values (${user.name}, ${user.email}, ${user.password}, ${user.photo})`;	
     }
 
     async createPost(content, timepost, likes, titleReview, textReview, image) {

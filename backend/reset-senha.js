@@ -2,11 +2,18 @@ import nodemailer from 'nodemailer';
 import 'dotenv/config';
 
 export class ResetSenha {
-    constructor(email) {
+    constructor(email, validationCode) {
         this.email = email;
+        this.validationCode = validationCode;
     }
 
     sendEmail() {
+        const emailContent = `
+            Olá, recebemos sua solicitação para redefinir sua senha. Digite o código abaixo para redefinir a senha: <br><br> <h1 style="text-align: center">${this.validationCode}</h1>
+            <br><br>
+            Atenciosamente, <br>
+            <img src="https://i.ibb.co/k9Y2ZzX/Viver-sem-ler-perigoso-te-obriga-a-crer-no-que-te-dizem-Mafalda.png">
+        `
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 587,
@@ -22,7 +29,7 @@ export class ResetSenha {
             from: "Troca Páginas <process.env.USER_EMAIL>",
             to: this.email, 
             subject: "Solicitação de alteração de senha",
-            html: "Olá, recebemos sua solicitação para redefinir sua senha. Clique no link abaixo para redefinir a senha: <br><br> <a href='http://localhost:8081/'>Redefinir minha senha</a>"
+            html: emailContent
         }).then(message => {
             console.log(message);
         

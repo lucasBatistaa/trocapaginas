@@ -30,7 +30,12 @@ export default function CreatePost(props) {
     }
 
     useEffect(() => {
-        getUser();
+        if(props.route.params.user === undefined) {
+            getUser();
+
+        }else {
+            setUserData(props.route.params.user);  
+        }
     }, []);
 
     const handleSelectAnImage = async () => {
