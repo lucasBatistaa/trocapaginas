@@ -3,15 +3,14 @@ import {Database} from '../../database.js';
 import {ResetSenha} from '../../reset-senha.js';
 import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
-import { Post } from '../models/post.js';
+import {Post} from '../models/post.js';
+import {Review} from '../models/review.js';
 
 const routes = express.Router();
 const database = new Database();
 const salt = bcrypt.genSaltSync(10);
 const user = new User();
 const post = new Post();
-let validationCode = [];
-
 async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
@@ -117,17 +116,34 @@ routes.post('/alterar-senha', async (req, res) => {
 //criao da rota post
 
 routes.post('/post', async (req, res) => {
-    const {post:{content, timepost, likes, titleReview, textReview, image}} = req.body; // recebendo o objeto post
+    const {post: {content, timePost, nameBook, ImageURI}} = req.body; // recebendo o objeto post
 
     try{
 
-        await database.createPost(content, timepost, likes, titleReview, textReview, image).then(() => { //criando o post no banco de dados
-            return res.status(200).send('Post criado com sucesso!');
+        await database.createPost(content, timePost, nameBook, ImageURI).then(() => { //criando o post no banco de dados
+            return res.status(201).send('Post criado com sucesso!');
         });
+
     } catch (error) {   //retornando erro
         console.log(error);
         return res.status(500).send('Erro ao criar o post');
     }
 
-})
+});
+
+routes.post('/review', async (req, res) => {
+    const {review: {title, text, nameBook, avaliation, ImageURI}} = req.body; // recebendo o objeto review
+
+    try{
+        await database.createReview(title, text, nameBook, avaliation, ImageURI).then(() => { //criando o review no banco de dados
+        return res.status(201).send('Resenha criada com sucesso!');
+        });    
+
+    } catch (error) {   //retornando erro
+        console.log(error);
+        return res.status(500).send('Erro ao criar a resenha');
+    }
+
+});
+
 export default routes;

@@ -15,7 +15,11 @@ export class Database {
         await sql `insert into users (name, email, password, photo) values (${user.name}, ${user.email}, ${user.password}, ${user.photo})`;	
     }
 
-    async createPost(content, timepost, likes, titleReview, textReview, image) {
-        await sql `insert into posts (content, time_post, likes, title_review, text_review, image) values (${content}, ${timepost}, ${likes}, ${titleReview}, ${textReview}, ${image})`;
+    async createPost(content, timePost, nameBook, ImageURI) {
+        await sql `insert into posts (content, timePost, nameBook, ImageURI) values (${content}, ${timepost}, ${nameBook}, ${ImageURI})`;
+    }
+
+    async createReview(title, text, nameBook, avaliation, ImageURI) {
+        await sql `insert into reviews (title, text, nameBook, avaliation, ImageURI) values (${title}, ${text}, ${nameBook}, ${avaliation}, ${ImageURI})`;
     }
 }
