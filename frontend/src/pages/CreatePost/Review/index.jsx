@@ -86,7 +86,7 @@ export default function Review({onSubmit}) {
                 value={text}
                 placeholder="Digite aqui..."
                 placeholderTextColor={'#8B8B8B'} 
-                maxLength={200}
+                maxLength={500}
             />
 
             <Input 

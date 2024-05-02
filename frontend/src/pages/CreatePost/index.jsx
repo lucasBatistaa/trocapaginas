@@ -30,7 +30,7 @@ export default function CreatePost(props) {
     }
 
     useEffect(() => {
-        if(props.route.params.user === undefined) {
+        if(props.route.params === undefined) {
             getUser();
 
         }else {
@@ -39,31 +39,49 @@ export default function CreatePost(props) {
     }, []);
 
     const handleSelectAnImage = async () => {
-        const URI = await ImageURI()
-        setImageURI(URI)
+        const URI = await ImageURI();
+        setImageURI(URI);
     }
 
     const handleCreatePost = async (text, nameBook, title = '', avaliation = 0) => {
-        if (imageURI) {
-            console.log(title, text, nameBook, avaliation, imageURI)
+        /*if (imageURI) {
+            console.log(title, text, nameBook, avaliation, imageURI);
+
         } else {
-            console.log('Sem imagem, validar ainda')
+            console.log('Sem imagem, validar ainda');
+        }*/
+        const data_post = {
+            userEmail: userdata.email,
+            text: text,
+            nameBook: nameBook,
+            imageURI: imageURI 
         }
 
         if(isSelectedPost){
             try{
-                const response = await axios.post('http://localhost:3000/post', 
-                JSON.stringify({text, nameBook,imageURI}),{
+                
+
+                const response = await axios.post('http://192.168.1.64:6005/post', 
+                JSON.stringify({data_post}),
+                {
                     headers: {'Content-Type': 'application/json'}
                 });
+
+                navigation.navigate('Slogan');
+
             } catch(error) {
-                if (!error?.response === 500) {
-                    setMessageError('Não foi possivel criar o post devido a um erro interno do servidor');
+
+                if(!error?.response) {
+                    setMessageError('Erro ao acessar a página');
+
+                }else if (error?.response === 500) {
+                    setMessageError('Não foi possivel criar o post devido a um erro interno do servidor');          
                 }
             }   
-        }  else {
+
+        }else {
             try{
-                const response = await axios.post('http://localhost:3000/resenha', 
+                const response = await axios.post('http://192.168.1.64:6005/review', 
                 JSON.stringify({text, nameBook, title, avaliation, imageURI}),{
                     headers: {'Content-Type': 'application/json'}
                 });
@@ -75,7 +93,6 @@ export default function CreatePost(props) {
         }    
     } 
 
-   
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.viewAddImage}>

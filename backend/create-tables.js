@@ -152,12 +152,6 @@ values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123'
 	console.log('usuários apagados');
 })*/
 
-/*sql `
-	drop table posts;
-`.then(() => {
-	console.log('tabela posts apagada');
-})*/
-
 //sql `
 /*create table publications (
 	id_publication serial not null,
@@ -184,37 +178,42 @@ values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123'
 	console.log('usuários apagados');
 })*/
 
-/*sql `
-create table posts (
-	id_post serial not null,
-	id_user serial not null,
-	content text not null,
-	nameBook text not null,
-	title varchar(50),
-	image bytea,
-	time_post timestamp not null,
-	likes integer not null,
-	
-	primary key(id_post),
-	foreign key(id_user) references users(id_user)
-);`.then(() => {
-    console.log('tabela posts criada')
-})*/
-
 sql `
 create table reviews (
 	id_review serial not null,
-	id_user serial not null,
+	id_user integer not null,
 	rating integer not null,
 	content text not null,
 	nameBook text not null,
 	title varchar(50),
 	image bytea,
-	time_post timestamp not null,
-	likes integer not null,
+	time_post varchar(30) not null,
 	
 	primary key(id_review),
 	foreign key(id_user) references users(id_user)
+
 );`.then(() => {
     console.log('tabela posts criada')
 })
+
+/*sql `
+	drop table reviews;
+`.then(() => {
+	console.log('tabela posts excluída')
+})*/
+
+/*sql `
+	create table posts (
+		id_post serial not null,
+		id_user integer not null,
+		content text not null,
+		nameBook text not null,
+		imageBook bytea,
+		timePost varchar(30) not null,
+		
+		primary key(id_post),
+		foreign key(id_user) references users(id_user)
+
+);`.then(() => {
+    console.log('tabela posts criada')
+})*/

@@ -30,6 +30,13 @@ routes.post('/login', (req, res) => {
         
         if(validateUser !== undefined) {
             validateUser.photo = validateUser.photo.toString('utf8');
+
+            user.idUser = validateUser.idUser;
+            user.email = validateUser.email;
+            user.name = validateUser.name;
+            user.password = validateUser.password;
+            user.photo = validateUser.photo;
+
             return res.status(200).send(validateUser);
         
         }else {
@@ -113,26 +120,34 @@ routes.post('/alterar-senha', async (req, res) => {
 
 });
 
-//criao da rota post
+//criação da rota post
 
 routes.post('/post', async (req, res) => {
-    const {post: {content, timePost, nameBook, ImageURI}} = req.body; // recebendo o objeto post
+    const {data_post} = req.body; // recebendo o objeto post
 
+    console.log(data_post)
+    const user_owner_post = await userExists(data_post.userEmail);
+    
+    post.idUser = user_owner_post.id_user;
+    post.content = data_post.text;
+    post.timePost = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"))
+    post.nameBook = data_post.nameBook;
+    post.imageBook = data_post.imageURI;
+    
     try{
 
-        await database.createPost(content, timePost, nameBook, ImageURI).then(() => { //criando o post no banco de dados
+        await database.createPost(post).then(() => { //criando o post no banco de dados
             return res.status(201).send('Post criado com sucesso!');
         });
 
     } catch (error) {   //retornando erro
-        console.log(error);
         return res.status(500).send('Erro ao criar o post');
     }
 
 });
 
 routes.post('/review', async (req, res) => {
-    const {review: {title, text, nameBook, avaliation, ImageURI}} = req.body; // recebendo o objeto review
+    const {data_post} = req.body; // recebendo o objeto review
 
     try{
         await database.createReview(title, text, nameBook, avaliation, ImageURI).then(() => { //criando o review no banco de dados
