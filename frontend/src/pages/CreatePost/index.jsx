@@ -57,11 +57,13 @@ export default function CreatePost(props) {
             imageURI: imageURI 
         }
 
+        
+
         if(isSelectedPost){
             try{
                 
 
-                const response = await axios.post('http://192.168.1.64:6005/post', 
+                const response = await axios.post('http://localhost:6005/post', 
                 JSON.stringify({data_post}),
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -80,9 +82,17 @@ export default function CreatePost(props) {
             }   
 
         }else {
+            const data_review = {
+                userEmail: userdata.email,
+                text: text,
+                nameBook: nameBook,
+                title: title,
+                avaliation: avaliation,
+                imageURI: imageURI
+            }
             try{
-                const response = await axios.post('http://192.168.1.64:6005/review', 
-                JSON.stringify({text, nameBook, title, avaliation, imageURI}),{
+                const response = await axios.post('http://localhost:6005/review', 
+                JSON.stringify({data_review}),{
                     headers: {'Content-Type': 'application/json'}
                 });
             } catch(error){
