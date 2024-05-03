@@ -1,9 +1,11 @@
-import { View } from 'react-native'
+import { StatusBar, View } from 'react-native'
+import { useEffect, useState } from 'react';
+
 import { THEME } from '../../styles/Theme'
 
 import Publication from '../../components/Publication';
 import TopMenu from '../../components/Menus/TopMenu';
-import { useEffect, useState } from 'react';
+import BottomMenu from '../../components/Menus/BottomMenu';
 
 export default function InitialPage() {
     const [ publications, setPublications ] = useState([])
@@ -19,7 +21,9 @@ export default function InitialPage() {
         }])
     }, [])
     return (
-        <View>
+        <View style={{flex: 1}}>
+            <StatusBar barStyle={'light-content'} />
+
             <TopMenu
                 photo={require('../../assets/foto-perfil.png')}
             />
@@ -38,6 +42,8 @@ export default function InitialPage() {
                     ))
                 }
             </View>
+
+            <BottomMenu/>
         </View>
         
     )
