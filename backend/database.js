@@ -19,7 +19,7 @@ export class Database {
         await sql `insert into posts (id_user, content, timePost, nameBook, imageBook) values (${post.idUser}, ${post.content}, ${post.timePost}, ${post.nameBook}, ${post.imageBook})`;
     }
 
-    async createReview(title, text, nameBook, avaliation, ImageURI) {
-        await sql `insert into reviews (title, text, nameBook, avaliation, ImageURI) values (${title}, ${text}, ${nameBook}, ${avaliation}, ${ImageURI})`;
+    async createReview(review) {
+        await sql `insert into reviews (id_user, title, content, nameBook, rating, image, time_post) values (${review.idUser},${review.title}, ${review.content}, ${review.nameBook}, ${review.rating}, ${review.imageBook}, ${review.timePost})`;
     }
 }

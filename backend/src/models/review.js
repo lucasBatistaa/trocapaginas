@@ -4,11 +4,9 @@ import { Post } from "../models/post.js";
 const database = new Database();
 
 export class Review extends Post{
-    constructor(idReview, title, text, rating) {
-        super(idUser, nameBook, timePost, imageBook);
-        this.idReview = idReview;
+    constructor(idUser, title, content, nameBook, rating, imageBook, timePost) {
+        super(idUser, nameBook, timePost, content, imageBook);
         this.title = title;
-        this.text = text;
         this.rating = rating;
     }
 
