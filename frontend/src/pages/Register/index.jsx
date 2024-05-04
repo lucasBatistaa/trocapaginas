@@ -21,7 +21,7 @@ export default function Register() {
             setModalVisible(true);
 
             setTimeout(() => {
-                navigation.navigate('CreatePost');
+                navigation.navigate('InitialPage');
                 setModalVisible(false);
             }, 18000);
 

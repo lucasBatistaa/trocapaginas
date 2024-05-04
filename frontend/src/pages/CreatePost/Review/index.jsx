@@ -74,7 +74,7 @@ export default function Review({onSubmit}) {
                 numberOfLines={1}
                 onChangeText={setTitle}
                 value={title}
-                placeholder="Informe o título"
+                placeholder="Informe o título da resenha"
                 placeholderTextColor={'#8B8B8B'} 
             />
 

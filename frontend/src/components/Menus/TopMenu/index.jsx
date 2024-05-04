@@ -8,7 +8,7 @@ export default function TopMenu ({photo}) {
     return (
             <View style={styles.container}>
                 <Image
-                    style={{width: 40, height: 40}}
+                    style={{width: 40, height: 40, borderRadius: 20}}
                     source={photo}
                 />
 

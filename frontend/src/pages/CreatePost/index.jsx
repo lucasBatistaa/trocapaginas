@@ -18,6 +18,7 @@ export default function CreatePost(props) {
     const [ imageURI, setImageURI ] = useState(null)
     const navigation = useNavigation();
     const[userdata, setUserData] = useState({});
+    const[messageError, setMessageError] = useState('')
 
     const getUser = async() => {
         try {
@@ -50,18 +51,19 @@ export default function CreatePost(props) {
         } else {
             console.log('Sem imagem, validar ainda');
         }*/
-        const data_post = {
-            userEmail: userdata.email,
-            text: text,
-            nameBook: nameBook,
-            imageURI: imageURI 
-        }
+
 
         if(isSelectedPost){
             try{
-                
 
-                const response = await axios.post('http://192.168.1.64:6005/post', 
+                const data_post = {
+                    userEmail: userdata.email,
+                    text: text,
+                    nameBook: nameBook,
+                    imageURI: imageURI 
+                }
+
+                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
                 JSON.stringify({data_post}),
                 {
                     headers: {'Content-Type': 'application/json'}
@@ -81,13 +83,30 @@ export default function CreatePost(props) {
 
         }else {
             try{
-                const response = await axios.post('http://192.168.1.64:6005/review', 
-                JSON.stringify({text, nameBook, title, avaliation, imageURI}),{
+                const data_review = {
+                    userEmail: userdata.email,
+                    text: text,
+                    nameBook: nameBook,
+                    imageURI: imageURI,
+                    title: title,
+                    rating: avaliation
+                }
+
+                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/review', 
+                JSON.stringify({data_review}),{
                     headers: {'Content-Type': 'application/json'}
                 });
+
+                console.log(response.data)
+                navigation.navigate('InitialPage');
+
             } catch(error){
-                if (!error?.response === 500) {
-                    setMessageError('Não foi possivel criar o post devido a um erro interno do servidor');
+                console.log(error)
+                if(!error?.response) {
+                    setMessageError('Erro ao acessar a página');
+                
+                }else if (error?.response === 500) {
+                    setMessageError('Não foi possivel criar a resenha devido a um erro interno do servidor');
                 }
             }
         }    
@@ -135,6 +154,7 @@ export default function CreatePost(props) {
                     />
                 </View>
 
+                {messageError && <Text style={[THEME.fonts.body, { color: THEME.colors.brownDark}]}>{messageError}</Text>}
                 { isSelectedPost ? <Post onSubmit={handleCreatePost}/> : <Review onSubmit={handleCreatePost}/>}
             </ScrollView>
         </SafeAreaView>

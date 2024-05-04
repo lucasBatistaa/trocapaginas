@@ -46,7 +46,7 @@ export default function Reset (){
     const handleNextScreen = async () => {
         if (validateForm()) {
             try {
-                const response = await axios.post('http://192.168.1.65:6005/esqueciMinhaSenha',
+                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {
