@@ -34,6 +34,10 @@ app.use(cors({
   }
 ));
 
+/*app.use(cors({
+  origin: "http://localhost:8081",
+}));*/
+
 app.use(express.json());
 
 app.use(session({
@@ -94,11 +98,19 @@ passport.deserializeUser((user, done) => {
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
+/*app.get('/login/google', (req, res) => {
+  res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=https://trocapaginas-server-production.up.railway.app/auth/google/callback&scope=profile%20email&client_id=${clientid}`);
+});*/
 
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/success',
   failureRedirect: '/login/failed'
 }));
+
+/*app.get('/auth/google/callback', (req, res) => {
+  // Lide com a resposta do Google aqui
+  console.log(res.data);
+});*/
 
 
 app.get('/success', (req, res) => {
@@ -143,6 +155,15 @@ app.get('/login/failed', (req, res) => {
     `;
     
     res.status(401).send(htmlResponse);
+});
+
+app.get('/user-data', async (req, res) => {
+  if(req.isAuthenticade) {
+    res.json(req.user);
+  
+  }else {
+    res.status(401).json({error: 'Usuário não autenticado'});
+  }
 });
 
 
