@@ -1,24 +1,28 @@
-import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react'
+import { View, Text, Image, ScrollView, ImageBackground, Alert } from 'react-native'
+
+import axios from 'axios'
+import { useNavigation } from "@react-navigation/native"
+
+import Review from './Review'
+import Post from './Post'
+import Loading from '../../components/Loading'
+import { ButtonAddImage } from './components/ButtonAddImage'
+import { RadioButtons } from './components/RadioButtons'
+import { ImageURI } from '../../utils/imageURI'
 
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
 
-import { useState } from 'react'
-import { ImageURI } from '../../utils/imageURI'
-import { ButtonAddImage } from './components/ButtonAddImage'
-import { RadioButtons } from './components/RadioButtons'
-import Review from './Review'
-import Post from './Post'
-
 export default function CreatePost(props) {
-    const [ isSelectedPost, setIsSelectedPost ] = useState(true)
-    const [ imageURI, setImageURI ] = useState(null)
-    const navigation = useNavigation();
+    const [isSelectedPost, setIsSelectedPost] = useState(true)
+    const [imageURI, setImageURI] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [messageError, setMessageError] = useState('')
+    
     const[userdata, setUserData] = useState({});
-    const[messageError, setMessageError] = useState('')
+    
+    const navigation = useNavigation()
 
     const getUser = async() => {
         try {
@@ -45,13 +49,7 @@ export default function CreatePost(props) {
     }
 
     const handleCreatePost = async (text, nameBook, title = '', avaliation = 0) => {
-        /*if (imageURI) {
-            console.log(title, text, nameBook, avaliation, imageURI);
-
-        } else {
-            console.log('Sem imagem, validar ainda');
-        }*/
-
+        setIsLoading(true)
 
         if(isSelectedPost){
             try{
@@ -63,16 +61,18 @@ export default function CreatePost(props) {
                     imageURI: imageURI 
                 }
 
-                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
+                await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
                 JSON.stringify({data_post}),
                 {
                     headers: {'Content-Type': 'application/json'}
-                });
+                })
 
-                navigation.navigate('Slogan');
-
+                Alert.alert('Publicação', 'Publicação realizada com sucesso!', [
+                    {text: 'OK', onPress: () => navigation.navigate('InitialPage')}
+                ])
             } catch(error) {
 
+                setIsLoading(false)
                 if(!error?.response) {
                     setMessageError('Erro ao acessar a página');
 
@@ -81,8 +81,8 @@ export default function CreatePost(props) {
                 }
             }   
 
-        }else {
-            try{
+        } else {
+            try {
                 const data_review = {
                     userEmail: userdata.email,
                     text: text,
@@ -101,7 +101,9 @@ export default function CreatePost(props) {
                 navigation.navigate('InitialPage');
 
             } catch(error){
+                setIsLoading(false)
                 console.log(error)
+
                 if(!error?.response) {
                     setMessageError('Erro ao acessar a página');
                 
@@ -112,19 +114,21 @@ export default function CreatePost(props) {
         }    
     } 
 
+    if (!userdata) return <Loading />
+
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.viewAddImage}>
-                {imageURI ? 
-                    <ImageBackground source={{ uri: imageURI }} style={styles.imageBackground}>
-                        <ButtonAddImage 
-                            onPress={handleSelectAnImage}
-                        />
-                    </ImageBackground>
-                : 
-                    <ButtonAddImage 
-                        onPress={handleSelectAnImage}
-                    />
+                {
+                    imageURI ? 
+                        <ImageBackground 
+                            source={{ uri: imageURI }} 
+                            style={styles.imageBackground}
+                        >
+                            <ButtonAddImage onPress={handleSelectAnImage} />
+                        </ImageBackground>
+                    : 
+                        <ButtonAddImage onPress={handleSelectAnImage} />
                 }
             </View>
 
@@ -137,7 +141,14 @@ export default function CreatePost(props) {
                         style={{width: 40, height: 40, borderRadius: 20}}
                         source={{uri: userdata.photo}}
                     />
-                    <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark}]}>{userdata.name}</Text>
+                    <Text 
+                        style={[
+                            THEME.fonts.h1.normal, 
+                            styles.username
+                        ]}
+                    >
+                        {userdata.name}
+                    </Text>
                 </View>
 
                 <View style={styles.viewRadioButtons}>
@@ -154,9 +165,30 @@ export default function CreatePost(props) {
                     />
                 </View>
 
-                {messageError && <Text style={[THEME.fonts.body, { color: THEME.colors.brownDark}]}>{messageError}</Text>}
-                { isSelectedPost ? <Post onSubmit={handleCreatePost}/> : <Review onSubmit={handleCreatePost}/>}
+                {
+                    messageError && 
+                    <Text 
+                        style={[
+                            THEME.fonts.text,
+                            THEME.errors.message 
+                        ]}
+                    >
+                        {messageError}
+                    </Text>
+                }
+                { 
+                    isSelectedPost ? 
+                        <Post 
+                            onSubmit={handleCreatePost}
+                            isLoading={isLoading}
+                        /> 
+                    : 
+                        <Review 
+                            onSubmit={handleCreatePost}
+                            isLoading={isLoading}
+                        />
+                }
             </ScrollView>
-        </SafeAreaView>
+        </View>
     )
 }

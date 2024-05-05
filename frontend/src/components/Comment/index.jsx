@@ -1,9 +1,21 @@
-import { Modal, View, Text, Image, TextInput, ScrollView, TouchableOpacity, Keyboard, PanResponder } from "react-native";
-import { styles } from "./style";
 import { useEffect, useRef, useState } from "react";
+import { 
+    Modal, 
+    View, 
+    Text, 
+    Image, 
+    TextInput, 
+    ScrollView, 
+    TouchableOpacity, 
+    Keyboard, 
+    PanResponder 
+} from "react-native";
+
+import { FormatDate } from "../../utils/formatDate";
+
+import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FormatDate } from "../../utils/formatDate";
 
 export default function Comment({modalVisible, onPress}) {
     const [ textComment, setTextComment ] = useState('')

@@ -3,16 +3,9 @@ import { THEME } from "../../../styles/Theme";
 
 export const styles = StyleSheet.create({
     container: {
+        flex: 1,
         gap: 20,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-
-    textInput: {
-        width: '100%',
-        padding: 12,
-        borderRadius: 12,
-        color: THEME.colors.grayDark,
-        backgroundColor: THEME.colors.grayMedium,
+        // alignItems: 'center',
+        // justifyContent: 'space-between',
     },
 })

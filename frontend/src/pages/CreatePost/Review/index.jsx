@@ -1,22 +1,24 @@
 import { useState } from "react"
 import { View, TextInput, TouchableOpacity, Text } from "react-native"
-import Ionicons from '@expo/vector-icons/Ionicons';
 
-import SimpleButton from '../../../components/Button/SimpleButton'
-import Input from '../../../components/Forms/Input'
+import Button from '../../../components/Button'
+import TextArea from "../../../components/Forms/TextArea"
+import { Input } from '../../../components/Input'
 
-import { styles } from "./style";
-import { THEME } from "../../../styles/Theme";
-import IsFormEmpty from "../../../utils/isFormEmpty";
+import { styles } from "./style"
+import { THEME } from "../../../styles/Theme"
+import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function Review({onSubmit}) {
+export default function Review({ onSubmit, isLoading=false}) {
     const [ title, setTitle ] = useState('')
-    const [ errorTitle, setErrorTitle ] = useState('')
     const [ text, setText ] = useState('')
-    const [ errorText, setErrorText ] = useState('')
     const [ nameBook, setNameBook ] = useState('')
+
+    const [ errorTitle, setErrorTitle ] = useState('')
+    const [ errorText, setErrorText ] = useState('')
     const [ errorNameBook, setErrorNameBook ] = useState('')
     const [ messageError, setMessageError ] = useState('')
+
     const [ starsAvaliation, setStarsAvaliation ] = useState({
         0: false,
         1: false,
@@ -26,9 +28,10 @@ export default function Review({onSubmit}) {
     })  
 
     const [totalStarsAvaliation, setTotalStarsAvaliation ] = useState(0)
+    
     let avaliation = Object.values(starsAvaliation)
 
-    const clickOnStarIcon = (index) => {
+    const handleClickOnStarIcon = (index) => {
         const newData = {...starsAvaliation}
         
         Object.keys(newData).forEach(key => {
@@ -42,22 +45,13 @@ export default function Review({onSubmit}) {
     }
 
     const validateForm = () => {
-        const isEmptyTitle = IsFormEmpty(title)
-        setErrorTitle(isEmptyTitle)
-
-        const isEmptyText = IsFormEmpty(text)
-        setErrorText(isEmptyText)
-
-        const isEmptyNameBook = IsFormEmpty(nameBook)
-        setErrorNameBook(isEmptyNameBook)
-
-        if (!isEmptyTitle && !isEmptyText && !isEmptyNameBook) {
-            setMessageError('')
-            return true
-        } else {
-            console.log(isEmptyTitle, isEmptyText, isEmptyNameBook)
-            setMessageError('Informe todos os campos!')
-        }
+        if (title.trim() && text.trim() && nameBook.trim()) return true
+       
+        title.trim() ? setErrorTitle(false) : setErrorTitle(true)
+        text.trim() ? setErrorText(false) : setErrorText(true)
+        nameBook.trim() ? setErrorNameBook(false) : setErrorNameBook(true)
+        
+        setMessageError('Informe todos os campos!')
     }
 
     const handleValidatePost = () => {
@@ -68,45 +62,49 @@ export default function Review({onSubmit}) {
 
     return (
         <View style={styles.container}>
-            <TextInput
-                style={styles.textInput}
-                multiline={true}
-                numberOfLines={1}
+            <TextArea   
+                error={errorTitle}
+                numberOfLines={1} 
+                placeholder={'Informe o título da resenha'}
+                maxLength={80}
                 onChangeText={setTitle}
-                value={title}
-                placeholder="Informe o título da resenha"
-                placeholderTextColor={'#8B8B8B'} 
             />
 
-            <TextInput
-                style={[styles.textInput, { textAlignVertical: 'top' }]}
-                multiline={true}
-                numberOfLines={6} // Adjust as needed
-                onChangeText={setText}
-                value={text}
-                placeholder="Digite aqui..."
-                placeholderTextColor={'#8B8B8B'} 
+            <TextArea   
+                error={errorText}
+                numberOfLines={6} 
+                placeholder={'Digite aqui...'}
                 maxLength={500}
+                onChangeText={setText}
             />
 
-            <Input 
-                onChangeText={setNameBook}
-                value={nameBook}
-                placeholder={'Escolher livro'}
-                style={errorNameBook && THEME.errors.input}
-            />
+            <Input error={errorNameBook}>
+                <Input.Field 
+                    placeholder={'Escolher livro'}
+                    onChangeText={setNameBook}
+                />
+            </Input>
 
             <View style={styles.avaliation}>
                 {
                     avaliation.map((value, index) => (
                         <TouchableOpacity
                             key={index}
-                            onPress={() => clickOnStarIcon(index)}
+                            onPress={() => handleClickOnStarIcon(index)}
                         >
-                            {value ? 
-                                <Ionicons name='star' size={28} color={THEME.colors.brownLight} />
-                            :
-                                <Ionicons name='star-outline' size={28} color={THEME.colors.brownLight} />
+                            {
+                                value ? 
+                                    <Ionicons 
+                                        name='star' 
+                                        size={28} 
+                                        color={THEME.colors.brownLight} 
+                                    />
+                                :
+                                    <Ionicons 
+                                        name='star-outline' 
+                                        size={28} 
+                                        color={THEME.colors.brownLight} 
+                                    />
                             }
                         </TouchableOpacity>
                     ))
@@ -116,16 +114,20 @@ export default function Review({onSubmit}) {
             {
                 messageError && 
                 <Text 
-                    style={[THEME.fonts.text, THEME.errors.message]}
+                    style={[
+                        THEME.fonts.text, 
+                        THEME.errors.message
+                    ]}
                 >
                     {messageError}
                 </Text>
             }
                 
-            <SimpleButton 
-                onPress={handleValidatePost}
+            <Button 
                 title={'PUBLICAR'}
                 color={'brownDark'}
+                isLoading={isLoading}
+                onPress={handleValidatePost}
             />
         </View>
     )

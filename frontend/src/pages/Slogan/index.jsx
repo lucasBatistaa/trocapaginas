@@ -1,11 +1,11 @@
-import { Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Text, View } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 
-import SimpleButton from '../../components/Button/SimpleButton'
 import Logo from '../../assets/logo.svg'
+import Button from '../../components/Button'
 
+import { THEME } from "../../styles/Theme"
 import { styles } from './styles'
-import { THEME } from "../../styles/Theme";
 
 export default function Slogan () {
     const navigation = useNavigation()
@@ -15,25 +15,22 @@ export default function Slogan () {
             <Logo width={180} height ={180} />
 
             <Text style={[THEME.fonts.h2.normal, styles.slogan]}>
-                Junte-se a uma incrível troca de experiências literárias e imaginativas no <Text style={{color: '#59372A'}}>Troca Páginas!</Text>
+                Junte-se a uma incrível troca de experiências literárias e imaginativas no <Text style={{color: THEME.colors.brownDark}}>Troca Páginas!</Text>
             </Text>
 
             <View style={styles.viewButtons}>
-                <SimpleButton 
+                <Button 
                     title={'CADASTRE-SE'} 
                     color={'brownDark'} 
-                    name={'Login'}
                     onPress={() => navigation.navigate('Register')}
                 />
                 
-                <SimpleButton 
+                <Button 
                     title={'LOGIN'} 
-                    color={'brownLight'}
-                    name={'Login'}
+                    color={'brownMedium'}
                     onPress={() => navigation.navigate('Login')}
                 />
             </View>
-
         </View>
     )
 }
