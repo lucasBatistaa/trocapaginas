@@ -1,6 +1,6 @@
 import { StatusBar } from "react-native"
 
-const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
+// const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 
 export const THEME = {
     colors: {
@@ -60,6 +60,7 @@ export const THEME = {
         },
 
         input: {
+            borderWidth: 1,
             borderColor: '#CE1F1F',
         },
     }, 
@@ -67,7 +68,7 @@ export const THEME = {
     structure: {
         container: {
             flex: 1,
-            paddingTop: paddingTopValue,
+            // paddingTop: paddingTopValue,
             paddingHorizontal: 28,
             paddingBottom: 40,
     
@@ -84,17 +85,17 @@ export const THEME = {
             gap: 36,
         },
 
-        modalContainer: {
-            flex: 1,
-            justifyContent: 'center',
-        },
+        // modalContainer: {
+        //     flex: 1,
+        //     justifyContent: 'center',
+        // },
 
-        modalContent: {
-            margin: 10,
-            padding: 40,
-            backgroundColor: '#F2F2F2',
-            borderRadius: 8,
-            elevation: 10,
-        }
+        // modalContent: {
+        //     margin: 10,
+        //     padding: 40,
+        //     backgroundColor: '#F2F2F2',
+        //     borderRadius: 8,
+        //     elevation: 10,
+        // }
     }
 }

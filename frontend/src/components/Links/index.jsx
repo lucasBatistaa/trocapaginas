@@ -1,20 +1,21 @@
 import { Text, View } from "react-native"
+
 import { THEME } from "../../styles/Theme"
 import { useNavigation } from "@react-navigation/native"
+import { styles } from "./styles"
 
-export default function Links ({text, screen, title}) { 
+export default function Links ({ text, screen, title }) { 
     const navigation = useNavigation()
 
     return (
-        <View style={{alignItems: 'center'}} >
-            <Text >
-                {text}
+        <View style={styles.container} >
+            <Text style={THEME.fonts.link}>
+                {text} 
                 <Text
                     onPress={() => { navigation.navigate(screen)}}
-                    style={[
-                        THEME.fonts.link,
-                        {color: THEME.colors.brownMedium}
-                    ]}> {title}
+                    style={styles.title}
+                > 
+                     {title}
                 </Text>
             </Text>
         </View>

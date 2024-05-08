@@ -1,52 +1,55 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useNavigation } from "@react-navigation/native";
-import axios from 'axios';
+import { useState } from 'react'
+import { View, Text } from 'react-native'
 
-import { styles } from './styles.jsx';
-import Input from '../../components/Forms/Input';
-import ConfirmationCode from './confirmationCode.jsx';
-import SimpleButton from '../../components/Button/SimpleButton';
+import { useNavigation } from "@react-navigation/native"
+import axios from 'axios'
 
-import IsFormEmpty from '../../utils/isFormEmpty.jsx';
-import isEmail from '../../utils/isEmail.jsx';
-import { THEME } from '../../styles/Theme.jsx';
+import Button from '../../components/Button'
+import { Input } from '../../components/Input'
+import ConfirmationCode from './ConfirmationCode'
 
-export default function Reset (){
+import isEmail from '../../utils/isEmail.jsx'
+
+import { styles } from './styles.jsx'
+import { THEME } from '../../styles/Theme.jsx'
+import Ionicons from '@expo/vector-icons/Ionicons'
+
+export default function Reset() {
     const [email, setEmail] = useState ("")
+
     const [errorEmail, setErrorEmail] = useState(false)
     const [messageError, setMessageError] = useState('')
+
     const [nextPage, setNextPage] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigation = useNavigation()
 
     const validateForm = () => {
-        const isEmptyEmail =  IsFormEmpty(email)
-        setErrorEmail(isEmptyEmail)
-    
-        if (!isEmptyEmail) {
+        if (email.trim()) {
 
             if (isEmail(email)){
-                setMessageError('')
                 return true
             }
             else { 
-                setMessageError('E-mail incorreto')
                 setErrorEmail(true)
+                setMessageError('E-mail incorreto')
             }
         } else {
-            setMessageError('O campo precisa ser preenchido')
             setErrorEmail(true)
+            setMessageError('O campo precisa ser preenchido')
         }
 
         return false
     }
 
     const handleNextScreen = async () => {
+
+        setIsLoading(true)
+
         if (validateForm()) {
             try {
-                const response = await axios.post('http://192.168.1.65:6005/esqueciMinhaSenha',
+                await axios.post('https://trocapaginas-server-production.up.railway.app/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {
@@ -66,46 +69,82 @@ export default function Reset (){
                 }
             }
         }
+
+        setIsLoading(false)
     }
 
     return (
         <View style={styles.container}>
+            <Text style={[
+                    THEME.fonts.h1.bold, 
+                ]}
+            > 
+                ALTERAR SENHA 
+            </Text>
+
+            {
+                !nextPage ? 
+                    <View style={styles.viewSelectEmail}>
+                        <View style={styles.viewMessageAlert}>
+                            <Ionicons 
+                                name="alert-circle-outline" 
+                                size={32} 
+                                color={THEME.colors.brownMedium}
+                            />
+                            <Text 
+                                style={[
+                                    THEME.fonts.h1.normal,
+                                    styles.textMessageAlert
+                                ]}
+                            >
+                                Insira no campo abaixo o email utilizado no seu cadastro!
+                            </Text>
+                        </View>
             
-            {!nextPage ? 
-                <View style={styles.containerEmailPage}>
-                    <Text style={[THEME.fonts.h1.bold, THEME.colors.black, styles.text]}> ALTERAR SENHA </Text>
+                        <Text 
+                            style={[
+                                THEME.fonts.text,
+                                styles.label
+                            ]}
+                        >
+                            Email
+                        </Text>
+                        <Input error={errorEmail}>
+                            <Input.Field 
+                                placeholder={'Insira seu email'}
+                                onChangeText={setEmail}
+                            />
+                        </Input>
 
-                    <View style={styles.alert}>
-                        <Ionicons name="alert-circle-outline" size={32} color={THEME.colors.brownMedium}/>
-                        <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownMedium}]}>Insira no campo abaixo o email utilizado no seu cadastro!</Text>
+                        {
+                            messageError && 
+                            <Text 
+                                style={[
+                                    THEME.fonts.text, 
+                                    THEME.errors.message
+                                ]}
+                            >
+                                {messageError}
+                            </Text>
+                        }
+
+                        
                     </View>
-        
-                    <Input
-                        label={'Email'}
-                        placeholder={'Insira seu email'}
-                        value={email}
-                        onChangeText={setEmail}
-                        style={errorEmail && THEME.errors.input}
-                    />
-
-                    {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
-
-                    <View style={[THEME.structure.viewButton, styles.buttonStyle]}>
-                        <SimpleButton 
-                            type='submit'
-                            onPress={handleNextScreen}
-                            title={"AVANÇAR"}
-                            color={'brownDark'} 
-                        />
-                    </View>
-                    
-                </View>
-            
                 : 
-                
-                <ConfirmationCode/>
+                    <ConfirmationCode/>
             }
-            
+
+            {
+                !nextPage && 
+                
+                <View style={styles.viewButton}>
+                    <Button 
+                        title={"AVANÇAR"}
+                        color={'brownDark'} 
+                        isLoading={isLoading}
+                        onPress={handleNextScreen}
+                    />
+                </View>}
         </View>
     )
 }

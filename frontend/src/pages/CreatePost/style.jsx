@@ -1,19 +1,15 @@
 import { StyleSheet } from "react-native"
-import { StatusBar } from "react-native"
 import { THEME } from "../../styles/Theme"
 
-const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
 
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: StatusBar.currentHeight,
     },
 
     viewAddImage: {
         height: 250,
         backgroundColor: THEME.colors.grayMedium,
-        alignItems: 'center',
         justifyContent: 'center',
     },
 
@@ -38,11 +34,13 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    username: {
+        color: THEME.colors.brownDark
+    },
+
     viewRadioButtons: {
         flexDirection: 'row',
         alignSelf: 'center',
         gap: 28,
     },
-
-    
 })

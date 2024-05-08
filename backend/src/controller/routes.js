@@ -13,8 +13,8 @@ const salt = bcrypt.genSaltSync(10);
 const user = new User();
 const post = new Post();
 const review = new Review();
+const validationCode = [];
 const comments = new Comment();
-
 async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
@@ -29,7 +29,9 @@ async function userExists(email) {
     if(data.image === undefined) {
         review.imageBook = null;
         post.imageBook = null;
+
     } else {
+
         review.imageBook = data.ImageURI;
         post.imageBook = data.ImageURI;
     }    
@@ -138,17 +140,14 @@ routes.post('/alterar-senha', async (req, res) => {
 
 routes.post('/post', async (req, res) => {
     const {data_post} = req.body; // recebendo o objeto post
-
-    console.log(data_post)
     const user_owner_post = await userExists(data_post.userEmail);
+    
     validateImage(data_post);
 
-    
     post.idUser = user_owner_post.id_user;
     post.content = data_post.text;
     post.timePost = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"))
     post.nameBook = data_post.nameBook;
-
     
     try{
 
@@ -163,27 +162,28 @@ routes.post('/post', async (req, res) => {
 });
 
 routes.post('/review', async (req, res) => {
+
     const {data_review} = req.body; // recebendo o objeto review
     const user_owner_post = await userExists(data_review.userEmail);
-    console.log(data_review);
+
     validateImage(data_review);
+
     review.idUser = user_owner_post.id_user;
     review.title = data_review.title;
     review.content = data_review.text;
     review.nameBook = data_review.nameBook;
-    review.rating = data_review.avaliation;
+    review.rating = data_review.rating;
     review.timePost = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"))
-    console.log(review);
 
+    console.log(review)
     try{
-        console.log(review);
         await database.createReview(review).then(() => { //criando o review no banco de dados
-        return res.status(201).send('Resenha criada com sucesso!');
+            return res.status(201).send('Resenha criada com sucesso!');
         });    
 
 
-    } catch (error) {   //retornando erro
-        console.log(error);
+    } catch (error) {
+        console.log(error)   //retornando erro
         return res.status(500).send('Erro ao criar a resenha');
     }
 

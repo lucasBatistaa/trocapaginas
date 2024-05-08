@@ -1,8 +1,17 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({ 
+    container: {
+        justifyContent: 'center'
+    },
+
+    label: {
+        marginTop: 12,
+        marginBottom: 4,
+    },
+
     requirementsContainer: {
-        gap: 10,
+        gap: 12,
         marginVertical: 12,
     }, 
 
@@ -12,13 +21,9 @@ export const styles = StyleSheet.create({
         gap: 4,
     },
 
-    text: {
-        textAlign: 'left', 
-        width: 370,
-        marginBottom: 90,
-    },
-
-    button: {
-        marginTop: 52
+    viewButton: {
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20,
     }
 })

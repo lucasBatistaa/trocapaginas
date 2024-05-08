@@ -1,35 +1,28 @@
-import { View, TextInput, Text } from "react-native"
 import { useState } from "react"
+import { View, Text } from "react-native"
 
-import Input from "../../../components/Forms/Input"
-import SimpleButton from "../../../components/Button/SimpleButton"
+import { Input } from "../../../components/Input"
+import Button from "../../../components/Button"
+import TextArea from "../../../components/Forms/TextArea"
 
 import { styles } from "./style"
 import { THEME } from "../../../styles/Theme"
-import IsFormEmpty from "../../../utils/isFormEmpty"
 
-export default function Post({onSubmit}) {
+export default function Post({ onSubmit, isLoading=false }) {
     const [ text, setText ] = useState('')
-    const [ errorText, setErrorText ] = useState('')
-    const [ messageError, setMessageError ] = useState('')
     const [ nameBook, setNameBook ] = useState('')
-    const [ errorNameBook, setErrorNameBook ] = useState('')
+
+    const [ errorText, setErrorText ] = useState(false)
+    const [ errorNameBook, setErrorNameBook ] = useState(false)
+    const [ messageError, setMessageError ] = useState('')
 
     const validateForm = () => {
-        const isEmptyText = IsFormEmpty(text)
-        setErrorText(isEmptyText)
+        if (text.trim() && nameBook.trim()) return true
 
-        const isEmptyNameBook = IsFormEmpty(nameBook)
-        setErrorNameBook(isEmptyNameBook)
-
-        if (!isEmptyText && !isEmptyNameBook) {
-            setMessageError('')
-            return true
-        } else {
-            setMessageError('Informe todos os campos!')
-        }
+        text.trim() ? setErrorText(false) : setErrorText(true)
+        nameBook.trim() ? setErrorNameBook(false) : setErrorNameBook(true)
+        setMessageError('Informe todos os campos!')
     }
-
 
     const handleValidatePost = () => {
         if (validateForm()) {
@@ -39,37 +32,38 @@ export default function Post({onSubmit}) {
 
     return (
         <View style={styles.container}>
-            <TextInput
-                style={[styles.textInput, { textAlignVertical: 'top'}, errorText && THEME.errors.input]}
-                multiline={true}
-                numberOfLines={6} // Adjust as needed
-                onChangeText={setText}
-                value={text}
-                placeholder="Digite aqui..."
-                placeholderTextColor={'#8B8B8B'} 
+            <TextArea 
+                error={errorText}
+                numberOfLines={6} 
+                placeholder={'Digite aqui'}
                 maxLength={200}
+                onChangeText={setText}
             />
 
-            <Input
-                onChangeText={setNameBook}
-                value={nameBook}
-                placeholder={'Escolher livro'}
-                style={errorNameBook && THEME.errors.input}
-            />
+            <Input error={errorNameBook}>
+                <Input.Field 
+                    placeholder={'Escolher livro'}
+                    onChangeText={setNameBook}
+                />
+            </Input>
 
             {
                 messageError && 
                 <Text 
-                    style={[THEME.fonts.text, THEME.errors.message]}
+                    style={[
+                        THEME.fonts.text, 
+                        THEME.errors.message
+                    ]}
                 >
                     {messageError}
                 </Text>
             }
 
-            <SimpleButton 
-                onPress={handleValidatePost}
+            <Button 
                 title={'PUBLICAR'}
                 color={'brownDark'}
+                isLoading={isLoading}
+                onPress={handleValidatePost}
             />
         </View>
     )

@@ -1,146 +1,207 @@
-import { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import api from '../../services/api';
-import IsFormEmpty from "../../utils/isFormEmpty";
-import * as WebBrowser from 'expo-web-browser';
-import { Linking } from "react-native";
+import { useState } from "react"
+import { Text, View, TouchableOpacity } from "react-native"
 
-import SimpleButton from "../../components/Button/SimpleButton";
-import ButtonWithIcon from "../../components/Button/ButtonWithIcon";
-import Input from "../../components/Forms/Input";
-import Links from "../../components/Links";
-import Info from "../../components/Info";
+import * as WebBrowser from 'expo-web-browser'
+import axios from "axios"
+import { useNavigation } from "@react-navigation/native"
 
-import { styles } from "./styles";
-import { THEME } from "../../styles/Theme";
 
-export default function Login (props) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorPassword, setErrorPassword] = useState(false);
-    const [messageError, setMessageError] = useState('');
-    const [user, setUser] = useState(false);
-    const[modalVisible, setModalVisible] = useState(false);
+import Button from "../../components/Button"
+import { ButtonWithIcon } from "../../components/ButtonWithIcon"
+import { Input } from '../../components/Input'
+import Links from "../../components/Links"
+import WaitMessage from "../../components/WaitMessage"
 
-    const navigation = useNavigation();
+import { styles } from "./styles"
+import { THEME } from "../../styles/Theme"
 
-    const GoogleLogin =  async () => {
+import GoogleLogo from "../../assets/googleLogo.svg"
+import Ionicons from '@expo/vector-icons/Ionicons'
+
+export default function Login() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const [errorEmail, setErrorEmail] = useState(false)
+    const [errorPassword, setErrorPassword] = useState(false)
+    const [messageError, setMessageError] = useState('')
+
+    const [user, setUser] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [securePassword, setSecurePassword] = useState(true)
+    const [modalVisible, setModalVisible] = useState(false)
+
+    const navigation = useNavigation()
+
+    const handleGoogleLogin =  async () => {
         try {
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google/callback', '_self');
 
-            WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google/callback', '_self');
-
-            setModalVisible(true);
+            setModalVisible(true)
 
             setTimeout(() => {
-                navigation.navigate('CreatePost');
+                navigation.navigate('InitialPage')
                 setModalVisible(false);
-            }, 18000);
+            }, 18000)
 
 
-        }catch(error) {
-            console.log(error);
+        } catch(error) {
+
+            setModalVisible(false)
+            console.log(error)
         }
+    }
 
-    };
+    const handleSubmitLogin = async () => {    
+        setIsLoading(true)
 
-    const handleSubmit = async () => {    
-
-        const isEmptyEmail =  IsFormEmpty(email)
-        setErrorEmail(isEmptyEmail)
-
-        const isEmptyPassword =  IsFormEmpty(password)
-        setErrorPassword(isEmptyPassword)
-        
-        if (!isEmptyEmail && !isEmptyPassword) {
-            setMessageError('')
-
+        if (email.trim() && password.trim()) {
             try {
-                const response = await axios.post('http://192.168.1.65:6005/login',
+                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
         
-                props.navigation.navigate('CreatePost', {user: response.data});
+                navigation.navigate('InitialPage', {user: response.data});
 
             } catch (error) {
                 if (!error?.response) {
                     setMessageError('Erro ao acessar a página');
                 
                 } else if (error.response?.status === 401) {
+                    setErrorEmail(true)
+                    setErrorPassword(true)
                     setMessageError('Email e/ou senha incorreto(s)!');
                 }
             }
 
         } else {
+            email.trim() ? setErrorEmail(false) : setErrorEmail(true)
+            password.trim() ? setErrorPassword(false) : setErrorPassword(true)
+
             setMessageError('Insira todos os campos!')
         }
 
+        setIsLoading(false)
     } 
-
+        
     return (
-        <View style={[THEME.structure.container, modalVisible ? {opacity: 0.5 } : '']}>
-            <Text style={THEME.fonts.h1.bold}>LOGIN</Text>
+        <View style={styles.container}>
+            <Text style={THEME.fonts.h1.bold}>
+                LOGIN
+            </Text>
 
-            <View style={THEME.structure.viewForm}>
+            <View>
                 <ButtonWithIcon
-                    title={'Continuar com Google'}
-                    onPress={GoogleLogin}
-                />
+                    onPress={handleGoogleLogin}
+                >
+                    <GoogleLogo height={24} width={24} />
+                    <ButtonWithIcon.Field 
+                        title={'Continuar com Google'}
+                    />
+                </ButtonWithIcon>
 
-                {user && navigation.navigate('CreatePost')}
+                <Text style={[
+                    THEME.fonts.text, 
+                    styles.textCentralized
+                    ]}
+                > 
+                    ou 
+                </Text>
 
-                <Text style={[THEME.fonts.text, {textAlign: 'center'}]}> ou </Text>
 
-                <Input 
-                    label={"Email"}
-                    placeholder={"Insira seu email"}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType='email-address'
-                    style={errorEmail && THEME.errors.input}
-                />
+                <Text 
+                    style={[
+                        THEME.fonts.text,
+                        styles.label
+                    ]}
+                >
+                    Email
+                </Text>
+                <Input error={errorEmail}>
+                    <Input.Field 
+                        placeholder={"Insira seu email"}
+                        onChangeText={setEmail}
+                        keyboardType='email-address'
+                    />
+                </Input>
 
-                <Input 
-                    label={"Senha"}
-                    placeholder={"Insira sua senha"}
-                    value={password}
-                    onChangeText={setPassword}
-                    style={errorPassword && THEME.errors.input}
-                    secureTextEntry
-                />
+                <Text 
+                    style={[
+                        THEME.fonts.text,
+                        styles.label
+                    ]}
+                >
+                    Senha
+                </Text>
+                <Input error={errorPassword}>
+                    <Input.Field 
+                        placeholder={"Insira sua senha"}
+                        onChangeText={setPassword}
+                        secureTextEntry={securePassword}
+                    />
 
-                {messageError && <Text style={[THEME.fonts.text, THEME.errors.message]}>{messageError}</Text>}
+                    { 
+                        securePassword ? 
+                            <Ionicons 
+                                name='eye-off' 
+                                size={20} 
+                                color={THEME.colors.brownDark}
+                                onPress={() => setSecurePassword(false)}
+                            /> 
+                        :
+                            <Ionicons 
+                                name='eye' 
+                                size={20} 
+                                color={THEME.colors.brownDark}
+                                onPress={() => setSecurePassword(true)}
+                            />
+                    }
+                </Input>
+
+                {
+                    messageError && 
+                    
+                    <Text style={[
+                            THEME.fonts.text, 
+                            THEME.errors.message
+                        ]}
+                    >
+                        {messageError}
+                    </Text>
+                }
                 
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigation.navigate('Reset')}
                 >
-                    <Text style={[THEME.fonts.link, styles.resetPassword]}>Esqueci minha senha</Text>
+                    <Text style={[
+                            THEME.fonts.link, 
+                            styles.resetPassword
+                        ]}
+                    >
+                        Esqueci minha senha
+                    </Text>
                 </TouchableOpacity>
 
-
+                <View style={styles.viewButton}>
+                    <Button 
+                        onPress={handleSubmitLogin}
+                        title='ACESSAR'
+                        isLoading={isLoading}
+                        color={'brownDark'}         
+                    />
+                </View>
             </View>
 
-            <View style={THEME.structure.viewButton}>
-                <SimpleButton 
-                    onPress={handleSubmit}
-                    title='ACESSAR'
-                    color={'brownDark'}         
-                />
+            <Links 
+                text={"Não possui conta? "}
+                title={"Criar conta"}
+                screen={"Register"}
+            /> 
 
-                <Links 
-                    text={"Não possui conta?"}
-                    title={"Criar conta"}
-                    screen={"Register"}
-                /> 
-
-            </View>
-
-            {modalVisible && <Info /> }
+            <WaitMessage modalVisible={modalVisible}/>
         </View>
     )
 }
