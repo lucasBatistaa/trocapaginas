@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FormatDate } from "../../utils/formatDate";
+import axios from 'axios';
 
 export default function Comment({modalVisible, onPress}) {
     const [ textComment, setTextComment ] = useState('')
@@ -36,12 +37,26 @@ export default function Comment({modalVisible, onPress}) {
 
             setAllComments([...allComments, newComment])
 
+             //envia os dados para o servidor
+        try{ 
+            axios.post('http://localhost:6005/coment', JSON.stringify({newComment}), 
+            {
+                headers: {'Content-Type': 'application/json'}
+            })
+            
+        } catch(error) {
+            console.log(error);
+            console.error('Erro inesperado', error);
+        }
+    }l
+
             inputRef.current.blur() 
             Keyboard.dismiss()
             setTextComment('')
             console.log('Enviado!')
         }
-    }
+
+       
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponderCapture: () => true,
