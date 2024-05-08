@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
 import {Post} from '../models/post.js';
 import {Review} from '../models/review.js';
+import {Comment} from '../models/comment.js';
 
 const routes = express.Router();
 const database = new Database();
@@ -12,6 +13,8 @@ const salt = bcrypt.genSaltSync(10);
 const user = new User();
 const post = new Post();
 const review = new Review();
+const comments = new Comment();
+
 async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
@@ -184,6 +187,20 @@ routes.post('/review', async (req, res) => {
         return res.status(500).send('Erro ao criar a resenha');
     }
 
+});
+
+routes.post('/comment', async (req, res) => {
+    const {comments = {idUser, time, comment}} = req.body; // recebendo o objeto comment
+
+    
+    try{ // tentar criar o comentário no banco de dados
+        await database.createComment(comments).then(() => {
+            return res.status(201).send('Comentário criado com sucesso!');
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send('Erro ao criar o comentário');
+    }
 });
 
 export default routes;
