@@ -16,7 +16,6 @@ import { FormatDate } from "../../utils/formatDate";
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FormatDate } from "../../utils/formatDate";
 import axios from 'axios';
 
 export default function Comment({modalVisible, onPress}) {

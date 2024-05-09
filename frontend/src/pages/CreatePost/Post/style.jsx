@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
         flex: 1,
         gap: 20,
         // alignItems: 'center',
-        // justifyContent: 'space-between',
+         
     },
+
+    menu: {
+        justifyContent: 'space-between',
+    }
 })

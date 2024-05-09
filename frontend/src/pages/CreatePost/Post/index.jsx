@@ -7,6 +7,7 @@ import TextArea from "../../../components/Forms/TextArea"
 
 import { styles } from "./style"
 import { THEME } from "../../../styles/Theme"
+import BottomMenu from "../../../components/Menus/BottomMenu"
 
 export default function Post({ onSubmit, isLoading=false }) {
     const [ text, setText ] = useState('')
@@ -32,39 +33,41 @@ export default function Post({ onSubmit, isLoading=false }) {
 
     return (
         <View style={styles.container}>
-            <TextArea 
+            <TextArea
                 error={errorText}
-                numberOfLines={6} 
+                numberOfLines={6}
                 placeholder={'Digite aqui'}
                 maxLength={200}
                 onChangeText={setText}
             />
-
             <Input error={errorNameBook}>
-                <Input.Field 
+                <Input.Field
                     placeholder={'Escolher livro'}
                     onChangeText={setNameBook}
                 />
             </Input>
-
             {
-                messageError && 
-                <Text 
+                messageError &&
+                <Text
                     style={[
-                        THEME.fonts.text, 
+                        THEME.fonts.text,
                         THEME.errors.message
                     ]}
                 >
                     {messageError}
                 </Text>
             }
-
-            <Button 
+            <Button
                 title={'PUBLICAR'}
                 color={'brownDark'}
                 isLoading={isLoading}
                 onPress={handleValidatePost}
             />
+
+            <View style={styles.menu}>
+                <BottomMenu/>
+            </View>
         </View>
+        
     )
 }
