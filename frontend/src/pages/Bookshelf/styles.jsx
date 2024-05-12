@@ -22,6 +22,5 @@ export const styles = StyleSheet.create({
     title: {
         color: THEME.colors.brownDark,
         textAlign: 'center',
-        marginTop: 20,
     }
 })

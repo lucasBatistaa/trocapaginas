@@ -8,6 +8,7 @@ import Reset from '../pages/Reset'
 import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
 import Bookshelf from '../pages/Bookshelf'
+import Book from '../pages/Book'
 
 const Stack = createNativeStackNavigator()
 
@@ -22,6 +23,7 @@ export default function StackRoutes() {
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
             <Stack.Screen name='Bookshelf' component={Bookshelf}/>
+            <Stack.Screen name='Book' component={Book}/>
         </Stack.Navigator>
     )
 }

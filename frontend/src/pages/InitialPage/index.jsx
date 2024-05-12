@@ -1,34 +1,34 @@
+import { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, View } from 'react-native'
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-import { THEME } from '../../styles/Theme'
+import axios from 'axios'
 
-import Publication from '../../components/Publication';
-import TopMenu from '../../components/Menus/TopMenu';
-import BottomMenu from '../../components/Menus/BottomMenu';
-import { styles } from './style';
+import Publication from '../../components/Publication'
+import TopMenu from '../../components/Menus/TopMenu'
+import BottomMenu from '../../components/Menus/BottomMenu'
+
+import { styles } from './style'
 
 export default function InitialPage(props) {
-    const [ publications, setPublications ] = useState([]);
-    const [ userData, setUserData ] = useState({});
+    const [ publications, setPublications ] = useState([])
+    const [ userData, setUserData ] = useState({})
 
     const getUser = async() => {
         try {
             const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
-            setUserData(user.data);
+            setUserData(user.data)
 
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
     useEffect(() => {
         if(props.route.params === undefined) {
-            getUser();
+            getUser()
 
         }else {
-            setUserData(props.route.params.user);  
+            setUserData(props.route.params.user); 
         }
 
         // CHAMADA DA API
