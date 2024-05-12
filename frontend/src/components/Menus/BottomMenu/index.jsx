@@ -20,7 +20,9 @@ export default function BottomMenu () {
                 onPress={() => navigation.navigate('CreatePost')}            
             />
 
-            <BooksIcon/>
+            <BooksIcon
+                onPress={() => navigation.navigate('Bookshelf')}
+            />
         </View>
     )
 }

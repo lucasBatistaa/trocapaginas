@@ -8,12 +8,13 @@ import Reset from '../pages/Reset'
 import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
 import Bookshelf from '../pages/Bookshelf'
+import Profile from '../pages/Profile'
 
 const Stack = createNativeStackNavigator()
 
 export default function StackRoutes() {
     return (
-        <Stack.Navigator initialRouteName='Bookshelf' screenOptions={{ headerShown: false}}>
+        <Stack.Navigator initialRouteName='Profile' screenOptions={{ headerShown: false}}>
             <Stack.Screen name='Slogan' component={Slogan} />
             <Stack.Screen name='Login' component={Login} />
             <Stack.Screen name='Register' component={Register} />
@@ -22,6 +23,7 @@ export default function StackRoutes() {
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
             <Stack.Screen name='Bookshelf' component={Bookshelf}/>
+            <Stack.Screen name='Profile' component={Profile}/>
         </Stack.Navigator>
     )
 }
