@@ -1,15 +1,21 @@
-import { View, Image, Text } from 'react-native'
+import { Image, Text, TouchableOpacity } from 'react-native'
 import { styles } from './styles'
 import { THEME } from '../../styles/Theme'
+import { useNavigation } from '@react-navigation/native'
 
 export default function BookTemplate({ image, titleBook, authorBook }) {
+    const navigation = useNavigation()
+
     return (
-        <View style={styles.container}>
-            <Image 
+        <TouchableOpacity
+            style={styles.container}
+            onPress={() => navigation.navigate('Book')}
+        >
+            <Image
                 source={image}
                 style={styles.image}
             />
-            <Text 
+            <Text
                 style={[
                     THEME.fonts.h2.normal,
                     styles.titleBook,
@@ -17,13 +23,13 @@ export default function BookTemplate({ image, titleBook, authorBook }) {
                 ]}>
                     {titleBook}
             </Text>
-            <Text 
+            <Text
                 style={[
                     THEME.fonts.text,
                     styles.colorBrownDark
                 ]}>
                     {authorBook}
             </Text>
-        </View>
+        </TouchableOpacity>
     )
 }

@@ -60,7 +60,7 @@ export default function Comment({modalVisible, onPress}) {
             console.log(error);
             console.error('Erro inesperado', error);
         }
-    }l
+    }
 
             inputRef.current.blur() 
             Keyboard.dismiss()
