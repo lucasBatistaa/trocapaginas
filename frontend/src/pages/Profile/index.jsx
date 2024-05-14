@@ -1,4 +1,5 @@
-import {View, Image, Text} from 'react-native'
+import {View, Image, Text, TouchableOpacity} from 'react-native'
+import { useState } from 'react'
 
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
@@ -6,22 +7,74 @@ import { styles } from './style'
 import MenuICon from '../../assets/menu-icon.svg'
 
 export default function Profile () {
-  return (
-    <View>
-        <View style={styles.header}>
-            <Image
-                style={{width: 90, height: 90}}
-                source={require('../../assets/user-circle.png')}
-            />
+    const [selectedOption, setSelectedOption] = useState('showPublications');
 
-            <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownDark}]}>
-                Nome da usuária
-            </Text>
+    const handleOptionChange = (option) => {
+        if (selectedOption !== option) {
+            setSelectedOption(option);
+        }
+    };
+    
+    return (
+        <View>
+            <View style={styles.header}>
+                <Image
+                    style={{width: 90, height: 90}}
+                    source={require('../../assets/user-circle.png')}
+                />
 
-            <MenuICon
-                style={{alignSelf: 'flex-start', bottom: 20}}
-            />
+                <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownDark}]}>
+                    Nome da usuária
+                </Text>
+
+                <MenuICon
+                    style={{alignSelf: 'flex-start', bottom: 20}}
+                />
+            </View>
+
+            
+            <View style={styles.tabView}>
+                    <TouchableOpacity
+                        onPress={() => handleOptionChange('showPublications')}
+                        style={[
+                            styles.tabButton(true), 
+                            selectedOption === 'showPublications' && styles.tabButton(false)
+                        ]}  
+                    >
+                         <Text style={[THEME.fonts.text, selectedOption === 'showPublications' && styles.tabTitle(true)]}> 
+                            PUBLICAÇÕES 
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => handleOptionChange('showInterests')}
+                        style={[
+                            styles.tabButton(true), 
+                            selectedOption === 'showInterests' && styles.tabButton(false)
+                        ]}
+                        
+                    >
+                         <Text style={[THEME.fonts.text, selectedOption === 'showInterests' && styles.tabTitle(true)]}> 
+                            INTERESSES 
+                        </Text>
+
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => handleOptionChange('showExchange')}
+                        style={[
+                            styles.tabButton(true), 
+                            selectedOption === 'showExchange' && styles.tabButton(false)
+                        ]}
+                        
+                    >
+                        <Text style={[THEME.fonts.text, selectedOption === 'showExchange' && styles.tabTitle(true)]}> 
+                            TROCAR 
+                        </Text>
+
+                    </TouchableOpacity>
+
+                </View>
         </View>
-    </View>
-  )
+    )
 }

@@ -8,11 +8,8 @@ import Reset from '../pages/Reset'
 import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
 import Bookshelf from '../pages/Bookshelf'
-<<<<<<< HEAD
 import Profile from '../pages/Profile'
-=======
 import Book from '../pages/Book'
->>>>>>> eaa69c67d103ac62964cd3276e875a2a204cdda1
 
 const Stack = createNativeStackNavigator()
 
@@ -27,11 +24,8 @@ export default function StackRoutes() {
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
             <Stack.Screen name='Bookshelf' component={Bookshelf}/>
-<<<<<<< HEAD
             <Stack.Screen name='Profile' component={Profile}/>
-=======
             <Stack.Screen name='Book' component={Book}/>
->>>>>>> eaa69c67d103ac62964cd3276e875a2a204cdda1
         </Stack.Navigator>
     )
 }

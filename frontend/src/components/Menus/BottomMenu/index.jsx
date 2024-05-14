@@ -21,11 +21,7 @@ export default function BottomMenu () {
             />
 
             <BooksIcon
-<<<<<<< HEAD
-                onPress={() => navigation.navigate('Bookshelf')}
-=======
                 onPress={() => navigation.navigate('Bookshelf')}  
->>>>>>> eaa69c67d103ac62964cd3276e875a2a204cdda1
             />
         </View>
     )
