@@ -3,11 +3,17 @@ import { useState } from 'react'
 
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
+import LateralMenu from '../../components/Menus/LateralMenu'
 
 import MenuICon from '../../assets/menu-icon.svg'
 
 export default function Profile () {
     const [selectedOption, setSelectedOption] = useState('showPublications');
+    const [menuVisible, setMenuVisible] = useState(false)
+
+    const closeMenu = () => {
+        setMenuVisible(false)
+    }
 
     const handleOptionChange = (option) => {
         if (selectedOption !== option) {
@@ -27,9 +33,14 @@ export default function Profile () {
                     Nome da usuária
                 </Text>
 
-                <MenuICon
-                    style={{alignSelf: 'flex-start', bottom: 20}}
-                />
+                <TouchableOpacity
+                    onPress={() => setMenuVisible(true)}
+                >
+                    <MenuICon style={{alignSelf: 'flex-start', bottom: 20}}/>
+
+                </TouchableOpacity>
+               
+               <LateralMenu menuVisible={menuVisible} onPress={closeMenu}/>
             </View>
 
             
