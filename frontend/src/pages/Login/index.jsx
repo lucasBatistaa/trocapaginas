@@ -17,6 +17,7 @@ import { THEME } from "../../styles/Theme"
 
 import GoogleLogo from "../../assets/googleLogo.svg"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useUserStore } from '../../store/badgeStore'
 
 export default function Login() {
     const [email, setEmail] = useState('')
@@ -26,11 +27,11 @@ export default function Login() {
     const [errorPassword, setErrorPassword] = useState(false)
     const [messageError, setMessageError] = useState('')
 
-    const [user, setUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [securePassword, setSecurePassword] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
 
+    const user = useUserStore(state => state.data)
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
@@ -62,10 +63,13 @@ export default function Login() {
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
+
+                user.save(response.data);
         
-                navigation.navigate('InitialPage', {user: response.data});
+                navigation.navigate('InitialPage');
 
             } catch (error) {
+                console.log(error)
                 if (!error?.response) {
                     setMessageError('Erro ao acessar a página');
                 

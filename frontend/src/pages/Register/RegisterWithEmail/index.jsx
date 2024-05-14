@@ -12,6 +12,7 @@ import { Input } from "../../../components/Input"
 
 import { THEME } from "../../../styles/Theme"
 import { styles } from "./styles"
+import { useUserStore } from '../../../store/badgeStore'
 
 export default function RegisterEmail() {
     const [ email, setEmail ] = useState('')
@@ -27,6 +28,8 @@ export default function RegisterEmail() {
     
     const isEmail = /.+@.+/
     const navigation = useNavigation()
+
+    const user = useUserStore(state => state.save)
 
     const validateForm = async () => {
         setIsLoading(true)
@@ -84,13 +87,15 @@ export default function RegisterEmail() {
 
             setIsLoading(true)
 
-            const user = await axios.post('https://trocapaginas-server-production.up.railway.app/create',
+            const response = await axios.post('https://trocapaginas-server-production.up.railway.app/create',
             JSON.stringify({username, email, password, photo}),
             {
                 headers: {'Content-Type': 'application/json'}
-            });
+            })
 
-            navigation.navigate('InitialPage', {user: user.data});
+            user(response.data)
+
+            navigation.navigate('InitialPage');
 
         } catch (error) {
 
