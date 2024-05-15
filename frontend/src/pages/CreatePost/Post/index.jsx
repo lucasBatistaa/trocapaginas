@@ -63,11 +63,6 @@ export default function Post({ onSubmit, isLoading=false }) {
                 isLoading={isLoading}
                 onPress={handleValidatePost}
             />
-
-            <View style={styles.menu}>
-                <BottomMenu/>
-            </View>
-        </View>
-        
+        </View> 
     )
 }

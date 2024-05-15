@@ -17,11 +17,6 @@ import { FormatDate } from "../../utils/formatDate"
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import axios from 'axios';
-
-import { styles } from "./style"
-import { THEME } from "../../styles/Theme"
-import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function Comment({ id, modalVisible, onClose }) {
     const [ textComment, setTextComment ] = useState('')
