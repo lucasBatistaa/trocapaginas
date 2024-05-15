@@ -61,6 +61,7 @@ export default function Book() {
                     color={THEME.colors.brownDark}
                     style={styles.iconGoBack}
             />
+
             <View style={styles.bookOverview}>
                 <Image 
                     source={require('../../assets/book.png')}
@@ -182,17 +183,17 @@ export default function Book() {
             
             <ModalAvaliation 
                 modalVisible={modalAvaliationVisible}
-                onPress={() => setModalAvaliationVisible(false)}
+                onClose={() => setModalAvaliationVisible(false)}
             />
 
             <ModalSynopsis 
                 modalVisible={modalSynopsisVisible}
-                onPress={() => setModalSynopsisVisible(false)}
+                onClose={() => setModalSynopsisVisible(false)}
             />
 
             <Comment 
                 modalVisible={modalCommentVisible} 
-                onPress={() => setModalCommentVisible(false)} 
+                onClose={() => setModalCommentVisible(false)} 
             />
         </View>
     )   

@@ -1,21 +1,22 @@
 import { View, Image, Text, TouchableOpacity, Share } from 'react-native'
-import { useState } from 'react';
+import { useState } from 'react'
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Comment from '../Comment'
 
 import { styles } from './style'
 import { THEME } from '../../styles/Theme'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
-import Comment from '../Comment';
-
-export default function Publication({id, photo, username, textPost, isLike, bookImage}) {
+export default function Publication({ id, photo, username, textPost, isLike, bookImage }) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(isLike)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
+    // Função para fechar modal do Comentário
     const closeComment = () => {
         setModalCommentVisible(false)
     }
     
+    // Compartilhar 
     const onShare = async () => {
         try {
             const result = await Share.share({
@@ -77,7 +78,7 @@ export default function Publication({id, photo, username, textPost, isLike, book
                     source={bookImage} />
             </View>
 
-            <Comment modalVisible={modalCommentVisible} onPress={closeComment} />
+            <Comment idPublication={id} modalVisible={modalCommentVisible} onClose={closeComment} />
         </View>
     )
 }

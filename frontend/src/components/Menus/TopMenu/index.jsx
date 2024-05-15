@@ -4,16 +4,20 @@ import { useNavigation } from "@react-navigation/native"
 
 import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
+import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu ({photo}) {
+export default function TopMenu () {
     const navigation = useNavigation()
+    const user = useUserStore(state => state.data)
 
     return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')}   >
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Profile')}   
+                >
                     <Image
-                        style={{width: 40, height: 40, borderRadius: 20}}
-                        source={photo}
+                        style={styles.photo}
+                        source={{ uri: user.photo }}
                     />
                 </TouchableOpacity>
 
