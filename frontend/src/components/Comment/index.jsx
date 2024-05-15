@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react"
 import { 
     Modal, 
     View, 
@@ -9,19 +9,22 @@ import {
     TouchableOpacity, 
     Keyboard, 
     PanResponder 
-} from "react-native";
+} from "react-native"
 
+import axios from 'axios'
+
+import { FormatDate } from "../../utils/formatDate"
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import axios from 'axios';
 
-export default function Comment({modalVisible, onPress}) {
+export default function Comment({ id, modalVisible, onClose }) {
     const [ textComment, setTextComment ] = useState('')
     const [ allComments, setAllComments] = useState([])
-    const inputRef = useRef(null)
 
     useEffect(() => {
+
+        // exemplo de comentário
         setAllComments([
             {
                 idUser: '1',
@@ -45,60 +48,66 @@ export default function Comment({modalVisible, onPress}) {
                 comment:`${textComment.trim()}`
             }
 
-            setAllComments([...allComments, newComment])
+            setAllComments([ ...allComments, newComment ])
 
-             //envia os dados para o servidor
+                //envia os dados para o servidor
             try{ 
                 axios.post('http://localhost:6005/comment', JSON.stringify({newComment}), 
                 {
                     headers: {'Content-Type': 'application/json'}
-                });
+                })
             
-        } catch(error) {
-            console.log(error);
-            console.error('Erro inesperado', error);
-        }
-    }
+            } catch(error) {
+                console.log(error)
+                console.error('Erro inesperado', error)
+            }
 
             inputRef.current.blur() 
             Keyboard.dismiss()
             setTextComment('')
             console.log('Enviado!')
+        }
     }
-
        
-
+    // Fechar comentário com deslize para baixo
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponderCapture: () => true,
         onPanResponderMove: (event, gestureState) => {
             // Detecta movimento para baixo (dy > 0)
-            if (gestureState.dy > 0) {
+            if (gestureState.dy > 2) {
                 // Fecha o modal
-                onPress()
+                onClose()
             }
         },
-    });
+    })
 
     return (
         <Modal
             animationType="fade"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
+            onRequestClose={onClose}
         >
             <View 
                 style={styles.principalView}
             >   
                 <TouchableOpacity
                     style={styles.clickClose}
-                    onPress={onPress}
-                >
+                    onPress={onClose}
+                />
 
-                </TouchableOpacity>
                 <View style={styles.commentView}>
                     <View {...panResponder.panHandlers}>
-                        <View style={styles.gestureDropDown}></View>
-                        <Text style={[THEME.fonts.h1.normal, { color: THEME.colors.brownDark, alignSelf: 'center' }]}>Comentários</Text>
+                        <View style={styles.gestureDropDown}/>
+
+                        <Text 
+                            style={[
+                                THEME.fonts.h1.normal, 
+                                styles.titleModal
+                            ]}
+                        >
+                            Comentários
+                        </Text>
                     </View>
 
                     <ScrollView 
@@ -106,32 +115,31 @@ export default function Comment({modalVisible, onPress}) {
                         contentContainerStyle={styles.commentsList}
                     >
                         { 
-                            allComments?.map((comment) => (
+                            allComments?.map((comment, index) => (
                                 <View 
+                                    key={index}
                                     style={styles.comment}
-                                    key={comment.idUser}
                                 >
                                     <Image 
                                         source={comment.image}
-                                        style={{width: 36, height: 36}}
+                                        style={styles.userPhotoOfComment}
                                     />
-                                    <View style={styles.commentContent}>
+
+                                    <View>
                                         <View style={styles.commentHeader}>
                                             <Text style={[THEME.fonts.h2.normal, { color: THEME.colors.brownDark}]}>{comment.username}</Text>
                                             <Text style={[THEME.fonts.text, { color: THEME.colors.grayDark}]}>{comment.time}</Text>
                                         </View>
+
                                         <Text style={THEME.fonts.text}>{comment.comment}</Text>
                                     </View>
                                 </View>    
                             ))
-                        
                         }                    
                     </ScrollView>
 
                     <View style={styles.textInputView}>
                         <TextInput
-                        
-                            ref={inputRef}
                             style={styles.textInput}
                             multiline={true}
                             numberOfLines={1}

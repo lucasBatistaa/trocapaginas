@@ -9,6 +9,7 @@ import Post from './Post'
 import { ButtonAddImage } from './components/ButtonAddImage'
 import { RadioButtons } from './components/RadioButtons'
 import { ImageURI } from '../../utils/imageURI'
+import BottomMenu from '../../components/Menus/BottomMenu'
 
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
@@ -23,25 +24,6 @@ export default function CreatePost() {
     const user = useUserStore(state => state.data)
     
     const navigation = useNavigation()
-
-    // const getUser = async() => {
-    //     try {
-    //         const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
-    //         setUserData(user.data);
-
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-    // // useEffect(() => {
-    // //     if(props.route.params === undefined) {
-    // //         getUser();
-
-    // //     }else {
-    // //         setUserData(props.route.params.user);  
-    // //     }
-    // // }, []);
 
     const handleSelectAnImage = async () => {
         const URI = await ImageURI();
@@ -118,77 +100,79 @@ export default function CreatePost() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.viewAddImage}>
-                {
-                    imageURI ? 
-                        <ImageBackground 
-                            source={{ uri: imageURI }} 
-                            style={styles.imageBackground}
-                        >
-                            <ButtonAddImage onPress={handleSelectAnImage} />
-                        </ImageBackground>
-                    : 
-                        <ButtonAddImage onPress={handleSelectAnImage} />
-                }
-            </View>
-
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.viewPost}
             >
-                <View style={styles.viewUsername}>
-                    <Image
-                        style={{width: 40, height: 40, borderRadius: 20}}
-                        source={{uri: user.photo}}
-                    />
-                    <Text 
-                        style={[
-                            THEME.fonts.h1.normal, 
-                            styles.username
-                        ]}
-                    >
-                        {user.name}
-                    </Text>
+                <View style={styles.viewAddImage}>
+                    {
+                        imageURI ? 
+                            <ImageBackground 
+                                source={{ uri: imageURI }} 
+                                style={styles.imageBackground}
+                            >
+                                <ButtonAddImage onPress={handleSelectAnImage} />
+                            </ImageBackground>
+                        : 
+                            <ButtonAddImage onPress={handleSelectAnImage} />
+                    }
                 </View>
 
-                <View style={styles.viewRadioButtons}>
-                    <RadioButtons 
-                        label='Post'
-                        isSelectedPost={!isSelectedPost}
-                        onPress={() => setIsSelectedPost(true)}
-                    />
-
-                    <RadioButtons 
-                        label='Resenha'
-                        isSelectedPost={isSelectedPost}
-                        onPress={() => setIsSelectedPost(false)}
-                    />
+                <View style={styles.viewWrapper}>
+                    <View style={styles.viewPost}>
+                        <View style={styles.viewUsername}>
+                            <Image
+                                style={{width: 40, height: 40, borderRadius: 20}}
+                                source={{uri: user.photo}}
+                            />
+                            <Text
+                                style={[
+                                    THEME.fonts.h1.normal,
+                                    styles.username
+                                ]}
+                            >
+                                {user.name}
+                            </Text>
+                        </View>
+                        <View style={styles.viewRadioButtons}>
+                            <RadioButtons
+                                label='Post'
+                                isSelectedPost={!isSelectedPost}
+                                onPress={() => setIsSelectedPost(true)}
+                            />
+                            <RadioButtons
+                                label='Resenha'
+                                isSelectedPost={isSelectedPost}
+                                onPress={() => setIsSelectedPost(false)}
+                            />
+                        </View>
+                        {
+                            messageError &&
+                            <Text
+                                style={[
+                                    THEME.fonts.text,
+                                    THEME.errors.message
+                                ]}
+                            >
+                                {messageError}
+                            </Text>
+                        }
+                        {
+                            isSelectedPost ?
+                                <Post
+                                    onSubmit={handleCreatePost}
+                                    isLoading={isLoading}
+                                />
+                            :
+                                <Review
+                                    onSubmit={handleCreatePost}
+                                    isLoading={isLoading}
+                                />
+                        }
+                    </View>
                 </View>
-
-                {
-                    messageError && 
-                    <Text 
-                        style={[
-                            THEME.fonts.text,
-                            THEME.errors.message 
-                        ]}
-                    >
-                        {messageError}
-                    </Text>
-                }
-                { 
-                    isSelectedPost ? 
-                        <Post 
-                            onSubmit={handleCreatePost}
-                            isLoading={isLoading}
-                        /> 
-                    : 
-                        <Review 
-                            onSubmit={handleCreatePost}
-                            isLoading={isLoading}
-                        />
-                }
             </ScrollView>
+
+            <BottomMenu/>
         </View>
     )
 }
