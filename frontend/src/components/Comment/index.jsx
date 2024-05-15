@@ -14,6 +14,10 @@ import {
 import axios from 'axios'
 
 import { FormatDate } from "../../utils/formatDate"
+import { styles } from "./style";
+import { THEME } from "../../styles/Theme";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from 'axios';
 
 import { styles } from "./style"
 import { THEME } from "../../styles/Theme"
@@ -51,25 +55,24 @@ export default function Comment({ id, modalVisible, onClose }) {
 
             setAllComments([ ...allComments, newComment ])
 
-            //envia os dados para o servidor
-            try { 
-                axios.post('http://localhost:6005/coment', JSON.stringify({newComment}), 
+                //envia os dados para o servidor
+            try{ 
+                axios.post('http://localhost:6005/comment', JSON.stringify({newComment}), 
                 {
                     headers: {'Content-Type': 'application/json'}
                 })
-                
+            
             } catch(error) {
-                console.log(error);
-                console.error('Erro inesperado', error);
+                console.log(error)
+                console.error('Erro inesperado', error)
             }
-        }
 
             inputRef.current.blur() 
             Keyboard.dismiss()
             setTextComment('')
             console.log('Enviado!')
         }
-
+    }
        
     // Fechar comentário com deslize para baixo
     const panResponder = PanResponder.create({

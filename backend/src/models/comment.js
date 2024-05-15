@@ -1,9 +1,7 @@
-import { Database } from "postgres";
-import { User } from "./user";
+import { User } from "./user.js";
 
-const database = new Database();
 
-export class Comment extends User {
+export class Comment{
         constructor(idUser, idComment, comment, time){
         this.idUser = idUser;
         this.idComment = idComment;
