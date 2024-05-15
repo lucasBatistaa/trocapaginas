@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     commentView: {
         flex: 1,
         backgroundColor: THEME.colors.white,
-        // paddingTop: 12,
         padding: 20,
         gap: 20,
         borderTopStartRadius: 20,

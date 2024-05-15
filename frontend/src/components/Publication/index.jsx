@@ -8,7 +8,7 @@ import { THEME } from '../../styles/Theme'
 
 import Comment from '../Comment';
 
-export default function Publication({photo, username, textPost, isLike, bookImage}) {
+export default function Publication({id, photo, username, textPost, isLike, bookImage}) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(isLike)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 

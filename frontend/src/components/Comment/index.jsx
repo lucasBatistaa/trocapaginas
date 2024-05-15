@@ -14,7 +14,6 @@ import {
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FormatDate } from "../../utils/formatDate";
 import axios from 'axios';
 
 export default function Comment({modalVisible, onPress}) {
@@ -55,11 +54,11 @@ export default function Comment({modalVisible, onPress}) {
                     headers: {'Content-Type': 'application/json'}
                 });
             
-            } catch(error) {
-                console.log(error);
-                console.error('Erro inesperado', error);
-            }
-        }    
+        } catch(error) {
+            console.log(error);
+            console.error('Erro inesperado', error);
+        }
+    }
 
             inputRef.current.blur() 
             Keyboard.dismiss()

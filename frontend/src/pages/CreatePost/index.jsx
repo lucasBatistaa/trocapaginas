@@ -6,42 +6,42 @@ import { useNavigation } from "@react-navigation/native"
 
 import Review from './Review'
 import Post from './Post'
-import Loading from '../../components/Loading'
 import { ButtonAddImage } from './components/ButtonAddImage'
 import { RadioButtons } from './components/RadioButtons'
 import { ImageURI } from '../../utils/imageURI'
 
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
+import { useUserStore } from '../../store/badgeStore'
 
-export default function CreatePost(props) {
+export default function CreatePost() {
     const [isSelectedPost, setIsSelectedPost] = useState(true)
     const [imageURI, setImageURI] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [messageError, setMessageError] = useState('')
     
-    const[userdata, setUserData] = useState({});
+    const user = useUserStore(state => state.data)
     
     const navigation = useNavigation()
 
-    const getUser = async() => {
-        try {
-            const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
-            setUserData(user.data);
+    // const getUser = async() => {
+    //     try {
+    //         const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
+    //         setUserData(user.data);
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
-    useEffect(() => {
-        if(props.route.params === undefined) {
-            getUser();
+    // // useEffect(() => {
+    // //     if(props.route.params === undefined) {
+    // //         getUser();
 
-        }else {
-            setUserData(props.route.params.user);  
-        }
-    }, []);
+    // //     }else {
+    // //         setUserData(props.route.params.user);  
+    // //     }
+    // // }, []);
 
     const handleSelectAnImage = async () => {
         const URI = await ImageURI();
@@ -114,7 +114,7 @@ export default function CreatePost(props) {
         }    
     } 
 
-    if (!userdata) return <Loading />
+    // if (!userdata) return <Loading />
 
     return (
         <View style={styles.container}>
@@ -139,7 +139,7 @@ export default function CreatePost(props) {
                 <View style={styles.viewUsername}>
                     <Image
                         style={{width: 40, height: 40, borderRadius: 20}}
-                        source={{uri: userdata.photo}}
+                        source={{uri: user.photo}}
                     />
                     <Text 
                         style={[
@@ -147,7 +147,7 @@ export default function CreatePost(props) {
                             styles.username
                         ]}
                     >
-                        {userdata.name}
+                        {user.name}
                     </Text>
                 </View>
 
