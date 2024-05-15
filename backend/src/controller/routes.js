@@ -14,7 +14,7 @@ const user = new User();
 const post = new Post();
 const review = new Review();
 const validationCode = [];
-const comments = new Comment();
+const comentario = new Comment();
 async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
@@ -190,11 +190,12 @@ routes.post('/review', async (req, res) => {
 });
 
 routes.post('/comment', async (req, res) => {
-    const {comments = {idUser, time, comment}} = req.body; // recebendo o objeto comment
-
+    const {comments} = req.body; // recebendo o objeto comment
+    console.log(comments);
+    
     
     try{ // tentar criar o comentário no banco de dados
-        await database.createComment(comments).then(() => {
+        await database.createComment(comments.idUser, comments.idComment, comments.time, comments.comment).then(() => {
             return res.status(201).send('Comentário criado com sucesso!');
         })
     } catch (error) {
