@@ -31,7 +31,7 @@ export default function Login() {
     const [securePassword, setSecurePassword] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
 
-    const user = useUserStore(state => state.data)
+    const user = useUserStore(state => state.save)
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
@@ -64,7 +64,7 @@ export default function Login() {
                     headers: {'Content-Type': 'application/json'}
                 });
 
-                user.save(response.data);
+                user(response.data);
         
                 navigation.navigate('InitialPage');
 
