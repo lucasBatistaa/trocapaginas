@@ -14,6 +14,8 @@ export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
 
     const user = useUserStore(state => state.data)
+    console.log(user);
+    console.log('o console anterior é o user');
 
     // const [ userData, setUserData ] = useState({})
 
