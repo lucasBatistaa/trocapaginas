@@ -43,52 +43,53 @@ export default function Profile () {
 
                 </TouchableOpacity>
                
-               <LateralMenu menuVisible={menuVisible} onPress={closeMenu}/>
+                <LateralMenu menuVisible={menuVisible} onPress={closeMenu}/>
             </View>
 
             
             <View style={styles.tabView}>
-                    <TouchableOpacity
-                        onPress={() => handleOptionChange('showPublications')}
-                        style={[
-                            styles.tabButton(true), 
-                            selectedOption === 'showPublications' && styles.tabButton(false)
-                        ]}  
-                    >
-                         <Text style={[THEME.fonts.text, selectedOption === 'showPublications' && styles.tabTitle(true)]}> 
-                            PUBLICAÇÕES 
-                        </Text>
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => handleOptionChange('showPublications')}
+                    style={[
+                        styles.tabButton(true), 
+                        selectedOption === 'showPublications' && styles.tabButton(false)
+                    ]}  
+                >
+                        <Text style={[THEME.fonts.text, selectedOption === 'showPublications' && styles.tabTitle(true)]}> 
+                        PUBLICAÇÕES 
+                    </Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => handleOptionChange('showInterests')}
-                        style={[
-                            styles.tabButton(true), 
-                            selectedOption === 'showInterests' && styles.tabButton(false)
-                        ]}
-                        
-                    >
-                         <Text style={[THEME.fonts.text, selectedOption === 'showInterests' && styles.tabTitle(true)]}> 
-                            INTERESSES 
-                        </Text>
+                <TouchableOpacity
+                    onPress={() => handleOptionChange('showInterests')}
+                    style={[
+                        styles.tabButton(true), 
+                        selectedOption === 'showInterests' && styles.tabButton(false)
+                    ]}
+                    
+                >
+                    <Text style={[THEME.fonts.text, selectedOption === 'showInterests' && styles.tabTitle(true)]}> 
+                        INTERESSES 
+                    </Text>
 
-                    </TouchableOpacity>
+                </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => handleOptionChange('showExchange')}
-                        style={[
-                            styles.tabButton(true), 
-                            selectedOption === 'showExchange' && styles.tabButton(false)
-                        ]}
-                        
-                    >
-                        <Text style={[THEME.fonts.text, selectedOption === 'showExchange' && styles.tabTitle(true)]}> 
-                            TROCAR 
-                        </Text>
+                <TouchableOpacity
+                    onPress={() => handleOptionChange('showExchange')}
+                    style={[
+                        styles.tabButton(true), 
+                        selectedOption === 'showExchange' && styles.tabButton(false)
+                    ]}
+                    
+                >
+                    <Text style={[THEME.fonts.text, selectedOption === 'showExchange' && styles.tabTitle(true)]}> 
+                        TROCAR 
+                    </Text>
 
-                    </TouchableOpacity>
+                </TouchableOpacity>
 
-                </View>
+            </View>
+
         </View>
     )
 }
