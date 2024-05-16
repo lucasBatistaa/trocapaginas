@@ -12,6 +12,13 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    user: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },  
+
     image: {
         width: 32,
         height: 32,

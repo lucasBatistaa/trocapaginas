@@ -15,6 +15,7 @@ export default function InitialPage(props) {
 
     // Dados do usuário
     const user = useUserStore(state => state.data)
+    console.log(user)
 
     useEffect(() => {
         // CHAMADA DA API

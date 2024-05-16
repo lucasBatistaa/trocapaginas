@@ -13,6 +13,10 @@ export const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
 
+    username: {
+        color: THEME.colors.brownDark
+    },
+
     tabView: {
         flexDirection: 'row',
         justifyContent: 'center',

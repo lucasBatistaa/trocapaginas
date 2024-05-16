@@ -9,8 +9,16 @@ import { useState } from "react"
 
 export default function ModalAvaliation({ modalVisible, onClose }) {
     const [ hasInterest, setHasInterest ] = useState(false) 
-    const [ swap, setSwap ] = useState(false)
-    // const [ modalVisible, setModalVisible ] = useState(true)
+    const [ exchange, setExchange ] = useState(false)
+    const [ totalAvaliation, setTotalAvaliation ] = useState(0) 
+
+    const handleChoiceAvaliation = () => { 
+        if (totalAvaliation >= 1 || hasInterest || exchange) {
+            // Update na API
+        }
+        
+        onClose()
+    }
 
     return (
         <Modal
@@ -31,7 +39,9 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                             >
                                 Avaliar livro
                             </Text>
-                            <Avaliation size={32}/>
+
+                            <Avaliation size={32} totalAvaliation={(avaliation) => setTotalAvaliation(avaliation)}/>
+                            
                             <Text
                                 style={[
                                     THEME.fonts.h1.bold,
@@ -49,7 +59,7 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                                     ]}
                                     onPress={() => {
                                         setHasInterest(!hasInterest)
-                                        setSwap(false)
+                                        setExchange(false)
                                     }}
                                 >
                                     <Text style={styles.isActiveText(hasInterest)}>INTERESSES</Text>
@@ -58,20 +68,20 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                                     activeOpacity={0.7}
                                     style={[
                                         styles.buttonsActions,
-                                        styles.isActive(swap)
+                                        styles.isActive(exchange)
                                     ]}
                                     onPress={() => {
-                                        setSwap(!swap)
+                                        setExchange(!exchange)
                                         setHasInterest(false)
                                     }}
                                 >
-                                    <Text style={styles.isActiveText(swap)}>QUERO TROCAR</Text>
+                                    <Text style={styles.isActiveText(exchange)}>QUERO TROCAR</Text>
                                 </TouchableOpacity>
                             </View>
                             <Button
                                 title={'FINALIZAR'}
                                 isLoading={false}
-                                onPress={() => {}}
+                                onPress={handleChoiceAvaliation}
                             />
                         </View>
                     </TouchableWithoutFeedback>

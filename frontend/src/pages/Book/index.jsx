@@ -12,6 +12,7 @@ import { THEME } from "../../styles/Theme"
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import ModalSynopsis from "./components/ModalSynopsis"
+import { useNavigation } from "@react-navigation/native"
 
 export default function Book() {
     const [ publications, setPublications ] = useState([])
@@ -21,6 +22,7 @@ export default function Book() {
     const [ avaliation, setAvalation ] = useState(0)
     const [ showReviews, setShowReviews ] = useState(true)
    
+    const navigation = useNavigation()
     const stars = Array.from({ length: 5 }, (_, index) => index <= avaliation ? true : false)
 
     useEffect(() => {
@@ -55,11 +57,14 @@ export default function Book() {
 
     return (
         <View style={styles.container}>
+
+            {/* Botão de voltar */}
             <Ionicons 
-                    name="arrow-back-outline"
-                    size={24}
-                    color={THEME.colors.brownDark}
-                    style={styles.iconGoBack}
+                name="arrow-back-outline"
+                size={24}
+                color={THEME.colors.brownDark}
+                style={styles.iconGoBack}
+                onPress={() => { navigation.navigate('Bookshelf') }}
             />
 
             <View style={styles.bookOverview}>
@@ -181,7 +186,7 @@ export default function Book() {
 
             <BottomMenu />
             
-            <ModalAvaliation 
+            <ModalAvaliation    
                 modalVisible={modalAvaliationVisible}
                 onClose={() => setModalAvaliationVisible(false)}
             />

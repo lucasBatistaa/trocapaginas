@@ -6,10 +6,13 @@ import { styles } from './style'
 import LateralMenu from '../../components/Menus/LateralMenu'
 
 import MenuICon from '../../assets/menu-icon.svg'
+import { useUserStore } from '../../store/badgeStore'
 
 export default function Profile () {
     const [selectedOption, setSelectedOption] = useState('showPublications');
     const [menuVisible, setMenuVisible] = useState(false)
+    
+    const user = useUserStore(state => state.data)
 
     const closeMenu = () => {
         setMenuVisible(false)
@@ -29,8 +32,8 @@ export default function Profile () {
                     source={require('../../assets/user-circle.png')}
                 />
 
-                <Text style={[THEME.fonts.h1.normal, {color: THEME.colors.brownDark}]}>
-                    Nome da usuária
+                <Text style={[THEME.fonts.h1.normal, styles.username]}>
+                    { user.name }
                 </Text>
 
                 <TouchableOpacity
