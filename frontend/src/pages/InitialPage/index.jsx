@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, View } from 'react-native'
 
-import axios from 'axios'
-
 import Publication from '../../components/Publication'
 import TopMenu from '../../components/Menus/TopMenu'
 import BottomMenu from '../../components/Menus/BottomMenu'
@@ -10,12 +8,11 @@ import BottomMenu from '../../components/Menus/BottomMenu'
 import { styles } from './style'
 import { useUserStore } from '../../store/badgeStore'
 
-export default function InitialPage(props) {
+export default function InitialPage() {
     const [ publications, setPublications ] = useState([])
 
     // Dados do usuário
-    const user = useUserStore(state => state.data)
-    console.log(user)
+    const user = useUserStore()
 
     useEffect(() => {
         // CHAMADA DA API
@@ -29,6 +26,7 @@ export default function InitialPage(props) {
             }
         ])
     }, [])
+
     return (
         <View style={styles.container}> 
             <StatusBar barStyle={'light-content'} />
@@ -45,7 +43,7 @@ export default function InitialPage(props) {
                             key={index}
                             id={publication.id}
                             photo={publication.photo}
-                            username={user.name}
+                            username={user.data.name}
                             textPost={publication.textPost}
                             bookImage={publication.bookImage}
                             isLike={publication.isLike}

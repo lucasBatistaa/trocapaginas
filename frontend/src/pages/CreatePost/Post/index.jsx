@@ -7,7 +7,6 @@ import TextArea from "../../../components/Forms/TextArea"
 
 import { styles } from "./style"
 import { THEME } from "../../../styles/Theme"
-import BottomMenu from "../../../components/Menus/BottomMenu"
 
 export default function Post({ onSubmit, isLoading=false }) {
     const [ text, setText ] = useState('')

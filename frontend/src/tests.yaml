@@ -1,0 +1,27 @@
+appId: com.troca_paginas.trocapaginas
+---
+- openLink: exp://127.0.0.1:8081
+- tapOn: 
+    id: login-button
+- tapOn: 
+    id: forgotPassword-button
+
+- tapOn:
+    id: input-email
+- inputText: "lucas.lucas2004.30@gmail.com"
+- hideKeyboard
+- tapOn:
+    id: input-password
+- inputText: "Lucas123#"
+- tapOn:
+    id: visible-password
+- hideKeyboard
+- tapOn: 
+    id: access-button
+- tapOn: 
+    id: createPost-button
+- tapOn: 
+    id: review-button
+- tapOn: 
+    id: post-button
+- back

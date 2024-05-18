@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 
 import * as WebBrowser from 'expo-web-browser'
@@ -18,6 +18,9 @@ import { THEME } from "../../styles/Theme"
 import GoogleLogo from "../../assets/googleLogo.svg"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useUserStore } from '../../store/badgeStore'
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import InitialPage from "../InitialPage"
+import Slogan from "../Slogan"
 
 export default function Login() {
     const [email, setEmail] = useState('')
@@ -128,6 +131,7 @@ export default function Login() {
                         placeholder={"Insira seu email"}
                         onChangeText={setEmail}
                         keyboardType='email-address'
+                        testID="input-email"
                     />
                 </Input>
 
@@ -144,6 +148,7 @@ export default function Login() {
                         placeholder={"Insira sua senha"}
                         onChangeText={setPassword}
                         secureTextEntry={securePassword}
+                        testID="input-password"
                     />
 
                     { 
@@ -153,6 +158,7 @@ export default function Login() {
                                 size={20} 
                                 color={THEME.colors.brownDark}
                                 onPress={() => setSecurePassword(false)}
+                                testID="visible-password"
                             /> 
                         :
                             <Ionicons 
@@ -179,6 +185,7 @@ export default function Login() {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigation.navigate('Reset')}
+                    testID="forgotPassword-button"
                 >
                     <Text style={[
                             THEME.fonts.link, 
@@ -194,7 +201,8 @@ export default function Login() {
                         onPress={handleSubmitLogin}
                         title='ACESSAR'
                         isLoading={isLoading}
-                        color={'brownDark'}         
+                        color={'brownDark'}    
+                        testID="access-button"     
                     />
                 </View>
             </View>

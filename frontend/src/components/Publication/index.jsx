@@ -6,6 +6,7 @@ import Comment from '../Comment'
 import { styles } from './style'
 import { THEME } from '../../styles/Theme'
 import Ionicons from '@expo/vector-icons/Ionicons'
+
 import { useNavigation } from '@react-navigation/native'
 
 export default function Publication({ id, photo, username, textPost, isLike, bookImage }) {

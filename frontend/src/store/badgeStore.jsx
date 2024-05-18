@@ -7,7 +7,8 @@ export const useUserStore = create(
         (set) => ({
             data: null,
 
-            save: (data) => set({ data })
+            save: (data) => set({ data }),
+            logout: () => set(() => ({ data: null })),
     }),
     {
         name: 'troca-paginas:data',

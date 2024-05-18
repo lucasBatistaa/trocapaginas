@@ -7,15 +7,17 @@ import Button from '../../components/Button'
 import { THEME } from "../../styles/Theme"
 import { styles } from './styles'
 import { useUserStore } from "../../store/badgeStore"
-import InitialPage from "../InitialPage"
+import { useEffect, useState } from "react"
 
 export default function Slogan () {
     const navigation = useNavigation()
     const user = useUserStore(state => state.data)
 
-    if (user) {
-        return <InitialPage />
-    }
+    useEffect(() => {
+        if (user) {
+            navigation.navigate('InitialPage')
+        }
+    }, [user])
 
     return (
         <View style={styles.container}>
@@ -36,6 +38,7 @@ export default function Slogan () {
                     title={'LOGIN'} 
                     color={'brownMedium'}
                     onPress={() => navigation.navigate('Login')}
+                    testID="login-button"
                 />
             </View>
         </View>
