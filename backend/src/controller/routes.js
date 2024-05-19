@@ -189,6 +189,37 @@ routes.post('/review', async (req, res) => {
 
 });
 
+routes.get('/publications', async (req, res) => {
+    try{
+        const posts = await database.getUsersPosts().then((posts) => {
+            
+            posts.forEach(post => {
+                post.photo = post.photo.toString('utf-8');
+            })
+            return posts;
+        }); 
+
+        const reviews = await database.getUsersReviews().then((reviews) => {
+            reviews.forEach(review => {
+                review.photo = review.photo.toString('utf-8');
+            })
+           return reviews;
+        });
+
+        const publications = posts.concat(reviews);
+
+        publications.sort((a, b) => {
+            return new Date(b.timepost) - new Date(a.timepost);
+        })
+
+        return res.status(200).send(publications);
+
+    }catch(error) {
+        console.log(error)
+        return res.status(400).send('deu tudo errado')
+    }
+});
+
 routes.post('/comment', async (req, res) => {
     const {comments} = req.body; // recebendo o objeto comment
     console.log(comments);
