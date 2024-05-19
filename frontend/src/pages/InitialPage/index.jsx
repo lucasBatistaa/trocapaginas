@@ -12,19 +12,27 @@ export default function InitialPage() {
     const [ publications, setPublications ] = useState([])
 
     // Dados do usuário
-    const user = useUserStore()
+    const user = useUserStore();
+
+    const getPublications = async() => {
+        const response = await axios.get('http://localhost:6005/publications');
+        const posts = response.data;
+
+        const initialPosts = posts.map(post => ({
+            photo: post.photo,
+            username: post.name,
+            textPost: post.content,
+            bookImage: post.image_post,
+            isLike: true
+            })
+        )
+
+        setPublications(initialPosts);
+    }
 
     useEffect(() => {
         // CHAMADA DA API
-        setPublications([
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
-            }
-        ])
+        getPublications();
     }, [])
 
     return (
