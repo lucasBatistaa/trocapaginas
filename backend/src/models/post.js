@@ -11,4 +11,6 @@ export class Post {
         this.nameBook = nameBook;
         this.imageBook= imageBook;
     }
- }
+}
+
+export default Post;

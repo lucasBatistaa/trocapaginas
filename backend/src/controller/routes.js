@@ -37,6 +37,7 @@ async function userExists(email) {
     }    
   } 
 
+
 //login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -188,14 +189,18 @@ routes.post('/review', async (req, res) => {
     }
 
 });
-
+/*
 routes.post('/comment', async (req, res) => {
-    const {comments} = req.body; // recebendo o objeto comment
-    console.log(comments);
-    
+    const {idUser, image, username, comment} = req.body; // recebendo o objeto comment
+    console.log(comentario);
+
+    comentario.idUser;
+    comentario.image;
+    comentario.username;
+    comentario.comment;
     
     try{ // tentar criar o comentário no banco de dados
-        await database.createComment(comments.idUser, comments.idComment, comments.time, comments.comment).then(() => {
+        await database.createComment({idUser, }).then(() => {
             return res.status(201).send('Comentário criado com sucesso!');
         })
     } catch (error) {
@@ -203,5 +208,27 @@ routes.post('/comment', async (req, res) => {
         return res.status(500).send('Erro ao criar o comentário');
     }
 });
+*/
+
+routes.post('/comment', async (req, res) => {
+    const { idUser, image, username, comment } = req.body; // Recebendo os dados do corpo da requisição
+    console.log(req.body)
+    // Criando uma instância da classe Comment com os dados recebidos
+    const newComment = new Comment(idUser, null, comment, null);
+    console.log(newComment)
+
+    try {
+        // Tentar criar o comentário no banco de dados
+        await database.createComment(newComment).then(() => {
+            return res.status(201).send('Comentário criado com sucesso!');
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send('Erro ao criar o comentário');
+    }
+});
+
+
+
 
 export default routes;

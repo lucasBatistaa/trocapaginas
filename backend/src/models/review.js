@@ -11,3 +11,5 @@ export class Review extends Post{
     }
 
 }
+
+export default Review;
