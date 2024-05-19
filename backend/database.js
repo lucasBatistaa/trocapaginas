@@ -23,6 +23,22 @@ export class Database {
         await sql `insert into reviews (id_user, title, content, nameBook, rating, image, time_post) values (${review.idUser},${review.title}, ${review.content}, ${review.nameBook}, ${review.rating}, ${review.imageBook}, ${review.timePost})`;
     }
 
+    async getUsersPosts() {
+        const users_and_posts = await sql `select posts.*, users.name, users.photo
+        from posts inner join users using(id_user)
+        limit 2`;
+
+        return users_and_posts;
+    }
+
+    async getUsersReviews() {
+        const users_and_reviews= await sql `select reviews.*, users.name, users.photo
+        from reviews inner join users using(id_user)
+        limit 2`;
+
+        return users_and_reviews;
+    }
+    
     async createComment (comments) {
         await sql `insert into comments (content_coment, id_book, id_post, id_review, id_user, id_ time_coment) 
         values (${comments.comment}${comments.idBook}, ${comments.idPost}, ${comments.idReview}, ${comments.idUser}, ${comments.comment}, ${comments.time})`;
