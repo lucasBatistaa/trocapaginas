@@ -7,9 +7,13 @@ import { styles } from './style'
 import { THEME } from '../../styles/Theme'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
+import { useNavigation } from '@react-navigation/native'
+
 export default function Publication({ id, photo, username, textPost, isLike, bookImage }) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(isLike)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
+
+    const navigation = useNavigation()
 
     // Função para fechar modal do Comentário
     const closeComment = () => {
@@ -38,13 +42,17 @@ export default function Publication({ id, photo, username, textPost, isLike, boo
     
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <TouchableOpacity 
+                style={styles.header}
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('Profile')}
+            >
                 <Image 
                     style={{width: 32, height: 32}}
                     source={photo} />
                     
                 <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{username}</Text>
-            </View>
+            </TouchableOpacity>
 
             <View style={styles.publication}>
                 <View style={styles.post}>

@@ -1,30 +1,49 @@
 import { useEffect, useState } from "react"
 import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 
-import Publication from "../../components/Publication"
-import ExchangeBook from "../../components/ExchangeBook"
-import BottomMenu from '../../components/Menus/BottomMenu'
-import ModalAvaliation from "./components/ModalAvaliation"
+import { TabReviews, TabExchanges } from './components/TabsView'
 import Comment from "../../components/Comment"
+import BottomMenu from '../../components/Menus/BottomMenu'
+
+import ModalAvaliation from "./components/ModalAvaliation"
+import ModalSynopsis from "./components/ModalSynopsis"
 
 import { styles } from "./styles"
 import { THEME } from "../../styles/Theme"
-
 import Ionicons from '@expo/vector-icons/Ionicons'
-import ModalSynopsis from "./components/ModalSynopsis"
 
 export default function Book() {
     const [ publications, setPublications ] = useState([])
+    const [ bookExchanges, setBookExchanges ] = useState([])
+    const [ book, setBook ] = useState({})
+
+    const [ tabView, setTabView ] = useState('review')
+    const [ avaliation, setAvalation ] = useState(0)
+    
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
     const [ modalAvaliationVisible, setModalAvaliationVisible ] = useState(false)
     const [ modalSynopsisVisible, setModalSynopsisVisible ] = useState(false)
-    const [ avaliation, setAvalation ] = useState(0)
-    const [ showReviews, setShowReviews ] = useState(true)
-   
-    const stars = Array.from({ length: 5 }, (_, index) => index <= avaliation ? true : false)
+    
+    const navigation = useNavigation()
+    const stars = Array.from({ length: 5 }, (_, index) => index <= avaliation - 1 ? true : false)
 
     useEffect(() => {
-        // CHAMADA DA API
+        // CHAMADAS DA API
+
+        //BOOK
+        setBook({
+            id: '34534',
+            image: require('../../assets/book.png'),
+            name: 'Orgulho e Preconceito',
+            author: 'Jane Austen',
+            synopsys: 'Livro de romance de séculos passados.'
+        })
+
+        // AVALIAÇÃO DO LIVRO
+        setAvalation(4)
+
+        //PUBLICAÇÕES
         setPublications([
             {
                 photo: require('../../assets/foto-perfil.png'),
@@ -38,7 +57,7 @@ export default function Book() {
                 username: 'Stephanie',
                 textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
                 bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
+                isLike: false
             },
             {
                 photo: require('../../assets/foto-perfil.png'),
@@ -49,35 +68,59 @@ export default function Book() {
             },
         ])
 
-        setAvalation(3)
+        // TROCAS DISPONÍVEIS
+        setBookExchanges([
+            {
+                idUser: 1,
+                imageUser: require('../../assets/foto-perfil.png'),
+                username: 'Lucas'
+            },
+            {
+                idUser: 1,
+                imageUser: require('../../assets/foto-perfil.png'),
+                username: 'Lucas'
+            }
+        ])
     }, [])
 
+    const renderTabView = () => {
+        switch (tabView) {
+            case 'review':
+                return <TabReviews publications={publications} />
+        
+            case 'exchange': 
+                return <TabExchanges bookExchanges={bookExchanges} />
+        }
+    }
 
     return (
         <View style={styles.container}>
+
+            {/* Botão de voltar */}
             <Ionicons 
-                    name="arrow-back-outline"
-                    size={24}
-                    color={THEME.colors.brownDark}
-                    style={styles.iconGoBack}
+                name="arrow-back-outline"
+                size={24}
+                color={THEME.colors.brownDark}
+                style={styles.iconGoBack}
+                onPress={() => navigation.goBack()}
             />
 
             <View style={styles.bookOverview}>
                 <Image 
-                    source={require('../../assets/book.png')}
+                    source={book.image}
                     style={styles.imageBook}
                 />
 
                 <View style={styles.resumeAndActions} >
                     <View>
-                        <Text style={THEME.fonts.h1.bold}>Orgulho e Preconceito</Text>
+                        <Text style={THEME.fonts.h1.bold}>{book.name}</Text>
                         <Text
                             style={[
                                 THEME.fonts.h2.normal,
                                 styles.nameAuthor
                             ]}
                         >
-                            Jane Austen
+                            {book.author}
                         </Text>
                     </View>
 
@@ -126,12 +169,12 @@ export default function Book() {
 
             <View style={styles.tabView}>
                 <TouchableOpacity 
-                    style={styles.tabButton(showReviews)}
-                    onPress={() => setShowReviews(true)}
+                    style={styles.tabButton(tabView === 'review')}
+                    onPress={() => setTabView('review')}
                 >
                     <Text style={[
                             THEME.fonts.text, 
-                            styles.tabTitle(showReviews)
+                            styles.tabTitle(tabView === 'review')
                         ]}
                     >
                         RESENHAS
@@ -139,12 +182,12 @@ export default function Book() {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={styles.tabButton(!showReviews)}
-                    onPress={() => setShowReviews(false)}
+                    style={styles.tabButton(tabView === 'exchange')}
+                    onPress={() => setTabView('exchange')}
                 >
                     <Text style={[
                             THEME.fonts.text, 
-                            styles.tabTitle(!showReviews)
+                            styles.tabTitle(tabView === 'exchange')
                         ]}
                     >
                         TROCAS
@@ -152,46 +195,30 @@ export default function Book() {
                 </TouchableOpacity>
             </View>
 
+            {/* Conteúdo das Abas */}
             <ScrollView
                 contentContainerStyle={styles.viewContentOfTab}
                 showsVerticalScrollIndicator={false}
             >
-                { 
-                    showReviews ? (
-                        
-                        publications.map((publication, index) => (
-                            <Publication 
-                                key={index}
-                                photo={publication.photo}
-                                username={publication.username}
-                                textPost={publication.textPost}
-                                bookImage={publication.bookImage}
-                                isLike={publication.isLike}
-                            />
-                        ))
-                    ) : (
-                        <ExchangeBook 
-                            idUser={1}
-                            imageUser={require('../../assets/foto-perfil.png')}
-                            username={'Lucas'}
-                        /> 
-                    )
-                }
+                { renderTabView() }
             </ScrollView>
 
             <BottomMenu />
             
-            <ModalAvaliation 
+            {/* Modals */}
+            <ModalAvaliation    
                 modalVisible={modalAvaliationVisible}
                 onClose={() => setModalAvaliationVisible(false)}
             />
 
             <ModalSynopsis 
                 modalVisible={modalSynopsisVisible}
+                text={book.synopsys}
                 onClose={() => setModalSynopsisVisible(false)}
             />
 
             <Comment 
+                id={book.id}
                 modalVisible={modalCommentVisible} 
                 onClose={() => setModalCommentVisible(false)} 
             />

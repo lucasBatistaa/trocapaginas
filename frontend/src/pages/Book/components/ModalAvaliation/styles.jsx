@@ -9,6 +9,12 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 32,
     },
 
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },  
+
     content: {
         backgroundColor: THEME.colors.white,
         paddingVertical: 20,

@@ -3,6 +3,10 @@ import { StyleSheet } from "react-native"
 import { THEME } from "../../styles/Theme"
 
 export const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+
     header: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -11,6 +15,12 @@ export const styles = StyleSheet.create({
         paddingVertical: 48,
         borderBottomColor: 'rgba(207, 177, 140, 0.3)',
         borderBottomWidth: 1,
+    },
+
+    username: {
+        color: THEME.colors.brownDark,
+        flex: 1,
+        marginLeft: 28
     },
 
     tabView: {
@@ -29,4 +39,9 @@ export const styles = StyleSheet.create({
     tabTitle: (active) => ({
         color: active ? THEME.colors.white : THEME.colors.brownDark,
     }),
+
+    contentView: {
+        paddingHorizontal: 20,
+        marginTop: 16,
+    }
 })

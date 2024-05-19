@@ -138,11 +138,13 @@ export default function CreatePost() {
                                 label='Post'
                                 isSelectedPost={!isSelectedPost}
                                 onPress={() => setIsSelectedPost(true)}
+                                testID="post-button"
                             />
                             <RadioButtons
                                 label='Resenha'
                                 isSelectedPost={isSelectedPost}
                                 onPress={() => setIsSelectedPost(false)}
+                                testID="review-button"
                             />
                         </View>
                         {

@@ -5,47 +5,31 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { THEME } from "../../styles/Theme";
 import { styles } from "./styles";
 
-export default function Avaliation({ size=20 }) {
-    const [ starsAvaliation, setStarsAvaliation ] = useState({
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false
-    })  
+export default function Avaliation({ size=20, valueOfAvaliation, totalAvaliation }) {
+    const [stars, setStars] = useState(
+        Array.from({ length: 5 }, (_, index) => index <= valueOfAvaliation - 1)
+    )
 
     const handleClickOnStarIcon = (avaliation) => {
-        const newData = { ...starsAvaliation }
-
-        Object.keys(newData).forEach(key => {
-            newData[key] = key <= avaliation ? true : false
-        })
-
-        setStarsAvaliation(newData)
+        const updatedStars = stars.map((value, index) => index <= avaliation)
+        
+        setStars(updatedStars)
+        totalAvaliation(avaliation + 1)
     }
     
     return (
         <View style={styles.container}>
             {
-                Object.values(starsAvaliation).map((value, index) => (
+                stars.map((filled, index) => (
                     <TouchableOpacity
                         key={index}
                         onPress={() => handleClickOnStarIcon(index)}
                     >
-                        {
-                            value ?
-                                <Ionicons
-                                    name='star'
-                                    size={size}
-                                    color={THEME.colors.brownLight}
-                                />
-                            :
-                                <Ionicons
-                                    name='star-outline'
-                                    size={size}
-                                    color={THEME.colors.brownLight}
-                                />
-                        }
+                        <Ionicons
+                            name={filled ? 'star' : 'star-outline'}
+                            size={size}
+                            color={THEME.colors.brownLight}
+                        />
                     </TouchableOpacity>
                 ))
             }

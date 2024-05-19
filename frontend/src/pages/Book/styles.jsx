@@ -15,18 +15,21 @@ export const styles = StyleSheet.create({
 
     bookOverview: {
         flexDirection: 'row',
-        paddingHorizontal: 24,
-        paddingBottom: 36,
+        marginHorizontal: 24,
+        paddingBottom: 20,
         gap: 28,
+        justifyContent: 'flex-start'
     },
 
     imageBook: {
-        flex: 1,
         height: '100%',
-        resizeMode: 'cover'
+        width: 120,
+        resizeMode: 'cover',
+        borderRadius: 4,
     },
 
     resumeAndActions: {
+        flex: 1,
         justifyContent: 'space-between',
     },
     

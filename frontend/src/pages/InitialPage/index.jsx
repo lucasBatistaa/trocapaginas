@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ScrollView, StatusBar, View } from 'react-native'
 
-import axios from 'axios'
-
 import Publication from '../../components/Publication'
 import TopMenu from '../../components/Menus/TopMenu'
 import BottomMenu from '../../components/Menus/BottomMenu'
@@ -10,9 +8,10 @@ import BottomMenu from '../../components/Menus/BottomMenu'
 import { styles } from './style'
 import { useUserStore } from '../../store/badgeStore'
 
-export default function InitialPage(props) {
+export default function InitialPage() {
     const [ publications, setPublications ] = useState([])
 
+<<<<<<< HEAD
     const user = useUserStore(state => state.data);
     console.log(user);
     console.log('o console anterior é o user');
@@ -28,6 +27,10 @@ export default function InitialPage(props) {
     //         console.log(error)
     //     }
     // }
+=======
+    // Dados do usuário
+    const user = useUserStore()
+>>>>>>> 189e158f55df168c4d0d938b75b2c8d12d683d6e
 
     useEffect(() => {
         // if(props.route.params === undefined) {
@@ -62,6 +65,7 @@ export default function InitialPage(props) {
             },
         ])
     }, [])
+
     return (
         <View style={styles.container}> 
             <StatusBar barStyle={'light-content'} />
@@ -79,7 +83,7 @@ export default function InitialPage(props) {
                         <Publication 
                             key={index}
                             photo={publication.photo}
-                            username={user.name}
+                            username={user.data.name}
                             textPost={publication.textPost}
                             bookImage={publication.bookImage}
                             isLike={publication.isLike}

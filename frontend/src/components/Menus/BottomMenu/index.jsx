@@ -17,7 +17,8 @@ export default function BottomMenu () {
             />
 
             <PlusIcon
-                onPress={() => navigation.navigate('CreatePost')}            
+                onPress={() => navigation.navigate('CreatePost')}
+                testID="createPost-button"            
             />
 
             <BooksIcon

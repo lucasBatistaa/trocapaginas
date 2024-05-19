@@ -1,12 +1,24 @@
-import { View, Text, Image, ScrollView } from 'react-native'
+import { useEffect, useState } from 'react'
+import { View, Text, ScrollView } from 'react-native'
+
 import TopMenu from '../../components/Menus/TopMenu'
-import BottomMenu from '../../components/Menus/BottomMenu'
 import BookTemplate from '../../components/BookTemplate'
+import BottomMenu from '../../components/Menus/BottomMenu'
+
 import { styles } from './styles'
 import { THEME } from '../../styles/Theme'
-import { useNavigation } from '@react-navigation/native'
 
 export default function Bookshelf() {
+    const [ books, setBooks ] = useState([])
+
+    useEffect(() => {
+        setBooks([{
+            id: '34534',
+            image: require('../../assets/book.png'),
+            titleBook: 'Orgulho e Preconceito',
+            authorBook: 'Jane Austen',
+        }])
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -20,58 +32,21 @@ export default function Bookshelf() {
                     style={[
                         THEME.fonts.h1.bold,
                         styles.title
-                    ]}>
+                    ]}
+                >
                     Estante Virtual
                 </Text>
 
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                    
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
-
-                <BookTemplate 
-                    image={require('../../assets/book.png')}
-                    titleBook={'Orgulho e Preconceito'}
-                    authorBook={'Jane Austen'}
-                />
+                {
+                    books.map((book, index) => (
+                        <BookTemplate 
+                            key={index}
+                            image={book.image}
+                            titleBook={book.titleBook}
+                            authorBook={book.authorBook}
+                        />
+                    ))
+                }
             </ScrollView>
 
             <BottomMenu />

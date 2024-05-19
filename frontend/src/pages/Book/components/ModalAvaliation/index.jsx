@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react" 
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native"
 
 import Avaliation from "../../../../components/Avaliation"
@@ -5,12 +6,33 @@ import Button from "../../../../components/Button"
 
 import { styles } from "./styles"
 import { THEME } from "../../../../styles/Theme"
-import { useState } from "react"
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { useNavigation } from "@react-navigation/native"
 
 export default function ModalAvaliation({ modalVisible, onClose }) {
-    const [ hasInterest, setHasInterest ] = useState(false) 
-    const [ swap, setSwap ] = useState(false)
-    // const [ modalVisible, setModalVisible ] = useState(true)
+    const [ choicesUser, setChoicesUser ] = useState({
+        totalAvaliation: 0,
+        hasInterest: false,
+        exchange: false
+    })
+
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        setChoicesUser({
+            totalAvaliation: 1,
+            hasInterest: true,
+            exchange: false
+        })
+    }, [])
+
+    const handleChoiceAvaliation = () => { 
+        if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
+            // Update na API
+        }
+        
+        onClose()
+    }
 
     return (
         <Modal
@@ -23,15 +45,30 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                 <View style={styles.container}>
                     <TouchableWithoutFeedback>
                         <View style={styles.content}>
-                            <Text
-                                style={[
-                                    THEME.fonts.h1.bold,
-                                    styles.brownDarkColor
-                                ]}
-                            >
-                                Avaliar livro
-                            </Text>
-                            <Avaliation size={32}/>
+                            <View style={styles.header}>
+                                <Text
+                                    style={[
+                                        THEME.fonts.h1.bold,
+                                        styles.brownDarkColor
+                                    ]}
+                                >
+                                    Avaliar livro
+                                </Text>
+
+                                <Ionicons
+                                    name="close"
+                                    size={24}
+                                    color={THEME.colors.brownDark}
+                                    onPress={onClose}
+                                />
+                            </View>
+
+                            <Avaliation 
+                                size={32} 
+                                valueOfAvaliation={choicesUser.totalAvaliation} 
+                                totalAvaliation={(avaliation) => setChoicesUser({...choicesUser, totalAvaliation: avaliation})}
+                            />
+                            
                             <Text
                                 style={[
                                     THEME.fonts.h1.bold,
@@ -40,38 +77,47 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                             >
                                 Adicionar ao perfil
                             </Text>
+
                             <View style={styles.viewButtonsActions}>
                                 <TouchableOpacity
                                     activeOpacity={0.7}
                                     style={[
                                         styles.buttonsActions,
-                                        styles.isActive(hasInterest)
+                                        styles.isActive(choicesUser.hasInterest)
                                     ]}
                                     onPress={() => {
-                                        setHasInterest(!hasInterest)
-                                        setSwap(false)
+                                        setChoicesUser({
+                                            ...choicesUser,
+                                            hasInterest: !choicesUser.hasInterest,
+                                            exchange: (choicesUser.hasInterest && false)
+                                        })
                                     }}
                                 >
-                                    <Text style={styles.isActiveText(hasInterest)}>INTERESSES</Text>
+                                    <Text style={styles.isActiveText(choicesUser.hasInterest)}>INTERESSES</Text>
                                 </TouchableOpacity>
+
                                 <TouchableOpacity
                                     activeOpacity={0.7}
                                     style={[
                                         styles.buttonsActions,
-                                        styles.isActive(swap)
+                                        styles.isActive(choicesUser.exchange)
                                     ]}
                                     onPress={() => {
-                                        setSwap(!swap)
-                                        setHasInterest(false)
+                                        setChoicesUser({
+                                            ...choicesUser,
+                                            hasInterest: (choicesUser.exchange && false),
+                                            exchange: !choicesUser.exchange
+                                        })
                                     }}
                                 >
-                                    <Text style={styles.isActiveText(swap)}>QUERO TROCAR</Text>
+                                    <Text style={styles.isActiveText(choicesUser.exchange)}>QUERO TROCAR</Text>
                                 </TouchableOpacity>
                             </View>
+
                             <Button
                                 title={'FINALIZAR'}
                                 isLoading={false}
-                                onPress={() => {}}
+                                onPress={handleChoiceAvaliation}
                             />
                         </View>
                     </TouchableWithoutFeedback>

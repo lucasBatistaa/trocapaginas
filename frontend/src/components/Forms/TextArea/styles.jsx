@@ -9,6 +9,6 @@ export const styles = StyleSheet.create({
         backgroundColor: THEME.colors.grayMedium,
         textAlignVertical: 'top',
         borderWidth: error ? 1 : 0,
-        borderColor: error && THEME.colors.red,
+        borderColor: THEME.colors.red,
     }),
 })
