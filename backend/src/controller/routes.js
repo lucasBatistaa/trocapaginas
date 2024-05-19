@@ -228,6 +228,11 @@ routes.post('/comment', async (req, res) => {
     }
 });
 
+routes.get('/loadComments', async (req, res) => {
+  //implemetação do código aqui      
+
+})
+
 
 
 

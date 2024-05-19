@@ -38,7 +38,17 @@ export default function Comment({ id, modalVisible, onClose }) {
                 comment: 'sim amigaa, esse livro é maravilhoso'
             },
         ]);
+        loadComments();
     }, [])
+
+    const loadComments = async () => {
+        try {
+            const response = await axios.get('http://localhost:6005/loadComments/' + id); //ainda falta terminar verificar tudo antes
+            setAllComments(response.data);
+        } catch (error) {
+            console.error('Erro ao carregar comentários:', error);
+        }
+    };
 
     const handleSendComment = async () => {
 
