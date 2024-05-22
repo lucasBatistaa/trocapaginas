@@ -20,14 +20,24 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    viewWrapper: {
+        marginTop: -20, // Ajuste conforme necessário
+        borderRadius: 20,
+        overflow: 'hidden',
+
+        position: 'relative',
+        zIndex: 1,
+    },
+
     viewPost: {
+        
+        borderRadius: 20,
         gap: 20,
         padding: 28,
-        marginBottom: 40,
     },
     
     viewUsername: {
-        marginTop: 20,
+        marginTop:20,
         gap: 16,
         alignSelf: 'flex-start',
         flexDirection: 'row',

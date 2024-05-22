@@ -1,21 +1,26 @@
 import { View, Image, Text, TouchableOpacity, Share } from 'react-native'
-import { useState } from 'react';
+import { useState } from 'react'
 
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Comment from '../Comment'
 
 import { styles } from './style'
 import { THEME } from '../../styles/Theme'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
-import Comment from '../Comment';
+import { useNavigation } from '@react-navigation/native'
 
 export default function Publication(/*{photo, username, textPost, isLike, bookImage}*/ {publication}) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(publication.isLike)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
+    const navigation = useNavigation()
+
+    // Função para fechar modal do Comentário
     const closeComment = () => {
         setModalCommentVisible(false)
     }
     
+    // Compartilhar 
     const onShare = async () => {
         try {
             const result = await Share.share({
@@ -37,7 +42,11 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
     
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <TouchableOpacity 
+                style={styles.header}
+                activeOpacity={0.7}
+                onPress={() => navigation.navigate('Profile')}
+            >
                 <Image 
                     style={{width: 32, height: 32, borderRadius: 20}}
                     source={{uri: publication.photo}} />
@@ -78,7 +87,7 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
                     />
             </View>
 
-            <Comment modalVisible={modalCommentVisible} onPress={closeComment} />
+            <Comment idPublication={id} modalVisible={modalCommentVisible} onClose={closeComment} />
         </View>
     )
 }

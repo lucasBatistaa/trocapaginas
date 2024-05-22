@@ -17,6 +17,10 @@ import { THEME } from "../../styles/Theme"
 
 import GoogleLogo from "../../assets/googleLogo.svg"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useUserStore } from '../../store/badgeStore'
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import InitialPage from "../InitialPage"
+import Slogan from "../Slogan"
 
 export default function Login(props) {
     const [email, setEmail] = useState('')
@@ -26,11 +30,11 @@ export default function Login(props) {
     const [errorPassword, setErrorPassword] = useState(false)
     const [messageError, setMessageError] = useState('')
 
-    const [user, setUser] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [securePassword, setSecurePassword] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
 
+    const user = useUserStore(state => state.save)
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
@@ -63,11 +67,12 @@ export default function Login(props) {
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
-        
-                setIsLoading(false);
-                navigation.navigate('InitialPage', {user: response.data});
+                user(response.data);
+
+                navigation.navigate('InitialPage', /*{user: response.data}*/);
 
             } catch (error) {
+                console.log(error)
                 if (!error?.response) {
                     setMessageError('Erro ao acessar a página');
                 
@@ -135,6 +140,7 @@ export default function Login(props) {
                         placeholder={"Insira seu email"}
                         onChangeText={setEmail}
                         keyboardType='email-address'
+                        testID="input-email"
                     />
                 </Input>
 
@@ -151,6 +157,7 @@ export default function Login(props) {
                         placeholder={"Insira sua senha"}
                         onChangeText={setPassword}
                         secureTextEntry={securePassword}
+                        testID="input-password"
                     />
 
                     { 
@@ -160,6 +167,7 @@ export default function Login(props) {
                                 size={20} 
                                 color={THEME.colors.brownDark}
                                 onPress={() => setSecurePassword(false)}
+                                testID="visible-password"
                             /> 
                         :
                             <Ionicons 
@@ -186,6 +194,7 @@ export default function Login(props) {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => navigation.navigate('Reset')}
+                    testID="forgotPassword-button"
                 >
                     <Text style={[
                             THEME.fonts.link, 
@@ -201,7 +210,8 @@ export default function Login(props) {
                         onPress={handleSubmitLogin}
                         title='ACESSAR'
                         isLoading={isLoading}
-                        color={'brownDark'}         
+                        color={'brownDark'}    
+                        testID="access-button"     
                     />
                 </View>
             </View>

@@ -252,6 +252,11 @@ routes.get('/publications', async (req, res) => {
             }    
         })
 
+        allPublications.map((pub) => {
+            console.log(pub.timepost)
+        })
+        console.log('--------------------')
+
         contPost += 3;
         contReview += 2;
         

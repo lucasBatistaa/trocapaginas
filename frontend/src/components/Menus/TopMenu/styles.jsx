@@ -2,8 +2,6 @@ import { StyleSheet, StatusBar } from "react-native";
 
 import { THEME } from "../../../styles/Theme"
  
-const paddingTopValue = StatusBar.currentHeight
-
 export const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 28,
@@ -12,6 +10,12 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+
+    photo: {
+        width: 40, 
+        height: 40, 
+        borderRadius: 20
     },
 
     textInput: {

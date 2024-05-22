@@ -44,4 +44,9 @@ export class Database {
 
         return users_and_reviews;
     }
+
+    async createComment (comments) {
+        await sql `insert into comments (content_coment, id_book, id_post, id_review, id_user, id_ time_coment) 
+        values (${comments.idUser}, ${comments.IdComment}, ${comments.comment}, ${comments.time})`;
+    }
 }

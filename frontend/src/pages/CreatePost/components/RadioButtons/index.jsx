@@ -4,11 +4,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { styles } from "./style"
 import { THEME } from "../../../../styles/Theme";
 
-export function RadioButtons({label, isSelectedPost, onPress}) {
+export function RadioButtons({label, isSelectedPost, onPress, testID}) {
     return (
         <TouchableOpacity
             onPress={onPress}
             style={styles.radioButton}
+            testID={testID}
         >
             
         {isSelectedPost ? 

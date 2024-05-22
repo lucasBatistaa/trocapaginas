@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundlerIdentifier": "com.troca_paginas.trocapaginas"
     },
     "android": {
       "package": "com.troca_paginas.trocapaginas",

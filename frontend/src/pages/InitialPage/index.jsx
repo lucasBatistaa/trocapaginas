@@ -6,10 +6,12 @@ import * as FileSystem from 'expo-file-system';
 
 import { THEME } from '../../styles/Theme';
 
-import Publication from '../../components/Publication';
-import TopMenu from '../../components/Menus/TopMenu';
-import BottomMenu from '../../components/Menus/BottomMenu';
-import { styles } from './style';
+import Publication from '../../components/Publication'
+import TopMenu from '../../components/Menus/TopMenu'
+import BottomMenu from '../../components/Menus/BottomMenu'
+
+import { styles } from './style'
+import { useUserStore } from '../../store/badgeStore'
 
 export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([]);
@@ -17,6 +19,10 @@ export default function InitialPage(props) {
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
+
+    const user = useUserStore(state => state.data);
+    console.log(user);
+    console.log('o console anterior é o user');
 
     const getUser = async() => {
         try {
@@ -55,9 +61,9 @@ export default function InitialPage(props) {
         if(props.route.params.user === undefined) {
             getUser();
 
-        }else {
-            setUserData(props.route.params.user);  
-        }
+        // }else {
+        //     setUserData(props.route.params.user); 
+        // }
 
         // CHAMADA DA API
         
@@ -96,7 +102,7 @@ export default function InitialPage(props) {
             <StatusBar barStyle={'light-content'} />
 
             <TopMenu
-                photo={{uri: userData.photo}}
+                
             />
 
             <FlatList

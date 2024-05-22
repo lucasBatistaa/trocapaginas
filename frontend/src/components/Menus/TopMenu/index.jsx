@@ -1,16 +1,25 @@
-import { View, Image, TextInput } from "react-native";
+import { View, Image, TextInput, TouchableOpacity } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from "@react-navigation/native"
 
 import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
+import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu ({photo}) {
+export default function TopMenu () {
+    const navigation = useNavigation()
+    const user = useUserStore(state => state.data)
+
     return (
             <View style={styles.container}>
-                <Image
-                    style={{width: 40, height: 40, borderRadius: 20}}
-                    source={photo}
-                />
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Profile')}   
+                >
+                    <Image
+                        style={styles.photo}
+                        source={{ uri: user.photo }}
+                    />
+                </TouchableOpacity>
 
                 <View>
                     <TextInput

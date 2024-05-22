@@ -1,8 +1,6 @@
 import { StatusBar, StyleSheet } from "react-native";
 import { THEME } from "../../styles/Theme";
 
-
-
 export const styles = StyleSheet.create({
     principalView: {
         flex: 1,
@@ -17,7 +15,6 @@ export const styles = StyleSheet.create({
     commentView: {
         flex: 1,
         backgroundColor: THEME.colors.white,
-        // paddingTop: 12,
         padding: 20,
         gap: 20,
         borderTopStartRadius: 20,
@@ -33,6 +30,11 @@ export const styles = StyleSheet.create({
         marginBottom: 8
     },
 
+    titleModal: {
+        color: THEME.colors.brownDark,
+        alignSelf: 'center'
+    },  
+
     commentsList: {
         gap: 12,
     },  
@@ -41,6 +43,11 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 12,
         width: '100%',
+    },
+
+    userPhotoOfComment: {
+        width: 36, 
+        height: 36
     },
 
     commentHeader: {

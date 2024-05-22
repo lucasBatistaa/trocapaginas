@@ -7,9 +7,11 @@ import RegisterWithEmail from '../pages/Register/RegisterWithEmail'
 import Reset from '../pages/Reset'
 import InitialPage from '../pages/InitialPage'
 import CreatePost from '../pages/CreatePost'
+import Bookshelf from '../pages/Bookshelf'
+import Profile from '../pages/Profile'
+import Book from '../pages/Book'
 
 const Stack = createNativeStackNavigator()
-//<Stack.Screen name='ConfirmationCode' component={ConfirmationCode}/>
 
 export default function StackRoutes() {
     return (
@@ -21,6 +23,9 @@ export default function StackRoutes() {
             <Stack.Screen name='Reset' component={Reset}/>
             <Stack.Screen name='InitialPage' component={InitialPage}/>
             <Stack.Screen name='CreatePost' component={CreatePost}/>
+            <Stack.Screen name='Bookshelf' component={Bookshelf}/>
+            <Stack.Screen name='Profile' component={Profile}/>
+            <Stack.Screen name='Book' component={Book}/>
         </Stack.Navigator>
     )
 }
