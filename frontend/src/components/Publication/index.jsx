@@ -8,8 +8,8 @@ import { THEME } from '../../styles/Theme'
 
 import Comment from '../Comment';
 
-export default function Publication({photo, username, textPost, isLike, bookImage}) {
-    const [ clickHeartIcon, setClickHeartIcon ] = useState(isLike)
+export default function Publication(/*{photo, username, textPost, isLike, bookImage}*/ {publication}) {
+    const [ clickHeartIcon, setClickHeartIcon ] = useState(publication.isLike)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
     const closeComment = () => {
@@ -19,7 +19,7 @@ export default function Publication({photo, username, textPost, isLike, bookImag
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: `${textPost}`,
+                message: `${publication.textPost}`,
                 // url: `../../assets/foto-perfil.png`
             })
 
@@ -39,16 +39,16 @@ export default function Publication({photo, username, textPost, isLike, bookImag
         <View style={styles.container}>
             <View style={styles.header}>
                 <Image 
-                    style={{width: 32, height: 32}}
-                    source={photo} />
+                    style={{width: 32, height: 32, borderRadius: 20}}
+                    source={{uri: publication.photo}} />
                     
-                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{username}</Text>
+                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{publication.username}</Text>
             </View>
 
             <View style={styles.publication}>
                 <View style={styles.post}>
                     <Text style={THEME.fonts.text}>
-                        {textPost}
+                        {publication.textPost}
                     </Text>
 
                     <View style={styles.icons}>
@@ -73,8 +73,9 @@ export default function Publication({photo, username, textPost, isLike, bookImag
                 </View>
                 
                 <Image 
-                    style={styles.imagePost}
-                    source={bookImage} />
+                    source={{uri: publication.bookImage}} 
+                    style={{width: 80, height: 80}}
+                    />
             </View>
 
             <Comment modalVisible={modalCommentVisible} onPress={closeComment} />

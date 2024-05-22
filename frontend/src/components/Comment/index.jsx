@@ -16,11 +16,12 @@ import { FormatDate } from "../../utils/formatDate";
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from "axios";
 
 export default function Comment({modalVisible, onPress}) {
-    const [ textComment, setTextComment ] = useState('')
-    const [ allComments, setAllComments] = useState([])
-    const inputRef = useRef(null)
+    const [ textComment, setTextComment ] = useState('');
+    const [ allComments, setAllComments] = useState([]);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         setAllComments([
@@ -37,7 +38,9 @@ export default function Comment({modalVisible, onPress}) {
     const handleSendComment = () => {
         if (textComment.trim()) {
             //id do usuario e comentário
-            
+
+            //rota pra puxar dados do usuário
+                        
             const newComment = {
                 idUser: '3',
                 image: require('../../assets/foto-perfil.png'),
@@ -47,6 +50,7 @@ export default function Comment({modalVisible, onPress}) {
             }
 
             setAllComments([...allComments, newComment])
+
 
             inputRef.current.blur() 
             Keyboard.dismiss()

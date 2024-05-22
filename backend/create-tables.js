@@ -178,7 +178,7 @@ values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123'
 	console.log('usuários apagados');
 })*/
 
-sql `
+/*sql `
 create table reviews (
 	id_review serial not null,
 	id_user integer not null,
@@ -194,10 +194,10 @@ create table reviews (
 
 );`.then(() => {
     console.log('tabela posts criada')
-})
+})*/
 
 /*sql `
-	drop table reviews;
+	drop table posts;
 `.then(() => {
 	console.log('tabela posts excluída')
 })*/
@@ -216,4 +216,39 @@ create table reviews (
 
 );`.then(() => {
     console.log('tabela posts criada')
+})*/
+
+/*sql `
+	alter table comment 
+	add constraint fk_id_book foreign key(id_book) references books(id_book)
+
+	`.then(() => {
+	console.log('tabela comment alterada')
+})*/
+
+/*sql `
+	alter table reviews
+	add column imageBook text;
+`.then(() => {
+	console.log('tabela posts alterada')
+})*/
+
+sql `
+	alter table reviews
+	rename column imagebook to image_post;
+`.then(() => {
+	console.log('tabela reviews alterada')
+})
+
+/*sql `
+	delete from reviews;
+`.then(() => {
+	console.log('tabela posts excluída')
+})*/
+
+/*sql `
+	update users set photo = 'https://cdn0.iconfinder.com/data/icons/phosphor-regular-vol-4/256/user-circle-512.png'
+	where id_user = 7;
+`.then(() => {
+	console.log('user editado')
 })*/

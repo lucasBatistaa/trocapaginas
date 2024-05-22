@@ -1,8 +1,10 @@
-import { ScrollView, StatusBar, View } from 'react-native'
+import { ScrollView, StatusBar, View, BackHandler, Alert, Text, Image, FlatList} from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigation } from "@react-navigation/native";
+import * as FileSystem from 'expo-file-system';
 
-import { THEME } from '../../styles/Theme'
+import { THEME } from '../../styles/Theme';
 
 import Publication from '../../components/Publication';
 import TopMenu from '../../components/Menus/TopMenu';
@@ -12,19 +14,45 @@ import { styles } from './style';
 export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([]);
     const [ userData, setUserData ] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const navigation = useNavigation();
 
     const getUser = async() => {
         try {
             const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
-            setUserData(user.data);
+            
+            if(user.data.email !== null) {
+                setUserData(user.data);
+
+            }else {
+                navigation.navigate(props.route.params.page, {error: 'Tentativa de acesso falhou, tente novamente!'});
+            }
 
         } catch (error) {
             console.log(error);
         }
     }
 
+    const getPublications = async() => {
+        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications');
+        const posts = response.data;
+
+        const initialPosts = posts.map(post => ({
+            photo: post.photo,
+            username: post.name,
+            textPost: post.content,
+            bookImage: post.image_post,
+            isLike: false
+            })
+        )
+
+        setPublications(initialPosts);
+    }
+
     useEffect(() => {
-        if(props.route.params === undefined) {
+
+        if(props.route.params.user === undefined) {
             getUser();
 
         }else {
@@ -32,30 +60,37 @@ export default function InitialPage(props) {
         }
 
         // CHAMADA DA API
-        setPublications([
+        
+        getPublications();
+    }, []);
+
+    //impedir o usuário de voltar à tela de login 
+    useEffect(() => {
+        const backAction = () => {
+          Alert.alert('Sair', 'Você realmente deseja sair do aplicativo?', [
             {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
+              text: 'Não',
+              onPress: () => null,
+              style: 'cancel',
             },
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
+            {text: 'Sim', onPress: () => {
+                setUserData({});
+                navigation.navigate('Slogan');
+                BackHandler.exitApp();
+                }
             },
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
-            },
-        ])
-    }, [])
+          ]);
+          return true;
+        };
+    
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+    
+        return () => backHandler.remove();
+    }, []);
+    
     return (
         <View style={styles.container}> 
             <StatusBar barStyle={'light-content'} />
@@ -64,24 +99,13 @@ export default function InitialPage(props) {
                 photo={{uri: userData.photo}}
             />
 
-            <ScrollView 
-                contentContainerStyle={styles.viewPublications}
-                showsVerticalScrollIndicator={false}
-            >
-                {
-                    publications.map((publication, index) => (
-                        <Publication 
-                            key={index}
-                            photo={publication.photo}
-                            username={publication.username}
-                            textPost={publication.textPost}
-                            bookImage={publication.bookImage}
-                            isLike={publication.isLike}
-                        />
-                    ))
-                }
-            </ScrollView>
-
+            <FlatList
+                contentContainerStyle = {styles.viewPublications}
+                data={publications}
+                renderItem={({item}) => <Publication publication = {item}/>}
+                refreshing={loading}
+                onRefresh={getPublications}
+            />
             <BottomMenu/>
         </View>
         

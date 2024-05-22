@@ -14,6 +14,14 @@ const post = new Post();
 const review = new Review();
 const validationCode = [];
 
+const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
+
+let contPost = 0;
+let contReview = 0; 
+
+let allPublications = [];
+let publications = [];
+
 async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
@@ -22,19 +30,42 @@ async function userExists(email) {
   
       return userWithEmail;
     });
-  }
+}
 
-  function validateImage(data){
-    if(data.image === undefined) {
+function validateImage(imageURI){
+    if(imageURI === undefined) {
         review.imageBook = null;
         post.imageBook = null;
 
     } else {
 
-        review.imageBook = data.ImageURI;
-        post.imageBook = data.ImageURI;
+        review.imageBook = imageURI;
+        post.imageBook = imageURI;
     }    
-  } 
+} 
+
+async function getPosts() {
+    const posts = await database.getUsersPosts(contPost).then((posts) => {
+            
+        posts.forEach(post => {
+            post.photo = post.photo.toString('utf-8');
+        })
+        return posts;
+    }); 
+
+    return posts;
+}
+
+async function getReviews() {
+    const reviews = await database.getUsersReviews(contReview).then((reviews) => {
+        reviews.forEach(review => {
+            review.photo = review.photo.toString('utf-8');
+        })
+       return reviews;
+    });
+
+    return reviews;
+}
 
 //login
 routes.post('/login', (req, res) => {
@@ -136,17 +167,20 @@ routes.post('/alterar-senha', async (req, res) => {
 });
 
 //criação da rota post
-
 routes.post('/post', async (req, res) => {
-    const {data_post} = req.body; // recebendo o objeto post
-    const user_owner_post = await userExists(data_post.userEmail);
+
+    const {userEmail, text, nameBook, imageURI} = req.body; // recebendo o objeto review
+
+    const user_owner_post = await userExists(userEmail);
     
-    validateImage(data_post);
+    validateImage(imageURI);
 
     post.idUser = user_owner_post.id_user;
-    post.content = data_post.text;
-    post.timePost = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"))
-    post.nameBook = data_post.nameBook;
+    post.content = text;
+    post.timePost = timeNow;
+    post.nameBook = nameBook;
+    post.username = await database.getUsersById(post.idUser).name;
+    post.user_photo = await database.getUsersById(post.idUser).photo;
     
     try{
 
@@ -162,19 +196,20 @@ routes.post('/post', async (req, res) => {
 
 routes.post('/review', async (req, res) => {
 
-    const {data_review} = req.body; // recebendo o objeto review
-    const user_owner_post = await userExists(data_review.userEmail);
+    const {userEmail, text, nameBook, imageURI, title, rating} = req.body; // recebendo o objeto review
+    const user_owner_post = await userExists(userEmail);
 
-    validateImage(data_review);
+    validateImage(imageURI);
 
     review.idUser = user_owner_post.id_user;
-    review.title = data_review.title;
-    review.content = data_review.text;
-    review.nameBook = data_review.nameBook;
-    review.rating = data_review.rating;
-    review.timePost = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"))
+    review.title = title;
+    review.content = text;
+    review.nameBook = nameBook;
+    review.rating = rating;
+    review.timePost = timeNow;
+    review.username = await database.getUsersById(review.idUser).name;
+    review.user_photo = await database.getUsersById(review.idUser).photo;
 
-    console.log(review)
     try{
         await database.createReview(review).then(() => { //criando o review no banco de dados
             return res.status(201).send('Resenha criada com sucesso!');
@@ -186,6 +221,46 @@ routes.post('/review', async (req, res) => {
         return res.status(500).send('Erro ao criar a resenha');
     }
 
+});
+
+routes.get('/publications', async (req, res) => {
+
+    try{
+        let posts = await getPosts();
+
+        if(posts.length < 3) {
+            contPost = 0;
+            posts = await getPosts();
+        }
+
+        let reviews = await getReviews();
+
+        if(reviews.length < 2) {
+            contReview = 0;
+            reviews = await getReviews();
+        }
+
+        const publications = posts.concat(reviews);
+
+        publications.sort((a, b) => {
+            return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
+        })
+        
+        publications.map((publication) => {
+            if((!(allPublications.some(pub => pub.id_post === publication.id_post))) || (!(allPublications.some(pub => pub.id_review === publication.id_review)))) {
+                allPublications.unshift(publication);
+            }    
+        })
+
+        contPost += 3;
+        contReview += 2;
+        
+        return res.status(200).send(allPublications);
+
+    }catch(error) {
+        console.log(error)
+        return res.status(400).send('deu tudo errado')
+    }
 });
 
 export default routes;

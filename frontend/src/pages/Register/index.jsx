@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { View, Text } from "react-native"
 
 import { useNavigation } from "@react-navigation/native"
@@ -15,32 +15,44 @@ import { styles } from "./style"
 import GoogleLogo from '../../assets/googleLogo.svg'
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function Register() {
-    const[ modalVisible, setModalVisible ] = useState(false)
-    const [ isLoading, setIsLoading ] = useState(false)
-    
-    const navigation = useNavigation()
+export default function Register(props) {
+    const[ modalVisible, setModalVisible ] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ messageError, setMessageError ] = useState('');
+
+    const navigation = useNavigation();
 
     const handleGoogleLogin = async () => {
+        props.route.params = undefined;
+
         try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google', '_self');
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
         
-            setIsLoading(true)
+            //setIsLoading(true)
             setModalVisible(true)
 
             setTimeout(() => {
-                navigation.navigate('InitialPage')
+                navigation.navigate('InitialPage', {page: 'Register'});
                 setModalVisible(false)
             }, 18000);
 
         } catch(error) {
             console.log(error)
 
-            setIsLoading(false)
+            //setIsLoading(false)
             setModalVisible(false)
         } 
 
     }
+
+    useEffect(() => {
+        if(props.route.params != undefined) {
+            setMessageError(props.route.params.error);
+        
+        }else {
+            setMessageError('');
+        }
+    })
 
     return (
         <View style={styles.container}>
@@ -51,7 +63,7 @@ export default function Register() {
             <View style={styles.viewButtons}>
                 <ButtonWithIcon
                     onPress={handleGoogleLogin}
-                    isLoading={isLoading}
+                    //isLoading={isLoading}
                 >
                     <GoogleLogo 
                         width={24} 
@@ -74,6 +86,19 @@ export default function Register() {
                         title={'Registrar com Email'}
                     />
                 </ButtonWithIcon>
+
+                {
+                    messageError && 
+                    
+                    <Text style={[
+                            THEME.fonts.text, 
+                            THEME.errors.message
+                        ]}
+                    >
+                        {messageError}
+                    </Text>
+                }
+
             </View>
 
             <Links

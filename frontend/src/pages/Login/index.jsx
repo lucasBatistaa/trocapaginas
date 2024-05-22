@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 
 import * as WebBrowser from 'expo-web-browser'
@@ -18,7 +18,7 @@ import { THEME } from "../../styles/Theme"
 import GoogleLogo from "../../assets/googleLogo.svg"
 import Ionicons from '@expo/vector-icons/Ionicons'
 
-export default function Login() {
+export default function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -34,16 +34,17 @@ export default function Login() {
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
-        try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google/callback', '_self');
+        props.route.params = undefined;
 
-            setModalVisible(true)
+        try {
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
+
+            setModalVisible(true);
 
             setTimeout(() => {
-                navigation.navigate('InitialPage')
+                navigation.navigate('InitialPage', {page: 'Login'});
                 setModalVisible(false);
             }, 18000)
-
 
         } catch(error) {
 
@@ -52,7 +53,7 @@ export default function Login() {
         }
     }
 
-    const handleSubmitLogin = async () => {    
+    const handleSubmitLogin = async () => {
         setIsLoading(true)
 
         if (email.trim() && password.trim()) {
@@ -63,6 +64,7 @@ export default function Login() {
                     headers: {'Content-Type': 'application/json'}
                 });
         
+                setIsLoading(false);
                 navigation.navigate('InitialPage', {user: response.data});
 
             } catch (error) {
@@ -85,6 +87,15 @@ export default function Login() {
 
         setIsLoading(false)
     } 
+
+    useEffect(() => {
+        if(props.route.params != undefined) {
+            setMessageError(props.route.params.error);
+        
+        }else {
+            setMessageError('');
+        }
+    })
         
     return (
         <View style={styles.container}>

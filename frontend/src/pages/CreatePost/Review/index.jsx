@@ -56,7 +56,7 @@ export default function Review({ onSubmit, isLoading=false}) {
 
     const handleValidatePost = () => {
         if (validateForm()) {
-            onSubmit(title, text, nameBook, totalStarsAvaliation)
+            onSubmit(text, nameBook, title, totalStarsAvaliation)
         }  
     }
 
