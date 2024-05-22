@@ -6,9 +6,9 @@ import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
 import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu () {
+export default function TopMenu ({user}) {
     const navigation = useNavigation()
-    const user = useUserStore(state => state.data)
+    //const user = useUserStore(state => state.data)
 
     return (
             <View style={styles.container}>

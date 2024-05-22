@@ -58,12 +58,12 @@ export default function InitialPage(props) {
 
     useEffect(() => {
 
-        if(props.route.params.user === undefined) {
+        if(props.route.params === undefined) {
             getUser();
 
-        // }else {
-        //     setUserData(props.route.params.user); 
-        // }
+        }else {
+            //setUserData(props.route.params.user); 
+        }
 
         // CHAMADA DA API
         
@@ -102,7 +102,7 @@ export default function InitialPage(props) {
             <StatusBar barStyle={'light-content'} />
 
             <TopMenu
-                
+                user = {userData} 
             />
 
             <FlatList

@@ -47,13 +47,13 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
                 activeOpacity={0.7}
                 onPress={() => navigation.navigate('Profile')}
             >
+            
                 <Image 
                     style={{width: 32, height: 32, borderRadius: 20}}
                     source={{uri: publication.photo}} />
                     
                 <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{publication.username}</Text>
-            </View>
-
+            </TouchableOpacity>
             <View style={styles.publication}>
                 <View style={styles.post}>
                     <Text style={THEME.fonts.text}>
@@ -84,10 +84,11 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
                 <Image 
                     source={{uri: publication.bookImage}} 
                     style={{width: 80, height: 80}}
-                    />
+                />
             </View>
 
-            <Comment idPublication={id} modalVisible={modalCommentVisible} onClose={closeComment} />
+            <Comment idPublication={0} modalVisible={modalCommentVisible} onClose={closeComment} />
         </View>
+
     )
 }
