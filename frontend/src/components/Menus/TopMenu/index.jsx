@@ -6,13 +6,14 @@ import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
 import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu () {
+export default function TopMenu() {
+    const user = useUserStore(state => state.data) 
     const navigation = useNavigation()
-    const user = useUserStore(state => state.data)
 
     return (
             <View style={styles.container}>
                 <TouchableOpacity 
+                    activeOpacity={0.7}
                     onPress={() => navigation.navigate('Profile')}   
                 >
                     <Image

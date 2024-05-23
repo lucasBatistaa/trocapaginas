@@ -15,8 +15,7 @@ export const styles = StyleSheet.create ({
 
     menuContainer: {
         backgroundColor: THEME.colors.white,
-        width: 180,
-        
+        width: 180, 
     },
 
     viewOption: {

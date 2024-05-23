@@ -7,5 +7,7 @@ export class Comment{
         this.idComment = idComment;
         this.comment = comment;
         this.time = time;
-        }   
-    }
+    }   
+}
+
+export default Comment;

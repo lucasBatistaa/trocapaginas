@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { View, Text, Image, ScrollView, ImageBackground, Alert } from 'react-native'
 
-import axios from 'axios'
 import { useNavigation } from "@react-navigation/native"
 
 import Review from './Review'
@@ -35,27 +34,27 @@ export default function CreatePost() {
 
         if(isSelectedPost){
             try{
-
                 const data_post = {
                     userEmail: userdata.email,
                     text: text,
                     nameBook: nameBook,
-                    imageURI: imageURI 
+                    imageURI: imageURI,
                 }
 
-                await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
-                JSON.stringify({data_post}),
-                {
-                    headers: {'Content-Type': 'application/json'}
-                })
+                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
+                data_post);
+
+                setIsLoading(false)
 
                 Alert.alert('Publicação', 'Publicação realizada com sucesso!', [
-                    {text: 'OK', onPress: () => navigation.navigate('InitialPage')}
+                    {text: 'OK', onPress: () => navigation.navigate('Slogan')}
                 ])
+
             } catch(error) {
 
                 setIsLoading(false)
                 if(!error?.response) {
+                    console.log(error)
                     setMessageError('Erro ao acessar a página');
 
                 }else if (error?.response === 500) {
@@ -75,12 +74,13 @@ export default function CreatePost() {
                 }
 
                 const response = await axios.post('https://trocapaginas-server-production.up.railway.app/review', 
-                JSON.stringify({data_review}),{
-                    headers: {'Content-Type': 'application/json'}
-                });
+                data_review);
+                
+                setIsLoading(false)
 
-                console.log(response.data)
-                navigation.navigate('InitialPage');
+                Alert.alert('Publicação', 'Publicação realizada com sucesso!', [
+                    {text: 'OK', onPress: () => navigation.navigate('Slogan')}
+                ])
 
             } catch(error){
                 setIsLoading(false)

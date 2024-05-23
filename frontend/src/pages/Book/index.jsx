@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
+import { ScrollView, TouchableOpacity, View, Image, Text, ActivityIndicator } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
 
 import { TabReviews, TabExchanges } from './components/TabsView'
 import Comment from "../../components/Comment"
@@ -30,7 +31,6 @@ export default function Book() {
 
     useEffect(() => {
         // CHAMADAS DA API
-
         //BOOK
         setBook({
             id: '34534',
@@ -43,45 +43,39 @@ export default function Book() {
         // AVALIAÇÃO DO LIVRO
         setAvalation(4)
 
-        //PUBLICAÇÕES
-        setPublications([
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
-            },
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: false
-            },
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
-            },
-        ])
+        getPublications()
+        
 
         // TROCAS DISPONÍVEIS
-        setBookExchanges([
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            },
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            }
-        ])
+        // setBookExchanges([
+        //     {
+        //         idUser: 1,
+        //         imageUser: require('../../assets/foto-perfil.png'),
+        //         username: 'Lucas'
+        //     },
+        //     {
+        //         idUser: 1,
+        //         imageUser: require('../../assets/foto-perfil.png'),
+        //         username: 'Lucas'
+        //     }
+        // ])
     }, [])
+
+    const getPublications = async() => {
+        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications');
+        const posts = response.data;
+
+        const initialPosts = posts.map(post => ({
+            photo: post.photo,
+            username: post.name,
+            textPost: post.content,
+            bookImage: post.image_post,
+            isLike: false
+            })
+        )
+
+        setPublications(initialPosts);
+    }
 
     const renderTabView = () => {
         switch (tabView) {
@@ -200,7 +194,9 @@ export default function Book() {
                 contentContainerStyle={styles.viewContentOfTab}
                 showsVerticalScrollIndicator={false}
             >
-                { renderTabView() }
+                { 
+                    renderTabView()
+                }
             </ScrollView>
 
             <BottomMenu />

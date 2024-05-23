@@ -18,7 +18,7 @@ import { THEME } from "../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import GoogleLogo from "../../assets/googleLogo.svg"
 
-export default function Login() {
+export default function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -34,16 +34,17 @@ export default function Login() {
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
-        try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/auth/google/callback', '_self');
+        props.route.params = undefined;
 
-            setModalVisible(true)
+        try {
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
+
+            setModalVisible(true);
 
             setTimeout(() => {
-                navigation.navigate('InitialPage')
+                navigation.navigate('InitialPage', {page: 'Login'});
                 setModalVisible(false);
             }, 18000)
-
 
         } catch(error) {
 
@@ -52,7 +53,7 @@ export default function Login() {
         }
     }
 
-    const handleSubmitLogin = async () => {    
+    const handleSubmitLogin = async () => {
         setIsLoading(true)
 
         if (email.trim() && password.trim()) {
@@ -62,10 +63,9 @@ export default function Login() {
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
-
                 user(response.data);
-        
-                navigation.navigate('InitialPage');
+
+                navigation.navigate('InitialPage', /*{user: response.data}*/);
 
             } catch (error) {
                 console.log(error)
@@ -88,6 +88,15 @@ export default function Login() {
 
         setIsLoading(false)
     } 
+
+    useEffect(() => {
+        if(props.route.params != undefined) {
+            setMessageError(props.route.params.error);
+        
+        }else {
+            setMessageError('');
+        }
+    })
         
     return (
         <View style={styles.container}>

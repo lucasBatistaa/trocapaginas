@@ -9,8 +9,8 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useNavigation } from '@react-navigation/native'
 
-export default function Publication({ id, photo, username, textPost, isLike, bookImage }) {
-    const [ clickHeartIcon, setClickHeartIcon ] = useState(isLike)
+export default function Publication(/*{photo, username, textPost, isLike, bookImage}*/ {publication}) {
+    const [ clickHeartIcon, setClickHeartIcon ] = useState(false)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
     const navigation = useNavigation()
@@ -24,7 +24,7 @@ export default function Publication({ id, photo, username, textPost, isLike, boo
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: `${textPost}`,
+                message: `${publication.textPost}`,
                 // url: `../../assets/foto-perfil.png`
             })
 
@@ -47,17 +47,17 @@ export default function Publication({ id, photo, username, textPost, isLike, boo
                 activeOpacity={0.7}
                 onPress={() => navigation.navigate('Profile')}
             >
+            
                 <Image 
-                    style={{width: 32, height: 32}}
-                    source={photo} />
+                    style={{width: 32, height: 32, borderRadius: 20}}
+                    source={{uri: publication.photo}} />
                     
-                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{username}</Text>
+                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{publication.username}</Text>
             </TouchableOpacity>
-
             <View style={styles.publication}>
                 <View style={styles.post}>
                     <Text style={THEME.fonts.text}>
-                        {textPost}
+                        {publication.textPost}
                     </Text>
 
                     <View style={styles.icons}>
@@ -82,11 +82,13 @@ export default function Publication({ id, photo, username, textPost, isLike, boo
                 </View>
                 
                 <Image 
-                    style={styles.imagePost}
-                    source={bookImage} />
+                    source={{uri: publication.bookImage}} 
+                    style={{width: 80, height: 80}}
+                />
             </View>
 
-            <Comment idPublication={id} modalVisible={modalCommentVisible} onClose={closeComment} />
+            <Comment idPublication={0} modalVisible={modalCommentVisible} onClose={closeComment} />
         </View>
+
     )
 }

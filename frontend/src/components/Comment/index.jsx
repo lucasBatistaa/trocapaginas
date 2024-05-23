@@ -17,10 +17,14 @@ import { FormatDate } from "../../utils/formatDate"
 import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useUserStore } from "../../store/badgeStore";
 
 export default function Comment({ id, modalVisible, onClose }) {
     const [ textComment, setTextComment ] = useState('')
     const [ allComments, setAllComments] = useState([])
+
+    const user = useUserStore(state => state.data);
+    
 
     useEffect(() => {
 
@@ -34,39 +38,51 @@ export default function Comment({ id, modalVisible, onClose }) {
                 comment: 'sim amigaa, esse livro é maravilhoso'
             },
         ]);
+        // loadComments();
     }, [])
 
-    const handleSendComment = () => {
+    const loadComments = async () => {
+        try {
+            const response = await axios.get('http://localhost:6005/loadComments/' + id); //ainda falta terminar verificar tudo antes
+            setAllComments(response.data);
+        } catch (error) {
+            console.error('Erro ao carregar comentários:', error);
+        }
+    };
+
+    const handleSendComment = async () => {
+
         if (textComment.trim()) {
             //id do usuario e comentário
-            
+
+            //rota pra puxar dados do usuário
+                        
             const newComment = {
-                idUser: '3',
-                image: require('../../assets/foto-perfil.png'),
-                username: 'Nome da usuária',
-                time: `${FormatDate()}`,
+                idUser: user.id_user,
+                image: user.photo,
+                username: user.name,
                 comment:`${textComment.trim()}`
             }
+
+            console.log(newComment);
 
             setAllComments([ ...allComments, newComment ])
 
                 //envia os dados para o servidor
             try{ 
-                axios.post('http://localhost:6005/comment', JSON.stringify({newComment}), 
-                {
-                    headers: {'Content-Type': 'application/json'}
-                })
-            
+              await  axios.post('http://localhost:6005/comment', newComment)
             } catch(error) {
                 console.log(error)
                 console.error('Erro inesperado', error)
             }
-
+            
             inputRef.current.blur() 
             Keyboard.dismiss()
             setTextComment('')
             console.log('Enviado!')
         }
+        
+           
     }
        
     // Fechar comentário com deslize para baixo

@@ -1,16 +1,23 @@
-import {View, Image, Text, TouchableOpacity} from 'react-native'
-import { useState } from 'react'
+import {View, Image, Text, TouchableOpacity, ScrollView} from 'react-native'
+import { useEffect, useState } from 'react'
 
+import {TabPublications, TabInterests} from './components/TabView'
+import { useUserStore } from '../../store/badgeStore'
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
-import LateralMenu from '../../components/Menus/LateralMenu'
 
 import MenuICon from '../../assets/menu-icon.svg'
-import { useUserStore } from '../../store/badgeStore'
+import LateralMenu from '../../components/Menus/LateralMenu'
+import BottomMenu from '../../components/Menus/BottomMenu'
+
+
 
 export default function Profile () {
     const [selectedOption, setSelectedOption] = useState('showPublications');
     const [menuVisible, setMenuVisible] = useState(false)
+
+    const [ publications, setPublications ] = useState([])
+    const [ interests, setInterests ] = useState([])
     
     const user = useUserStore(state => state.data)
 
@@ -23,12 +30,46 @@ export default function Profile () {
             setSelectedOption(option);
         }
     };
+
+    useEffect(() => {
+        //Publicações
+        // setPublications([
+        //     {
+        //         photo: require('../../assets/foto-perfil.png'),
+        //         username: 'Stephanie',
+        //         textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
+        //         bookImage: require('../../assets/foto-livro.png'),
+        //         isLike: true
+        //     }
+        // ])
+
+        //interesses
+        setInterests([
+            {
+                id: '34534',
+                image: require('../../assets/book.png'),
+                titleBook: 'Orgulho e Preconceito',
+                authorBook: 'Jane Austen',
+            }
+            
+        ])
+
+    }, [])
+
+    const renderTabView = () => {
+        switch (selectedOption) {
+            case 'showPublications':
+                return <TabPublications publications={publications} />
+            case 'showInterests':
+                return <TabInterests interests={interests} />
+        }
+    }
     
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.header}>
                 <Image
-                    style={{width: 90, height: 90}}
+                    style={{width: 96, height: 96}}
                     source={require('../../assets/user-circle.png')}
                 />
 
@@ -36,11 +77,8 @@ export default function Profile () {
                     { user.name }
                 </Text>
 
-                <TouchableOpacity
-                    onPress={() => setMenuVisible(true)}
-                >
-                    <MenuICon style={{alignSelf: 'flex-start', bottom: 20}}/>
-
+                <TouchableOpacity onPress={() => setMenuVisible(true)}>
+                    <MenuICon style={{alignSelf: 'flex-start', bottom: 36}}/>
                 </TouchableOpacity>
                
                 <LateralMenu menuVisible={menuVisible} onPress={closeMenu}/>
@@ -55,7 +93,7 @@ export default function Profile () {
                         selectedOption === 'showPublications' && styles.tabButton(false)
                     ]}  
                 >
-                        <Text style={[THEME.fonts.text, selectedOption === 'showPublications' && styles.tabTitle(true)]}> 
+                    <Text style={[THEME.fonts.text, selectedOption === 'showPublications' && styles.tabTitle(true)]}> 
                         PUBLICAÇÕES 
                     </Text>
                 </TouchableOpacity>
@@ -89,7 +127,15 @@ export default function Profile () {
                 </TouchableOpacity>
 
             </View>
+            
+            <ScrollView 
+                style={styles.contentView}
+                showsVerticalScrollIndicator={false}
+            >
+                {renderTabView ()}
+            </ScrollView>
 
+            <BottomMenu/>
         </View>
     )
 }
