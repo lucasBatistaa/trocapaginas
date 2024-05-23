@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity } from "react-native"
 import * as WebBrowser from 'expo-web-browser'
 import axios from "axios"
 import { useNavigation } from "@react-navigation/native"
+import { useUserStore } from '../../store/badgeStore'
 
 
 import Button from "../../components/Button"
@@ -14,13 +15,8 @@ import WaitMessage from "../../components/WaitMessage"
 
 import { styles } from "./styles"
 import { THEME } from "../../styles/Theme"
-
-import GoogleLogo from "../../assets/googleLogo.svg"
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useUserStore } from '../../store/badgeStore'
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import InitialPage from "../InitialPage"
-import Slogan from "../Slogan"
+import GoogleLogo from "../../assets/googleLogo.svg"
 
 export default function Login() {
     const [email, setEmail] = useState('')

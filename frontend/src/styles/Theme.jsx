@@ -1,7 +1,3 @@
-import { StatusBar } from "react-native"
-
-// const paddingTopValue = StatusBar.currentHeight ? StatusBar.currentHeight + 68 : 72
-
 export const THEME = {
     colors: {
         white: '#F2F2F2',
@@ -64,38 +60,4 @@ export const THEME = {
             borderColor: '#CE1F1F',
         },
     }, 
-
-    structure: {
-        container: {
-            flex: 1,
-            // paddingTop: paddingTopValue,
-            paddingHorizontal: 28,
-            paddingBottom: 40,
-    
-            justifyContent: 'space-between'
-        },
-
-        viewForm: {
-            gap: 8,
-        },
-
-        viewButton: {
-            alignItems: 'center',
-            marginTop: 20,
-            gap: 36,
-        },
-
-        // modalContainer: {
-        //     flex: 1,
-        //     justifyContent: 'center',
-        // },
-
-        // modalContent: {
-        //     margin: 10,
-        //     padding: 40,
-        //     backgroundColor: '#F2F2F2',
-        //     borderRadius: 8,
-        //     elevation: 10,
-        // }
-    }
 }

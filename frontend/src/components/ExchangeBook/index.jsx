@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { View, Image, Text, TouchableOpacity } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons'
+
+import ExchangeForm from '../ExchangeForm'
 
 import { styles } from './styles';
 import { THEME } from '../../styles/Theme';
+import Ionicons from '@expo/vector-icons/Ionicons'
+
 import { useNavigation } from '@react-navigation/native';
 
 export default function ExchangeBook({ idUser, username, imageUser }) {
+    const [ visibleExchangeForm, setVisibleExchangeForm ] = useState(false)
     const navigation = useNavigation()
 
     return (
@@ -35,7 +40,12 @@ export default function ExchangeBook({ idUser, username, imageUser }) {
                 name='sync-outline'
                 size={20} 
                 color={THEME.colors.brownDark} 
-                onPress={() => {}}  
+                onPress={() => { setVisibleExchangeForm(true) }}  
+            />
+
+            <ExchangeForm 
+                visibleExchangeForm={visibleExchangeForm}
+                onClose={() => setVisibleExchangeForm(false)}
             />
         </View>
     )

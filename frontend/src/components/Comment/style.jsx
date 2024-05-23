@@ -1,11 +1,10 @@
-import { StatusBar, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { THEME } from "../../styles/Theme";
 
 export const styles = StyleSheet.create({
     principalView: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
-        paddingTop: StatusBar.currentHeight,
     },
 
     clickClose: {
