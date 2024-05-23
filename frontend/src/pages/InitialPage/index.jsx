@@ -12,6 +12,7 @@ import BottomMenu from '../../components/Menus/BottomMenu'
 
 import { styles } from './style'
 import { useUserStore } from '../../store/badgeStore'
+import Loading from '../../components/Loading';
 
 export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([]);
@@ -20,25 +21,71 @@ export default function InitialPage(props) {
 
     const navigation = useNavigation();
 
-    const user = useUserStore(state => state.data);
+    const user = useUserStore()
     console.log(user);
     console.log('o console anterior é o user');
 
-    const getUser = async() => {
-        try {
-            const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
+
+    // VALIDAR USO
+
+    // const getUser = async() => {
+    //     try {
+    //         const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
             
-            if(user.data.email !== null) {
-                setUserData(user.data);
+    //         if(user.data.email !== null) {
+    //             setUserData(user.data);
 
-            }else {
-                navigation.navigate(props.route.params.page, {error: 'Tentativa de acesso falhou, tente novamente!'});
-            }
+    //         }else {
+    //             navigation.navigate(props.route.params.page, {error: 'Tentativa de acesso falhou, tente novamente!'});
+    //         }
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+     //impedir o usuário de voltar à tela de login 
+    // useEffect(() => {
+    //     const backAction = () => {
+    //       Alert.alert('Sair', 'Você realmente deseja sair do aplicativo?', [
+    //         {
+    //           text: 'Não',
+    //           onPress: () => null,
+    //           style: 'cancel',
+    //         },
+    //         {text: 'Sim', onPress: () => {
+    //             setUserData({});
+    //             navigation.navigate('Slogan');
+    //             BackHandler.exitApp();
+    //             }
+    //         },
+    //       ]);
+    //       return true;
+    //     };
+    
+    //     const backHandler = BackHandler.addEventListener(
+    //       'hardwareBackPress',
+    //       backAction,
+    //     );
+    
+    //     return () => backHandler.remove();
+    // }, []);
+
+    
+
+    useEffect(() => {
+        // user.logout()
+        // if(props.route.params === undefined) {
+        //     getUser();
+
+        // }else {
+            //setUserData(props.route.params.user); 
+        // }
+
+        // CHAMADA DA API
+        
+        getPublications();
+    }, []);
 
     const getPublications = async() => {
         const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications');
@@ -55,55 +102,12 @@ export default function InitialPage(props) {
 
         setPublications(initialPosts);
     }
-
-    useEffect(() => {
-
-        if(props.route.params === undefined) {
-            getUser();
-
-        }else {
-            //setUserData(props.route.params.user); 
-        }
-
-        // CHAMADA DA API
-        
-        getPublications();
-    }, []);
-
-    //impedir o usuário de voltar à tela de login 
-    useEffect(() => {
-        const backAction = () => {
-          Alert.alert('Sair', 'Você realmente deseja sair do aplicativo?', [
-            {
-              text: 'Não',
-              onPress: () => null,
-              style: 'cancel',
-            },
-            {text: 'Sim', onPress: () => {
-                setUserData({});
-                navigation.navigate('Slogan');
-                BackHandler.exitApp();
-                }
-            },
-          ]);
-          return true;
-        };
-    
-        const backHandler = BackHandler.addEventListener(
-          'hardwareBackPress',
-          backAction,
-        );
-    
-        return () => backHandler.remove();
-    }, []);
     
     return (
         <View style={styles.container}> 
             <StatusBar barStyle={'light-content'} />
 
-            <TopMenu
-                user = {userData} 
-            />
+            <TopMenu/>
 
             <FlatList
                 contentContainerStyle = {styles.viewPublications}
@@ -112,6 +116,19 @@ export default function InitialPage(props) {
                 refreshing={loading}
                 onRefresh={getPublications}
             />
+            
+            {/* <ScrollView 
+                contentContainerStyle={styles.viewPublications}
+            >
+                { 
+                    publications ?
+                    publications.map((publication) => (
+                        <Publication publication={publication} />
+                    ))
+
+                    : <Loading />
+                }
+            </ScrollView> */}
             <BottomMenu/>
         </View>
         

@@ -10,7 +10,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 
 export default function Publication(/*{photo, username, textPost, isLike, bookImage}*/ {publication}) {
-    const [ clickHeartIcon, setClickHeartIcon ] = useState(publication.isLike)
+    const [ clickHeartIcon, setClickHeartIcon ] = useState(false)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
     const navigation = useNavigation()

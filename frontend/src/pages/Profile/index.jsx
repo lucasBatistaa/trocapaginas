@@ -33,15 +33,15 @@ export default function Profile () {
 
     useEffect(() => {
         //Publicações
-        setPublications([
-            {
-                photo: require('../../assets/foto-perfil.png'),
-                username: 'Stephanie',
-                textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-                bookImage: require('../../assets/foto-livro.png'),
-                isLike: true
-            }
-        ])
+        // setPublications([
+        //     {
+        //         photo: require('../../assets/foto-perfil.png'),
+        //         username: 'Stephanie',
+        //         textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
+        //         bookImage: require('../../assets/foto-livro.png'),
+        //         isLike: true
+        //     }
+        // ])
 
         //interesses
         setInterests([

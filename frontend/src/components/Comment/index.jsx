@@ -38,7 +38,7 @@ export default function Comment({ id, modalVisible, onClose }) {
                 comment: 'sim amigaa, esse livro é maravilhoso'
             },
         ]);
-        loadComments();
+        // loadComments();
     }, [])
 
     const loadComments = async () => {
