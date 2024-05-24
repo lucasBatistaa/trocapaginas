@@ -1,15 +1,16 @@
 import {View, Image, Text, TouchableOpacity, ScrollView} from 'react-native'
 import { useEffect, useState } from 'react'
 
-import {TabPublications, TabInterests} from './components/TabView'
+import axios from 'axios'
 import { useUserStore } from '../../store/badgeStore'
-import { THEME } from '../../styles/Theme'
-import { styles } from './style'
 
-import MenuICon from '../../assets/menu-icon.svg'
+import {TabPublications, TabInterests} from './components/TabView'
+import MenuIcon from '../../assets/menu-icon.svg'
 import LateralMenu from '../../components/Menus/LateralMenu'
 import BottomMenu from '../../components/Menus/BottomMenu'
 
+import { styles } from './style'
+import { THEME } from '../../styles/Theme'
 
 
 export default function Profile () {
@@ -21,27 +22,8 @@ export default function Profile () {
     
     const user = useUserStore(state => state.data)
 
-    const closeMenu = () => {
-        setMenuVisible(false)
-    }
-
-    const handleOptionChange = (option) => {
-        if (selectedOption !== option) {
-            setSelectedOption(option);
-        }
-    };
-
     useEffect(() => {
-        //Publicações
-        // setPublications([
-        //     {
-        //         photo: require('../../assets/foto-perfil.png'),
-        //         username: 'Stephanie',
-        //         textPost: 'Excelentissimo livro, se tornou um dos meus favoritos. Com certeza estará entre os meus livros de cabeceira para recordar bons momentos. 5/5.',
-        //         bookImage: require('../../assets/foto-livro.png'),
-        //         isLike: true
-        //     }
-        // ])
+        getPublications()
 
         //interesses
         setInterests([
@@ -55,6 +37,19 @@ export default function Profile () {
         ])
 
     }, [])
+
+    const handleOptionChange = (option) => {
+        if (selectedOption !== option) {
+            setSelectedOption(option);
+        }
+    }
+
+    const getPublications = async() => {
+        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const posts = response.data
+
+        setPublications(posts)
+    }
 
     const renderTabView = () => {
         switch (selectedOption) {
@@ -70,7 +65,7 @@ export default function Profile () {
             <View style={styles.header}>
                 <Image
                     style={{width: 96, height: 96}}
-                    source={require('../../assets/user-circle.png')}
+                    source={{ uri: user.photo }}
                 />
 
                 <Text style={[THEME.fonts.h1.normal, styles.username]}>
@@ -78,10 +73,10 @@ export default function Profile () {
                 </Text>
 
                 <TouchableOpacity onPress={() => setMenuVisible(true)}>
-                    <MenuICon style={{alignSelf: 'flex-start', bottom: 36}}/>
+                    <MenuIcon style={{alignSelf: 'flex-start', bottom: 36}}/>
                 </TouchableOpacity>
                
-                <LateralMenu menuVisible={menuVisible} onPress={closeMenu}/>
+                <LateralMenu menuVisible={menuVisible} onPress={() => setMenuVisible(false)}/>
             </View>
 
             

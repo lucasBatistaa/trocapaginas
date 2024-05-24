@@ -5,15 +5,8 @@ function TabReviews({ publications }) {
     return (
         <>
             {
-                publications.map((publication, index) => (
+                publications.map((publication) => (
                     <Publication
-                        // key={index}
-                        // // id={publication.id}
-                        // photo={publication.photo}
-                        // username={publication.content}
-                        // textPost={publication.textPost}
-                        // bookImage={publication.image_post}
-                        // isLike={false}
                         publication={publication}
                     />
                 ))

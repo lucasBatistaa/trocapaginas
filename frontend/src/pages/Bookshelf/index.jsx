@@ -13,15 +13,15 @@ export default function Bookshelf() {
     const [ books, setBooks ] = useState([])
 
     useEffect(() => {
-        // setBooks([{
-        //     id: '34534',
-        //     image: require('../../assets/book.png'),
-        //     titleBook: 'Orgulho e Preconceito',
-        //     authorBook: 'Jane Austen',
-        // }])
+        setBooks([{
+            id: '34534',
+            image: require('../../assets/book.png'),
+            titleBook: 'Orgulho e Preconceito',
+            authorBook: 'Jane Austen',
+        }])
 
 
-        googleBooks()
+        // googleBooks()
 
 
     }, [])

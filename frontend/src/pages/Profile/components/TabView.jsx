@@ -8,12 +8,7 @@ function TabPublications ({publications}) {
                 publications.map((publication, index) => (
                     <Publication
                         key={index}
-                        id={publication.id}
-                        photo={publication.photo}
-                        username={publication.username}
-                        textPost={publication.textPost}
-                        bookImage={publication.bookImage}
-                        isLike={publication.isLike}
+                        publication={publication}
                     />
                 ))
             }

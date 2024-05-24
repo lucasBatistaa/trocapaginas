@@ -9,17 +9,12 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useNavigation } from '@react-navigation/native'
 
-export default function Publication(/*{photo, username, textPost, isLike, bookImage}*/ {publication}) {
+export default function Publication({ publication }) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(false)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
     const navigation = useNavigation()
 
-    // Função para fechar modal do Comentário
-    const closeComment = () => {
-        setModalCommentVisible(false)
-    }
-    
     // Compartilhar 
     const onShare = async () => {
         try {
@@ -52,12 +47,12 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
                     style={{width: 32, height: 32, borderRadius: 20}}
                     source={{uri: publication.photo}} />
                     
-                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{publication.username}</Text>
+                <Text style={[THEME.fonts.h3, {color: THEME.colors.brownDark}]}>{publication.name}</Text>
             </TouchableOpacity>
             <View style={styles.publication}>
                 <View style={styles.post}>
                     <Text style={THEME.fonts.text}>
-                        {publication.textPost}
+                        {publication.content}
                     </Text>
 
                     <View style={styles.icons}>
@@ -82,12 +77,12 @@ export default function Publication(/*{photo, username, textPost, isLike, bookIm
                 </View>
                 
                 <Image 
-                    source={{uri: publication.bookImage}} 
+                    source={{uri: publication.image_post}} 
                     style={{width: 80, height: 80}}
                 />
             </View>
 
-            <Comment idPublication={0} modalVisible={modalCommentVisible} onClose={closeComment} />
+            <Comment idPublication={0} modalVisible={modalCommentVisible} onClose={() => setModalCommentVisible(false)} />
         </View>
 
     )

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
-import { ScrollView, TouchableOpacity, View, Image, Text, ActivityIndicator } from "react-native"
+import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
+
 import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 
 import { TabReviews, TabExchanges } from './components/TabsView'
 import Comment from "../../components/Comment"
 import BottomMenu from '../../components/Menus/BottomMenu'
+import Loading from '../../components/Loading'
 
 import ModalAvaliation from "./components/ModalAvaliation"
 import ModalSynopsis from "./components/ModalSynopsis"
@@ -25,11 +27,14 @@ export default function Book() {
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
     const [ modalAvaliationVisible, setModalAvaliationVisible ] = useState(false)
     const [ modalSynopsisVisible, setModalSynopsisVisible ] = useState(false)
+
+    const [ loading, setLoading ] = useState(false)
     
     const navigation = useNavigation()
     const stars = Array.from({ length: 5 }, (_, index) => index <= avaliation - 1 ? true : false)
 
     useEffect(() => {
+        setLoading(true)
         // CHAMADAS DA API
         //BOOK
         setBook({
@@ -47,34 +52,26 @@ export default function Book() {
         
 
         // TROCAS DISPONÍVEIS
-        // setBookExchanges([
-        //     {
-        //         idUser: 1,
-        //         imageUser: require('../../assets/foto-perfil.png'),
-        //         username: 'Lucas'
-        //     },
-        //     {
-        //         idUser: 1,
-        //         imageUser: require('../../assets/foto-perfil.png'),
-        //         username: 'Lucas'
-        //     }
-        // ])
+        setBookExchanges([
+            {
+                idUser: 1,
+                imageUser: require('../../assets/foto-perfil.png'),
+                username: 'Lucas'
+            },
+            {
+                idUser: 1,
+                imageUser: require('../../assets/foto-perfil.png'),
+                username: 'Lucas'
+            }
+        ])
     }, [])
 
     const getPublications = async() => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications');
-        const posts = response.data;
+        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const posts = response.data
 
-        const initialPosts = posts.map(post => ({
-            photo: post.photo,
-            username: post.name,
-            textPost: post.content,
-            bookImage: post.image_post,
-            isLike: false
-            })
-        )
-
-        setPublications(initialPosts);
+        setPublications(posts)
+        setLoading(false)
     }
 
     const renderTabView = () => {
@@ -87,6 +84,8 @@ export default function Book() {
         }
     }
 
+    if (loading) return <Loading />
+        
     return (
         <View style={styles.container}>
 
