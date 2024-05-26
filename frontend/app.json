@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "scheme": "trocapaginas",
+    "name": "trocapaginas",
+    "slug": "trocapaginas",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundlerIdentifier": "com.troca_paginas.trocapaginas"
+    },
+    "android": {
+      "package": "com.troca_paginas.trocapaginas",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F2F2F2"
+      }
+    },
+    "web": {
+      "favicon": "./src/assets/logo.png"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c3bac5ec-1edf-42ef-94a8-0fc6d650b617"
+      }
+    },
+    "owner": "troca_paginas"
+  }
+}
