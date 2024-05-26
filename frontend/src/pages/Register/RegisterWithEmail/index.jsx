@@ -29,10 +29,10 @@ export default function RegisterEmail() {
     const isEmail = /.+@.+/
     const navigation = useNavigation()
 
-    //const user = useUserStore(state => state.save)
+    const user = useUserStore(state => state.save)
 
     const validateForm = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
 
         if (username.trim() && email.trim()) {
             if (isEmail.test(email)){
@@ -46,28 +46,28 @@ export default function RegisterEmail() {
                     return true
 
                 } catch (error) {
-                    setIsLoading(false);
+                    setIsLoading(false)
 
                     if (!error?.response) {
-                        setMessageError('Erro ao acessar a página');
+                        setMessageError('Erro ao acessar a página')
                         
                     } else if (error.response?.status === 422) {
-                        setMessageError('Usuário já cadastrado!');
-                        setErrorUsername(true);
+                        setMessageError('Usuário já cadastrado!')
+                        setErrorUsername(true)
                     }
                 }
 
             } else {
-                setMessageError('E-mail inválido!');
+                setMessageError('E-mail inválido!')
             }
         } else {
-            username.trim() ? setErrorUsername(false) : setErrorUsername(true);
-            email.trim() ? setErrorEmail(false) : setErrorEmail(true);
+            username.trim() ? setErrorUsername(false) : setErrorUsername(true)
+            email.trim() ? setErrorEmail(false) : setErrorEmail(true)
 
-            setMessageError('Insira todos os campos!');
+            setMessageError('Insira todos os campos!')
         }
 
-        setIsLoading(false);
+        setIsLoading(false)
 
         return false
     }
@@ -85,7 +85,7 @@ export default function RegisterEmail() {
     const handleSubmitRegister = async (password) => {      
         try {
 
-            setIsLoading(true);
+            setIsLoading(true)
 
             const response = await axios.post('https://trocapaginas-server-production.up.railway.app/create',
             JSON.stringify({username, email, password, photo}),
@@ -93,9 +93,9 @@ export default function RegisterEmail() {
                 headers: {'Content-Type': 'application/json'}
             })
 
-            //user(response.data);
+            user(response.data)
 
-            navigation.navigate('InitialPage', { user: response.data });
+            navigation.navigate('InitialPage');
 
         } catch (error) {
 

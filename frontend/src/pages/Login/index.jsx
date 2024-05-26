@@ -30,12 +30,12 @@ export default function Login(props) {
     const [securePassword, setSecurePassword] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
 
-    //const user = useUserStore(state => state.save)
+    const user = useUserStore(state => state.save)
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
-        setMessageError('');
-        
+        props.route.params = undefined;
+
         try {
             await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
 
@@ -54,7 +54,7 @@ export default function Login(props) {
     }
 
     const handleSubmitLogin = async () => {
-        setIsLoading(true);
+        setIsLoading(true)
 
         if (email.trim() && password.trim()) {
             try {
@@ -63,9 +63,9 @@ export default function Login(props) {
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
-                //user(response.data);
+                user(response.data);
 
-                navigation.navigate('InitialPage', {user: response.data});
+                navigation.navigate('InitialPage', /*{user: response.data}*/);
 
             } catch (error) {
                 console.log(error)
@@ -90,9 +90,11 @@ export default function Login(props) {
     } 
 
     useEffect(() => {
-        if(props.route.params?.error) {
+        if(props.route.params != undefined) {
             setMessageError(props.route.params.error);
-            props.route.params.error = '';
+        
+        }else {
+            setMessageError('');
         }
     })
         

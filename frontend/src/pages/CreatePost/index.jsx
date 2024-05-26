@@ -14,14 +14,14 @@ import { THEME } from '../../styles/Theme'
 import { styles } from './style'
 import { useUserStore } from '../../store/badgeStore'
 
-export default function CreatePost(props) {
+export default function CreatePost() {
     const [isSelectedPost, setIsSelectedPost] = useState(true)
     const [imageURI, setImageURI] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [messageError, setMessageError] = useState('')
     
-    //const user = useUserStore(state => state.data)
-    const user = props.route.params.user;
+    const user = useUserStore(state => state.data)
+    
     const navigation = useNavigation()
 
     const handleSelectAnImage = async () => {

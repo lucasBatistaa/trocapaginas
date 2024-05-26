@@ -7,7 +7,7 @@ import BooksIcon from '../../../assets/book-icon.svg'
 
 import {styles} from './styles'
 
-export default function BottomMenu ( { user }) {
+export default function BottomMenu () {
     const navigation = useNavigation()
 
     return (
@@ -17,7 +17,7 @@ export default function BottomMenu ( { user }) {
             />
 
             <PlusIcon
-                onPress={() => navigation.navigate('CreatePost', {user: user})}
+                onPress={() => navigation.navigate('CreatePost')}
                 testID="createPost-button"            
             />
 

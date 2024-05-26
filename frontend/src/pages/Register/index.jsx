@@ -23,32 +23,34 @@ export default function Register(props) {
     const navigation = useNavigation();
 
     const handleGoogleLogin = async () => {
-        setMessageError('');
+        props.route.params = undefined;
 
         try {
             await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
         
             //setIsLoading(true)
-            setModalVisible(true);
+            setModalVisible(true)
 
             setTimeout(() => {
                 navigation.navigate('InitialPage', {page: 'Register'});
-                setModalVisible(false);
+                setModalVisible(false)
             }, 18000);
 
         } catch(error) {
             console.log(error)
+
             //setIsLoading(false)
-            setModalVisible(false);
+            setModalVisible(false)
         } 
 
     }
 
     useEffect(() => {
-
-        if(props.route.params?.error) {
+        if(props.route.params != undefined) {
             setMessageError(props.route.params.error);
-            props.route.params.error = '';
+        
+        }else {
+            setMessageError('');
         }
     })
 
