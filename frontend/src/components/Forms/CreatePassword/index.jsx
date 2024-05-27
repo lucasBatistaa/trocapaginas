@@ -71,7 +71,7 @@ export default CreatePassword = ({ titleButton, onSubmit, isLoading=false }) => 
                     styles.label
                 ]}
             >
-                Email
+                Senha
             </Text>
             <Input error={passwordError}>
                 <Input.Field 
@@ -132,7 +132,7 @@ export default CreatePassword = ({ titleButton, onSubmit, isLoading=false }) => 
                     styles.label
                 ]}
             >
-                Email
+                Senha
             </Text>
             <Input error={confirmPasswordError}>
                 <Input.Field 

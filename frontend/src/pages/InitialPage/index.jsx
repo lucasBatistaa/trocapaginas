@@ -1,5 +1,6 @@
 import { StatusBar, View, FlatList} from 'react-native'
 import { useEffect, useState } from 'react'
+import { useNavigation } from "@react-navigation/native"
 
 import axios from 'axios'
 import { useUserStore } from '../../store/badgeStore'
@@ -10,29 +11,35 @@ import BottomMenu from '../../components/Menus/BottomMenu'
 
 import { styles } from './style'
 
-export default function InitialPage() {
+export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
     const [loading, setLoading] = useState(false)
+    const [userData, setUserData] = useState({});
         
     // VALIDAR USO
     
     // const [ userData, setUserData ] = useState({});
-    // const navigation = useNavigation();
-    // const getUser = async() => {
-    //     try {
-    //         const user = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
+
+    //const user = useUserStore(state => state.data);
+    const saveUser = useUserStore(state => state.save);
+
+    const navigation = useNavigation();
+    const getUser = async() => {
+        try {
+            const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
             
-    //         if(user.data.email !== null) {
-    //             setUserData(user.data);
+            if(response.data.email !== null) {
+                //setUserData(response.data);
+                saveUser(response.data);
 
-    //         }else {
-    //             navigation.navigate(props.route.params.page, {error: 'Tentativa de acesso falhou, tente novamente!'});
-    //         }
+            }else {
+                navigation.navigate(props.route.params.page, {error: 'Tentativa de acesso falhou, tente novamente!'});
+            }
 
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
      //impedir o usuário de voltar à tela de login 
     // useEffect(() => {
@@ -62,17 +69,13 @@ export default function InitialPage() {
     // }, []);
 
 
-    useEffect(() => {
+    useEffect(()=> {
         // user.logout()
-        // if(props.route.params === undefined) {
-        //     getUser();
 
-        // }else {
-            //setUserData(props.route.params.user); 
-        // }
+        if(props.route.params?.page) {
+            getUser();
+        }
 
-        // CHAMADA DA API
-        
         getPublications()
     }, []);
 
@@ -82,7 +85,7 @@ export default function InitialPage() {
 
         setPublications(posts)
     }
-    
+
     return (
         <View style={styles.container}> 
             <StatusBar barStyle={'light-content'} />

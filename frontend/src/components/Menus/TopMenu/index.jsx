@@ -6,8 +6,8 @@ import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
 import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu({user}) {
-    //const user = useUserStore(state => state.data) 
+export default function TopMenu() {
+    const user = useUserStore(state => state.data) 
     const navigation = useNavigation()
 
     return (

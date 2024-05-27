@@ -30,7 +30,7 @@ export default function Login(props) {
     const [securePassword, setSecurePassword] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
 
-    const user = useUserStore(state => state.save)
+    const saveUser = useUserStore(state => state.save)
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
@@ -63,9 +63,10 @@ export default function Login(props) {
                 {
                     headers: {'Content-Type': 'application/json'}
                 });
-                user(response.data);
 
-                navigation.navigate('InitialPage', /*{user: response.data}*/);
+                saveUser(response.data);
+
+                navigation.navigate('InitialPage');
 
             } catch (error) {
                 console.log(error)
