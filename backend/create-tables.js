@@ -239,9 +239,9 @@ create table reviews (
 	console.log('tabela posts excluída')
 })*/
 
-/*sql `
-	update users set photo = 'https://cdn0.iconfinder.com/data/icons/phosphor-regular-vol-4/256/user-circle-512.png'
-	where id_user = 7;
+sql `
+	update reviews set image_post = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png'	
+	where id_review = 15;
 `.then(() => {
 	console.log('user editado')
-})*/
+})

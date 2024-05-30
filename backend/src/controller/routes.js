@@ -13,14 +13,11 @@ const user = new User();
 const post = new Post();
 const review = new Review();
 const validationCode = [];
-
 const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
 
 let contPost = 0;
 let contReview = 0; 
-
 let allPublications = [];
-let publications = [];
 
 async function userExists(email) {
     return await database.getUsers().then(users => {
@@ -34,11 +31,10 @@ async function userExists(email) {
 
 function validateImage(imageURI){
     if(imageURI === undefined) {
-        review.imageBook = null;
-        post.imageBook = null;
+        review.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
+        post.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
 
     } else {
-
         review.imageBook = imageURI;
         post.imageBook = imageURI;
     }    
@@ -65,6 +61,12 @@ async function getReviews() {
     });
 
     return reviews;
+}
+
+function sortPublications(publications) {
+    publications.sort((a, b) => {
+        return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
+    })
 }
 
 //login
@@ -224,42 +226,26 @@ routes.post('/review', async (req, res) => {
 });
 
 routes.get('/publications', async (req, res) => {
-
     try{
-        let posts = await getPosts();
-
-        if(posts.length < 3) {
-            contPost = 0;
-            posts = await getPosts();
-        }
-
-        let reviews = await getReviews();
-
-        if(reviews.length < 2) {
-            contReview = 0;
-            reviews = await getReviews();
-        }
-
+        const posts = await getPosts();
+        const reviews = await getReviews();
         const publications = posts.concat(reviews);
 
-        publications.sort((a, b) => {
-            return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
-        })
+        posts.length === 0 ? contPost = 0 : contPost += 5;
+        reviews.length === 0 ? contReview = 0 : contReview += 5;
+
+        sortPublications(publications);
         
         publications.map((publication) => {
             if((!(allPublications.some(pub => pub.id_post === publication.id_post))) || (!(allPublications.some(pub => pub.id_review === publication.id_review)))) {
                 allPublications.unshift(publication);
             }    
         })
-
-        contPost += 3;
-        contReview += 2;
         
         return res.status(200).send(allPublications);
 
     }catch(error) {
-        console.log(error)
-        return res.status(400).send('deu tudo errado')
+        return res.status(400).send('Não foi possível carregar as publicações');
     }
 });
 
@@ -276,6 +262,29 @@ routes.post('/user-publication', async (req, res) => {
         console.log(error)
         return res.send(error)
     }
-})
+});
+
+routes.post('/my-publications', async (req, res) => {
+    const {email} = req.body;
+
+    try {
+
+        const myPosts = await database.getMyPosts(email);
+        const myReviews = await database.getMyReviews(email);
+        const myPublications = myPosts.concat(myReviews);
+
+        sortPublications(myPublications);
+        myPublications.reverse();
+
+        myPublications.map((publication) => {
+            publication.photo = publication.photo.toString('utf8');
+        })
+
+        return res.status(200).send(myPublications);
+
+    }catch(error) {
+        return res.status(400).send('Publicações não encontradas');
+    }
+});
 
 export default routes;

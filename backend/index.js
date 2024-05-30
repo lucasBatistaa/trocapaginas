@@ -7,6 +7,7 @@ import passport from 'passport';
 import OAuth2Strategy from 'passport-google-oauth2';
 import {Database} from './database.js';
 import {User} from './src/models/user.js';
+import bodyParser from 'body-parser';
 
 const oauth2strategy = OAuth2Strategy.Strategy;
 const app = express(); 
@@ -33,7 +34,6 @@ app.use(cors({
   credentials: true
   }
 ));
-
 
 app.use(express.json({limit: '50mb'}));
 
