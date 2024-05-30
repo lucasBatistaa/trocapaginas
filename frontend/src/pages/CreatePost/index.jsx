@@ -13,6 +13,7 @@ import BottomMenu from '../../components/Menus/BottomMenu'
 import { THEME } from '../../styles/Theme'
 import { styles } from './style'
 import { useUserStore } from '../../store/badgeStore'
+import axios from 'axios'
 
 export default function CreatePost() {
     const [isSelectedPost, setIsSelectedPost] = useState(true)
@@ -35,7 +36,7 @@ export default function CreatePost() {
         if(isSelectedPost){
             try{
                 const data_post = {
-                    userEmail: userdata.email,
+                    userEmail: user.email,
                     text: text,
                     nameBook: nameBook,
                     imageURI: imageURI,
@@ -65,7 +66,7 @@ export default function CreatePost() {
         } else {
             try {
                 const data_review = {
-                    userEmail: userdata.email,
+                    userEmail: user.email,
                     text: text,
                     nameBook: nameBook,
                     imageURI: imageURI,
@@ -79,7 +80,7 @@ export default function CreatePost() {
                 setIsLoading(false)
 
                 Alert.alert('Publicação', 'Publicação realizada com sucesso!', [
-                    {text: 'OK', onPress: () => navigation.navigate('Slogan')}
+                    {text: 'OK', onPress: () => navigation.navigate('InitialPage')}
                 ])
 
             } catch(error){

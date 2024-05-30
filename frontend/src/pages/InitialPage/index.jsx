@@ -1,6 +1,6 @@
-import { StatusBar, View, FlatList} from 'react-native'
-import { useEffect, useState } from 'react'
-import { useNavigation } from "@react-navigation/native"
+import { StatusBar, View, FlatList, BackHandler} from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 
 import axios from 'axios'
 import { useUserStore } from '../../store/badgeStore'
@@ -10,15 +10,11 @@ import Publication from '../../components/Publication'
 import BottomMenu from '../../components/Menus/BottomMenu'
 
 import { styles } from './style'
+import React from 'react'
 
 export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
     const [loading, setLoading] = useState(false)
-    const [userData, setUserData] = useState({});
-        
-    // VALIDAR USO
-    
-    // const [ userData, setUserData ] = useState({});
 
     //const user = useUserStore(state => state.data);
     const saveUser = useUserStore(state => state.save);
@@ -41,34 +37,7 @@ export default function InitialPage(props) {
         }
     }
 
-     //impedir o usuário de voltar à tela de login 
-    // useEffect(() => {
-    //     const backAction = () => {
-    //       Alert.alert('Sair', 'Você realmente deseja sair do aplicativo?', [
-    //         {
-    //           text: 'Não',
-    //           onPress: () => null,
-    //           style: 'cancel',
-    //         },
-    //         {text: 'Sim', onPress: () => {
-    //             setUserData({});
-    //             navigation.navigate('Slogan');
-    //             BackHandler.exitApp();
-    //             }
-    //         },
-    //       ]);
-    //       return true;
-    //     };
     
-    //     const backHandler = BackHandler.addEventListener(
-    //       'hardwareBackPress',
-    //       backAction,
-    //     );
-    
-    //     return () => backHandler.remove();
-    // }, []);
-
-
     useEffect(()=> {
         // user.logout()
 
@@ -79,8 +48,26 @@ export default function InitialPage(props) {
         getPublications()
     }, []);
 
+     //impedir o usuário de voltar à tela de login 
+    useFocusEffect(
+        useCallback(() => {
+            const backAction = () => {
+                BackHandler.exitApp();
+
+                return true;
+            }
+
+            const backHandler = BackHandler.addEventListener(
+                'hardwareBackPress',
+                backAction,
+            );
+
+            return () => backHandler.remove();
+        }, [])
+    );
+
     const getPublications = async () => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const response = await axios.get('http://192.168.1.65:6005/publications')
         const posts = response.data
 
         setPublications(posts)

@@ -17,7 +17,7 @@ export default function Slogan () {
         if (Object.keys(user).length > 0) {
             navigation.navigate('InitialPage')
         }
-    }, [user])
+    }, [])
 
     return (
         <View style={styles.container}>

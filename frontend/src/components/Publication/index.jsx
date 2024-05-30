@@ -38,10 +38,13 @@ export default function Publication({ publication }) {
     }
 
     const getUserOwner = async () => {
+        console.log(publication.id_user)
         try{
             const response = await axios.post('https://trocapaginas-server-production.up.railway.app/user-publication', {
                 id_user: publication.id_user
             });
+
+            console.log(response.data)
 
             navigation.navigate('Profile', {user: response.data})
 

@@ -19,13 +19,13 @@ export default function Profile (props) {
 
     const [ publications, setPublications ] = useState([])
     const [ interests, setInterests ] = useState([])
+    const [ tabContent, setTabContent ] = useState(null)
     
     //const user = useUserStore(state => state.data)
     const user = props.route.params.user;
 
     useEffect(() => {
-        getPublications()
-
+        renderTabView()
         //interesses
         setInterests([
             {
@@ -46,16 +46,28 @@ export default function Profile (props) {
     }
 
     const getPublications = async() => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const response = await axios.post('http://192.168.1.65:6005/my-publications', {
+            email: user.email
+        })
+        
         const posts = response.data
-
         setPublications(posts)
     }
 
-    const renderTabView = () => {
+    const renderTabView = async () => {
         switch (selectedOption) {
             case 'showPublications':
-                return <TabPublications publications={publications} />
+                await getPublications();
+
+                if(publications.length === 0) {
+                    setTabContent(
+                        <Text style={THEME.fonts.h2.bold}> Nenhuma publicação encontrada </Text>
+                    )
+
+                } else {
+                    setTabContent(<TabPublications publications={publications} />)
+                }
+
             case 'showInterests':
                 return <TabInterests interests={interests} />
         }
@@ -123,12 +135,12 @@ export default function Profile (props) {
                 </TouchableOpacity>
 
             </View>
-            
+             
             <ScrollView 
                 style={styles.contentView}
                 showsVerticalScrollIndicator={false}
             >
-                {renderTabView ()}
+                { tabContent }
             </ScrollView>
 
             <BottomMenu/>
