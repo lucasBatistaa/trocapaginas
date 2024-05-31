@@ -9,7 +9,7 @@ export class Database {
 
     //retornar usuário 
     async getUsersById(id_user) {
-        const users_with_id = sql `select name, photo from users where id_user = ${id_user}`;
+        const users_with_id = sql `select name, photo, email from users where id_user = ${id_user}`;
         return users_with_id;
     }
 

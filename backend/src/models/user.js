@@ -1,7 +1,3 @@
-import {Database} from '../../database.js'
-
-const database = new Database();
-
 export class User {
     constructor(idUser, name, email, password, photo) {
         this.idUser = idUser;
@@ -11,5 +7,3 @@ export class User {
         this.photo = photo;
     }
 }
-
-export default User;

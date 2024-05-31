@@ -8,12 +8,14 @@ import { useUserStore } from '../../store/badgeStore'
 import TopMenu from '../../components/Menus/TopMenu'
 import Publication from '../../components/Publication'
 import BottomMenu from '../../components/Menus/BottomMenu'
+import AppLoader from '../../components/AppLoader'
 
 import { styles } from './style'
 import React from 'react'
 
 export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
+    const [pageIsLoading, setPageIsLoading] = useState(true)
     const [loading, setLoading] = useState(false)
 
     //const user = useUserStore(state => state.data);
@@ -67,26 +69,31 @@ export default function InitialPage(props) {
     );
 
     const getPublications = async () => {
-        const response = await axios.get('http://192.168.1.65:6005/publications')
+        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
         const posts = response.data
 
         setPublications(posts)
+        setPageIsLoading(false)
     }
 
     return (
-        <View style={styles.container}> 
-            <StatusBar barStyle={'light-content'} />
+        <>
+            <View style={styles.container}> 
+                <StatusBar barStyle={'light-content'} />
 
-            <TopMenu/>
+                <TopMenu/>
 
-            <FlatList
-                contentContainerStyle = {styles.viewPublications}
-                data={publications}
-                renderItem={({ item }) => <Publication publication = {item}/>}
-                refreshing={loading}
-                onRefresh={getPublications}
-            />
-            <BottomMenu/>
-        </View>  
+                <FlatList
+                    contentContainerStyle = {styles.viewPublications}
+                    data={publications}
+                    renderItem={({ item }) => <Publication publication = {item}/>}
+                    refreshing={loading}
+                    onRefresh={getPublications}
+                />
+                <BottomMenu/>
+            </View>  
+
+            {pageIsLoading  && <AppLoader />}
+        </>
     )
 }

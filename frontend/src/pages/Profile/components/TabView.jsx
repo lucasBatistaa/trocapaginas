@@ -3,14 +3,11 @@ import BookTemplate from '../../../components/BookTemplate';
 import { View } from "react-native";
 
 function TabPublications ({publications}) {
-    publications.map((pub) => {
-        console.log(pub.content)
-    })
     return (
         <> 
             {
                 publications.map((publication, index) => (
-                    <View key={index} style={{marginBottom: 20}}>
+                    <View key={index} style={{marginBottom: 10}}>
                         <Publication
                             publication={publication}
                         />

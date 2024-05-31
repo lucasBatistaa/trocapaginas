@@ -251,9 +251,9 @@ routes.get('/publications', async (req, res) => {
 
 routes.post('/user-publication', async (req, res) => {
     const {id_user} = req.body;
+    
     try {
         const user_owner_publication = await database.getUsersById(id_user);
-
         user_owner_publication[0].photo = user_owner_publication[0].photo.toString('utf8');
 
         return res.status(200).send(user_owner_publication[0]);

@@ -10,5 +10,3 @@ export class Post {
         this.user_photo = user_photo;
     }
 }
-
-export default Post;

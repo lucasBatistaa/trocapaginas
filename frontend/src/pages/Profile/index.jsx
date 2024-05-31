@@ -8,6 +8,7 @@ import {TabPublications, TabInterests} from './components/TabView'
 import MenuIcon from '../../assets/menu-icon.svg'
 import LateralMenu from '../../components/Menus/LateralMenu'
 import BottomMenu from '../../components/Menus/BottomMenu'
+import AppLoader from '../../components/AppLoader'
 
 import { styles } from './style'
 import { THEME } from '../../styles/Theme'
@@ -20,6 +21,7 @@ export default function Profile (props) {
     const [ publications, setPublications ] = useState([])
     const [ interests, setInterests ] = useState([])
     const [ tabContent, setTabContent ] = useState(null)
+    const [ pageIsLoading, setPageIsLoading ] = useState(true)
     
     //const user = useUserStore(state => state.data)
     const user = props.route.params.user;
@@ -37,7 +39,7 @@ export default function Profile (props) {
             
         ])
 
-    }, [])
+    }, [selectedOption])
 
     const handleOptionChange = (option) => {
         if (selectedOption !== option) {
@@ -46,27 +48,30 @@ export default function Profile (props) {
     }
 
     const getPublications = async() => {
-        const response = await axios.post('http://192.168.1.65:6005/my-publications', {
+        const response = await axios.post('https://trocapaginas-server-production.up.railway.app/my-publications', {
             email: user.email
         })
         
         const posts = response.data
         setPublications(posts)
+
+        if(posts.length === 0) {
+            setTabContent(
+                <Text style={THEME.fonts.h2.bold}> Nenhuma publicação encontrada </Text>
+            )
+
+        } else {
+            setTabContent(<TabPublications publications={posts} />)
+        }
+
+        setPageIsLoading(false)
     }
 
     const renderTabView = async () => {
         switch (selectedOption) {
             case 'showPublications':
-                await getPublications();
-
-                if(publications.length === 0) {
-                    setTabContent(
-                        <Text style={THEME.fonts.h2.bold}> Nenhuma publicação encontrada </Text>
-                    )
-
-                } else {
-                    setTabContent(<TabPublications publications={publications} />)
-                }
+                await getPublications()
+                break
 
             case 'showInterests':
                 return <TabInterests interests={interests} />
@@ -144,6 +149,8 @@ export default function Profile (props) {
             </ScrollView>
 
             <BottomMenu/>
+
+            { pageIsLoading && <AppLoader /> }
         </View>
     )
 }
