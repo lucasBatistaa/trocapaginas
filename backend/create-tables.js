@@ -172,11 +172,11 @@ values ('Maria Eduarda de Faria', 'mariaeduardadefaria15@gmail.com', 'Senha#123'
 );`.then(() => {
     console.log('tabela publications criada')
 })*/
-sql `
+/*sql `
 	delete from users where email = 'lucas.lucas2004.30@gmail.com' or email = 'silva.ana@gmail.com' or email = 'jhon.elton@gmail.com' or email = 'teste6@gmail.com' or email = 'tes5@gmail.com';
 `.then(() => {
 	console.log('usuários apagados');
-})
+})*/
 
 /*sql `
 create table reviews (
@@ -227,8 +227,8 @@ create table reviews (
 })*/
 
 /*sql `
-	alter table reviews
-	add column imageBook text;
+	alter table books
+	add column cover text;
 `.then(() => {
 	console.log('tabela posts alterada')
 })*/
@@ -239,9 +239,43 @@ create table reviews (
 	console.log('tabela posts excluída')
 })*/
 
-sql `
+/*sql `
 	update reviews set image_post = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png'	
 	where id_review = 15;
 `.then(() => {
 	console.log('user editado')
+})*/
+
+/*sql `
+	create table interests (
+		id_interest serial not null,
+		id_book_interest integer not null,
+		id_myBook integer not null,
+		id_user_owner integer not null,
+		id_user_receiver integer not null,
+
+		primary key(id_interest),
+		foreign key(id_book_interest) references books(id_book),
+		foreign key(id_myBook) references books(id_book),
+		foreign key(id_user_owner) references users(id_user),
+		foreign key(id_user_receiver) references users(id_user)
+	);
+`.then(() => {
+	console.log('tabela interests criada')
+})*/
+
+sql `
+	insert into interests (id_book_interest, id_myBook, id_user_owner, id_user_receiver) 
+	values (2, 1, 63, 60);
+`.then(() => {
+	console.log('livro inserido')
 })
+
+/*sql `
+	insert into books (id_user, title, writer, year_edition, cover, review, rating)
+	values (63, 'Crime e Castigo', 'Dostoievski', 2014, 'https://m.media-amazon.com/images/I/71Gmavgu3ZL._AC_UF1000,1000_QL80_.jpg', 'Surreal como a mente é o pior castigo que podemos ter... o protagonista é uma pessoa comum que comete um erro, mas será que ele se arrepende? Será que ele tem noção do que está sentindo?', 5);
+`.then(() => {
+	console.log('livro inserido')
+})*/
+
+
