@@ -14,7 +14,7 @@ export default function Slogan () {
     const user = useUserStore(state => state.data)
 
     useEffect(() => {
-        if (Object.keys(user).length > 0) {
+        if (user) {
             navigation.navigate('InitialPage')
         }
     }, [])
