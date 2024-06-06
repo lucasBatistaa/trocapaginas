@@ -43,7 +43,8 @@
     "react-native-webview": "13.8.6",
     "react-router-dom": "^6.22.3",
     "typescript": "~5.3.3",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "expo-notifications": "~0.28.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

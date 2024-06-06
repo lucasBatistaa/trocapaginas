@@ -9,7 +9,7 @@ export class Database {
 
     //retornar usuário 
     async getUsersById(id_user) {
-        const users_with_id = sql `select name, photo, email from users where id_user = ${id_user}`;
+        const users_with_id = await sql `select name, photo, email from users where id_user = ${id_user}`;
         return users_with_id;
     }
 
@@ -51,8 +51,7 @@ export class Database {
     }
 
     async getMyPosts(email) {
-        console.log(email)
-        const myPosts = sql `select posts.*, users.name, users.photo 
+        const myPosts = await sql `select posts.*, users.name, users.photo 
         from posts inner join users using(id_user)
         where users.email = ${email}`;
 
@@ -60,10 +59,28 @@ export class Database {
     }
 
     async getMyReviews(email) {
-        const myReviews = sql `select reviews.*, users.name, users.photo
+        const myReviews = await sql `select reviews.*, users.name, users.photo
         from reviews inner join users using(id_user) 
         where users.email = ${email}`;
 
         return myReviews; 
+    }
+
+    async getUserOwnerInfo() {
+        const ownerBook = await sql `select interests.*, users.email, users.name, books.title
+        from interests 
+        inner join books on interests.id_book_interest = books.id_book
+        inner join users on interests.id_user_owner = users.id_user`
+
+        return ownerBook;
+    }
+
+    async getReceiverBookInfo() {
+        const receiverBook = await sql `select interests.*, users.email, users.name, books.title
+        from interests
+        inner join books on interests.id_mybook = books.id_book
+        inner join users on interests.id_user_receiver = users.id_user`;
+
+        return receiverBook;
     }
 }

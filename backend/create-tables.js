@@ -253,6 +253,7 @@ create table reviews (
 		id_myBook integer not null,
 		id_user_owner integer not null,
 		id_user_receiver integer not null,
+		status varchar(20) not null,
 
 		primary key(id_interest),
 		foreign key(id_book_interest) references books(id_book),
@@ -265,8 +266,8 @@ create table reviews (
 })*/
 
 sql `
-	insert into interests (id_book_interest, id_myBook, id_user_owner, id_user_receiver) 
-	values (2, 1, 63, 60);
+	insert into interests (id_book_interest, id_myBook, id_user_owner, id_user_receiver, status) 
+	values (1, 2, 60, 63, 'pendente');
 `.then(() => {
 	console.log('livro inserido')
 })
@@ -278,4 +279,8 @@ sql `
 	console.log('livro inserido')
 })*/
 
+/*sql `
+	drop table interests;`.then(() => {
+		console.log('tabela apagada')
+	})*/
 

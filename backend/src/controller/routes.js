@@ -287,4 +287,22 @@ routes.post('/my-publications', async (req, res) => {
     }
 });
 
+routes.get('/notifications', async (req, res) => {
+    const notifications = [];
+
+    try {
+        const ownerBook = await database.getUserOwnerInfo();
+        const receiverBook = await database.getReceiverBookInfo();
+
+        notifications.push(ownerBook, receiverBook);
+
+        console.log(notifications);
+
+        return res.status(200).send(notifications);
+
+    } catch (error) {
+        return res.status(404).send('Nenhuma notificação encontrada');
+    }
+})
+
 export default routes;
