@@ -1,36 +1,49 @@
-import {View, Image, Text} from 'react-native'
+import {View, Image, Text, ScrollView} from 'react-native'
 import { useState } from 'react';
+import { useNavigation } from "@react-navigation/native"
 
 import { useUserStore } from "../../store/badgeStore";
 
 import { Input } from '../../components/Input';
+import CreatePassword from '../../components/Forms/CreatePassword';
+
 import { THEME } from '../../styles/Theme';
+import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function EditProfile () {
     const user = useUserStore(state => state.data) 
+    const navigation = useNavigation()
+
     const [securePassword, setSecurePassword] = useState(true)
 
     return (
-        <View>
-            <Image
-                style={{width: 141, height:141}}
-                source={{ uri: user.photo }}
+        <ScrollView contentContainerStyle={styles.container}>
+            <Ionicons 
+                name="arrow-back"
+                size={24}
+                color={THEME.colors.brownDark}
+                onPress={() => navigation.navigate('Profile', {user: user})}
             />
 
-            <Text>Nome</Text>
+            <View style={{alignItems: "center"}}>
+                <Image
+                    style={{width: 141, height:141}}
+                    source={{ uri: user.photo }}
+                />
+            </View>
+
+            <Text style={[styles.label, THEME.fonts.text]}>Nome</Text>
             <Input>
                 <Input.Field 
-                    placeholder={user.name}
-                    //onChangeText={setEmail}
-                    
+                    placeholder={user.name}                    
                 />
             </Input>
 
+            <Text style={[styles.label, THEME.fonts.text]}>Senha (atual)</Text>
             <Input /*error={errorPassword}*/>
                 <Input.Field 
-                    placeholder={"Insira sua senha"}
-                    //onChangeText={setPassword}
+                    placeholder={"Insira sua senha atual"}
                     secureTextEntry={securePassword}
                 />
 
@@ -51,6 +64,10 @@ export default function EditProfile () {
                         />
                 }
             </Input>
-        </View>
+            
+            <CreatePassword
+                titleButton="ATUALIZAR"
+            />
+        </ScrollView>
     )
 }
