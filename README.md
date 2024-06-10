@@ -15,5 +15,5 @@ O aplicativo está sendo desenvolvido com **React Native**, no front-end, e **No
 ## Desenvolvedores
 O grupo é composto por Maria, Lucas, Stephanie e Túlio, sendo que cada um participa da área de desenvolvimento que tem mais afinidade.
 
-- Back-end e Banco de Dados: <a href="https://github.com/Maria-Faria">Maria Eduarda</a> e Túlio Koogi.
-- Front-end e Protótipo: <a href="https://github.com/stephanievic">Stephanie Victoria</a> e <a href="https://github.com/lucasBatistaa">Lucas Batista</a>
+- Back-end e Banco de Dados: <a href="https://github.com/Maria-Faria">Maria Eduarda</a> e <a href="https://github.com/TulioKoogi">Túlio Koogi</a>.
+- Front-end e Protótipo: <a href="https://github.com/stephanievic">Stephanie Victoria</a> e <a href="https://github.com/lucasBatistaa">Lucas Batista</a>.
