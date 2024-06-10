@@ -48,7 +48,7 @@ export default function Book() {
         
 
         // TROCAS DISPONÍVEIS
-        
+        //getExchanges()
     }, [])
 
     const getPublications = async() => {
@@ -65,7 +65,22 @@ export default function Book() {
             setLoading(false)
         }
     }
+    
+    const getExchanges = async () => {
+        try {
+            const response = await axios.get()
+            const exchanges = response.data
 
+            setBookExchanges(exchanges)
+
+        } catch (error) {
+            console.error(error)
+
+        } finally {
+            setLoading(false)
+        }
+
+    }
     const renderTabView = () => {
         switch (tabView) {
             case 'review':

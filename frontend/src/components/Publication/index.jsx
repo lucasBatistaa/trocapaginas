@@ -94,7 +94,7 @@ export default function Publication({ publication }) {
                 
                 <Image 
                     source={{uri: publication.image_post}} 
-                    style={{width: 80, height: 80}}
+                    style={styles.imagePost}
                 />
             </View>
 
