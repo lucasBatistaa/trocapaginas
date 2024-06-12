@@ -10,31 +10,47 @@ import { THEME } from '../../styles/Theme'
 import axios from 'axios'
 
 export default function Bookshelf() {
+    const [ search, setSearch ] = useState('best sellers')
     const [ books, setBooks ] = useState([])
 
     useEffect(() => {
-        setBooks([{
-            id: '34534',
-            image: require('../../assets/book.png'),
-            titleBook: 'Orgulho e Preconceito',
-            authorBook: 'Jane Austen',
-        }])
-
-
-        // googleBooks()
-
+        googleBooks()
 
     }, [])
 
     const googleBooks = async () => {
-        const response = await axios.get(`https://www.googleapis.com/books/v1/volumes/zyTCAlFPjgYC?key=AIzaSyCdXretFQnJh86xMg1HvIlEVDloTNHo3BE`)
+        const response = await axios.get('https://www.googleapis.com/books/v1/volumes?', {
+            params: {
+                q: search,
+                subject: search,
+                fields: 'items(id,volumeInfo(title,authors,description,imageLinks))',
+                maxResults: 40,
+                langRestrict: 'pt',
+                printType: 'books',
+                lang: 'pt-BR',
+                // 'key': 'AIzaSyCdXretFQnJh86xMg1HvIlEVDloTNHo3BE'
+            }}
+        )
 
-        console.log(response)
+        const books = response.data.items
+
+        setBooks(
+            books.map(book => ({
+                id: book.id,
+                image: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : null,
+                title: book.volumeInfo.title ? book.volumeInfo.title : 'Título desconhecido',
+                authors: book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Autor desconhecido',
+                description: book.volumeInfo.description
+            }))
+        )
     }
 
     return (
         <View style={styles.container}>
-            <TopMenu />
+            <TopMenu 
+                search={setSearch} 
+                onPress={googleBooks} 
+            />
             
             <ScrollView 
                 contentContainerStyle={styles.bookshelf}
@@ -53,9 +69,11 @@ export default function Bookshelf() {
                     books.map((book, index) => (
                         <BookTemplate 
                             key={index}
+                            id={book.id}
                             image={book.image}
-                            titleBook={book.titleBook}
-                            authorBook={book.authorBook}
+                            title={book.title}
+                            author={book.authors}
+                            description={book.description}
                         />
                     ))
                 }

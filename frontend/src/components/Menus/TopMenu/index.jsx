@@ -6,7 +6,7 @@ import { styles } from "./styles";
 import { THEME } from "../../../styles/Theme"
 import { useUserStore } from "../../../store/badgeStore";
 
-export default function TopMenu() {
+export default function TopMenu({ search, onPress }) {
     const user = useUserStore(state => state.data) 
     const navigation = useNavigation()
 
@@ -24,15 +24,17 @@ export default function TopMenu() {
 
                 <View>
                     <TextInput
-                        placeholder='pesquisar livro/usuário'
+                        placeholder='pesquisar livro'
                         placeholderTextColor={'rgba(89, 55, 42, 0.68)'}
                         style={[styles.textInput, THEME.fonts.text]}
+                        onChangeText={search}
                     />
 
                     <Ionicons  name="search-outline"
                         size={18}
                         style={styles.icon}
                         color={THEME.colors.brownDark}
+                        onPress={onPress}
                     />
                 </View>
             </View>

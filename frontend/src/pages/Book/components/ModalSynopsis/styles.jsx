@@ -9,13 +9,18 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 32,
     },
 
-    content: {
+    innerContainer: {
+        maxHeight: '60%',
         backgroundColor: THEME.colors.white,
-        paddingVertical: 20,
-        paddingHorizontal: 28,
         borderRadius: 20,
+        paddingVertical: 28,
+    },  
+    
+    content: {
+        paddingHorizontal: 28,
+        // paddingBottom: '-28',
         gap: 12,
-
+        
         alignItems: 'center'
     },
 

@@ -24,6 +24,20 @@ export default function InitialPage(props) {
     const saveUser = useUserStore(state => state.save);
 
     const navigation = useNavigation();
+
+    useEffect(()=> {
+        // user.logout()
+
+        if(props.route.params?.page) {
+            getUser();
+        }
+
+        getPublications();
+        getNotificationPermission();
+        getNotifications();
+
+    }, []);
+    
     const getUser = async() => {
         try {
             const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
@@ -95,18 +109,6 @@ export default function InitialPage(props) {
   
       };
     
-    useEffect(()=> {
-        // user.logout()
-
-        if(props.route.params?.page) {
-            getUser();
-        }
-
-        getPublications();
-        getNotificationPermission();
-        getNotifications();
-
-    }, []);
 
     //impedir o usuário de voltar à tela de login 
     useFocusEffect(

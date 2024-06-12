@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
 
     requirementsContainer: {
         gap: 12,
-        marginVertical: 12,
+        marginTop: 12,
     }, 
 
     requirementAlert: {

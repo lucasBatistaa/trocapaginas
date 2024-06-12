@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
 
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import axios from "axios"
 
 import { TabReviews, TabExchanges } from './components/TabsView'
@@ -17,6 +17,9 @@ import { THEME } from "../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function Book() {
+    const route = useRoute()
+    const { bookId, bookImage, bookTitle, bookAuthor, bookDescription } = route.params
+
     const [ publications, setPublications ] = useState([])
     const [ bookExchanges, setBookExchanges ] = useState([])
     const [ book, setBook ] = useState({})
@@ -36,44 +39,48 @@ export default function Book() {
     useEffect(() => {
         setLoading(true)
         // CHAMADAS DA API
-        //BOOK
-        setBook({
-            id: '34534',
-            image: require('../../assets/book.png'),
-            name: 'Orgulho e Preconceito',
-            author: 'Jane Austen',
-            synopsys: 'Livro de romance de séculos passados.'
-        })
 
         // AVALIAÇÃO DO LIVRO
         setAvalation(4)
 
+        // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
         getPublications()
         
 
         // TROCAS DISPONÍVEIS
-        setBookExchanges([
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            },
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            }
-        ])
+        //getExchanges()
     }, [])
 
     const getPublications = async() => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
-        const posts = response.data
+        try {
+            const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+            const posts = response.data
 
-        setPublications(posts)
-        setLoading(false)
+            setPublications(posts)
+
+        } catch (error) {
+            console.error(error)
+
+        } finally {
+            setLoading(false)
+        }
     }
+    
+    const getExchanges = async () => {
+        try {
+            const response = await axios.get()
+            const exchanges = response.data
 
+            setBookExchanges(exchanges)
+
+        } catch (error) {
+            console.error(error)
+
+        } finally {
+            setLoading(false)
+        }
+
+    }
     const renderTabView = () => {
         switch (tabView) {
             case 'review':
@@ -100,20 +107,20 @@ export default function Book() {
 
             <View style={styles.bookOverview}>
                 <Image 
-                    source={book.image}
+                    source={{ uri: bookImage }}
                     style={styles.imageBook}
                 />
 
                 <View style={styles.resumeAndActions} >
                     <View>
-                        <Text style={THEME.fonts.h1.bold}>{book.name}</Text>
+                        <Text style={THEME.fonts.h1.bold}>{bookTitle}</Text>
                         <Text
                             style={[
                                 THEME.fonts.h2.normal,
                                 styles.nameAuthor
                             ]}
                         >
-                            {book.author}
+                            {bookAuthor}
                         </Text>
                     </View>
 
@@ -208,12 +215,12 @@ export default function Book() {
 
             <ModalSynopsis 
                 modalVisible={modalSynopsisVisible}
-                text={book.synopsys}
+                text={bookDescription}
                 onClose={() => setModalSynopsisVisible(false)}
             />
 
             <Comment 
-                id={book.id}
+                id={bookId}
                 modalVisible={modalCommentVisible} 
                 onClose={() => setModalCommentVisible(false)} 
             />

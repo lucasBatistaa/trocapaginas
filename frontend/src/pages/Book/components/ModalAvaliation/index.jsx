@@ -16,11 +16,10 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
         exchange: false
     })
 
-    const navigation = useNavigation()
-
     useEffect(() => {
+        // Avaliação do livro feita pelo usuário
         setChoicesUser({
-            totalAvaliation: 1,
+            totalAvaliation: 4,
             hasInterest: true,
             exchange: false
         })
@@ -46,12 +45,7 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                     <TouchableWithoutFeedback>
                         <View style={styles.content}>
                             <View style={styles.header}>
-                                <Text
-                                    style={[
-                                        THEME.fonts.h1.bold,
-                                        styles.brownDarkColor
-                                    ]}
-                                >
+                                <Text style={[ THEME.fonts.h1.bold, styles.brownDarkColor ]}>
                                     Avaliar livro
                                 </Text>
 
@@ -69,22 +63,14 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                                 totalAvaliation={(avaliation) => setChoicesUser({...choicesUser, totalAvaliation: avaliation})}
                             />
                             
-                            <Text
-                                style={[
-                                    THEME.fonts.h1.bold,
-                                    styles.brownDarkColor
-                                ]}
-                            >
+                            <Text style={[ THEME.fonts.h1.bold, styles.brownDarkColor ]}>
                                 Adicionar ao perfil
                             </Text>
 
                             <View style={styles.viewButtonsActions}>
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    style={[
-                                        styles.buttonsActions,
-                                        styles.isActive(choicesUser.hasInterest)
-                                    ]}
+                                    style={[ styles.buttonsActions, styles.isActive(choicesUser.hasInterest) ]}
                                     onPress={() => {
                                         setChoicesUser({
                                             ...choicesUser,
@@ -98,10 +84,7 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
 
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    style={[
-                                        styles.buttonsActions,
-                                        styles.isActive(choicesUser.exchange)
-                                    ]}
+                                    style={[ styles.buttonsActions, styles.isActive(choicesUser.exchange) ]}
                                     onPress={() => {
                                         setChoicesUser({
                                             ...choicesUser,
