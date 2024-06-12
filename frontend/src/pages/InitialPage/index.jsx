@@ -43,7 +43,7 @@ export default function InitialPage(props) {
 
     const getNotifications = async () => {
         try {
-            const response = await axios.get('http://192.168.1.64:6005/notifications');
+            const response = await axios.get('http://192.168.1.66:6005/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]

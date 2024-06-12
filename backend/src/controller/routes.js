@@ -303,6 +303,10 @@ routes.get('/notifications', async (req, res) => {
     } catch (error) {
         return res.status(404).send('Nenhuma notificação encontrada');
     }
-})
+});
+
+routes.post('/save-book', async (req, res) => {
+    const {userEmail, title, writer, year_edition, review}= req.body;
+});
 
 export default routes;
