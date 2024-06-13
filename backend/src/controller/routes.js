@@ -378,10 +378,29 @@ routes.post('/get-book', async (req, res) => {
 
     try {
         const book = await database.getBookByImage(imageBook);
+
         return res.status(200).send(book);
 
     }catch(error) {
         return res.status(400).send('Livro não encontrado');
+    }
+});
+
+routes.get('/book-reviews', async(req, res) => {
+    const {title} = req.query;
+
+    try {
+        const reviewsBook = await database.getBookReviews(title);
+
+        reviewsBook.map((review) => {
+            review.photo = review.photo.toString('utf8');
+        })
+        
+        console.log(reviewsBook);
+        return res.status(200).send(reviewsBook);
+
+    } catch (error) {
+        return res.status(500).send('Erro ao carregar as resenhas');
     }
 });
 

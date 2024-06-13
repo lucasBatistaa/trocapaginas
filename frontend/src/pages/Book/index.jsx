@@ -20,7 +20,8 @@ export default function Book() {
     const route = useRoute()
     const { bookId, bookImage, bookTitle, bookAuthor, bookDescription } = route.params
 
-    const [ publications, setPublications ] = useState([])
+    const [ reviews, setReviews ] = useState([])
+    const [ messageError, setMessageError ] = useState('')
     const [ bookExchanges, setBookExchanges ] = useState([])
     const [ book, setBook ] = useState({})
 
@@ -44,22 +45,27 @@ export default function Book() {
         getRatingBook()
 
         // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
-        getPublications()
+        getBookReviews()
         
 
         // TROCAS DISPONÍVEIS
         //getExchanges()
     }, [])
 
-    const getPublications = async() => {
+    const getBookReviews = async() => {
         try {
-            const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
-            const posts = response.data
+            const response = await axios.get('http://192.168.1.64:6005/book-reviews', {
+                params: {
+                    title: bookTitle
+                }
+            })
 
-            setPublications(posts)
+            const reviews = response.data
+
+            reviews.length > 0 ? setReviews(reviews) : setMessageError('Nenhuma resenha disponível para esse livro')
 
         } catch (error) {
-            console.error(error)
+            setMessageError(error)
 
         } finally {
             setLoading(false)
@@ -98,7 +104,7 @@ export default function Book() {
     const renderTabView = () => {
         switch (tabView) {
             case 'review':
-                return <TabReviews publications={publications} />
+                return <TabReviews publications={reviews} />
         
             case 'exchange': 
                 return <TabExchanges bookExchanges={bookExchanges} />
@@ -210,6 +216,11 @@ export default function Book() {
             </View>
 
             {/* Conteúdo das Abas */}
+
+            {
+                messageError && <Text style={[THEME.fonts.h2.bold, {marginTop: 20, marginLeft: 20}]}>{messageError}</Text>
+            }
+
             <ScrollView
                 contentContainerStyle={styles.viewContentOfTab}
                 showsVerticalScrollIndicator={false}
@@ -239,6 +250,7 @@ export default function Book() {
                 modalVisible={modalCommentVisible} 
                 onClose={() => setModalCommentVisible(false)} 
             />
+
         </View>
     )   
 }
