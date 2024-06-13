@@ -330,19 +330,19 @@ create table reviews (
 	cons*/
 
 
-sql `
+/*sql `
 	delete from interests
 	where titlebook = 'Diário de uma garota nada popular - vol. 2';
 `.then(() => {
 	console.log('tabela books excluída')
-})
+})*/
 
 
-/*sql `
-	alter table interests
-	add column writerbook varchar(55);
+sql `
+	alter table books
+	add column sumRatings integer;
 `.then(() => {
 	console.log('tabela books alterada')
-})*/
+})
 
 

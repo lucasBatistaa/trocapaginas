@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 export default function BookTemplate({ id, image, title, author, description }) {
     const navigation = useNavigation()
 
-    console.log(id)
     return (
         <TouchableOpacity
             style={styles.container}

@@ -334,6 +334,15 @@ routes.post('/save-book', async (req, res) => {
     try {
         if(! await bookExists(imageBook)) {
             await database.createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview);
+        
+        }else {
+            const books = await database.getBookByImage(imageBook);
+            const totalRatings = books[0].totalratings + 1;
+            const sumRatings = books[0].sumratings + ratingBook;
+            const rating = Math.round(sumRatings / totalRatings)
+
+            await database.updateBook(imageBook, totalRatings, sumRatings, rating);
+
         }
 
         if(choiceUser === 'hasInterest') {
@@ -361,6 +370,18 @@ routes.post('/my-interests', async (req, res) => {
 
     }catch(error) {
         return res.status(400).send('Interesses não encontrados');
+    }
+});
+
+routes.post('/get-book', async (req, res) => {
+    const {imageBook} = req.body;
+
+    try {
+        const book = await database.getBookByImage(imageBook);
+        return res.status(200).send(book);
+
+    }catch(error) {
+        return res.status(400).send('Livro não encontrado');
     }
 });
 

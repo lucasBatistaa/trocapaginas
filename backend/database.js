@@ -85,13 +85,23 @@ export class Database {
     }
 
     async createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview) {
-        await sql `insert into books (id_user, title, writer, review, rating, cover) values (
-        ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook})`;
+        console.log('aaaa')
+        await sql `insert into books (id_user, title, writer, review, rating, cover, totalRatings, sumRatings) values (
+        ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook}, 1, ${ratingBook})`;
     }
 
     async getBooks() {
         const books = await sql `select * from books`;
         return books;
+    }
+
+    async getBookByImage(imageBook) {
+        const book = await sql `select * from books where cover = ${imageBook}`;
+        return book;
+    }
+
+    async updateBook(imageBook, totalRatings, sumRatings, rating) {
+        await sql `update books set totalRatings = ${totalRatings}, sumRatings = ${sumRatings}, rating = ${rating} where cover = ${imageBook}`;
     }
 
     async setInterest(id_user, titleBook, imageBook, writerBook) {

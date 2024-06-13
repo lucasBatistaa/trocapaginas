@@ -41,7 +41,7 @@ export default function Book() {
         // CHAMADAS DA API
 
         // AVALIAÇÃO DO LIVRO
-        setAvalation(4)
+        getRatingBook()
 
         // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
         getPublications()
@@ -80,6 +80,20 @@ export default function Book() {
             setLoading(false)
         }
 
+    }
+
+    const getRatingBook = async () => {
+        try {
+            const response = await axios.post('http://192.168.1.64:6005/get-book', {
+                imageBook: bookImage
+            });
+
+
+            setAvalation(response.data[0].rating)
+
+        }catch (error) {
+            setAvalation(0)
+        }
     }
     const renderTabView = () => {
         switch (tabView) {

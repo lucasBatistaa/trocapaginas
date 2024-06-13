@@ -23,7 +23,7 @@ export default function ModalAvaliation({ modalVisible, onClose, book }) {
     useEffect(() => {
         // Avaliação do livro feita pelo usuário
         setChoicesUser({
-            totalAvaliation: 4,
+            totalAvaliation: book[3],
             hasInterest: true,
             exchange: false
         })
@@ -41,7 +41,7 @@ export default function ModalAvaliation({ modalVisible, onClose, book }) {
                         imageBook: book[0],
                         titleBook: book[1],
                         writerBook: book[2],
-                        ratingBook: book[3],
+                        ratingBook: choicesUser.totalAvaliation,
                         bookReview: book[4],
                         choiceUser: 'hasInterest'
                     })
