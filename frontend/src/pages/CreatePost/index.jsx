@@ -48,7 +48,7 @@ export default function CreatePost() {
                 setIsLoading(false)
 
                 Alert.alert('Publicação', 'Publicação realizada com sucesso!', [
-                    {text: 'OK', onPress: () => navigation.navigate('Slogan')}
+                    {text: 'OK', onPress: () => navigation.navigate('InitialPage')}
                 ])
 
             } catch(error) {

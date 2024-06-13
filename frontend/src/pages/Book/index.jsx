@@ -211,6 +211,7 @@ export default function Book() {
             <ModalAvaliation    
                 modalVisible={modalAvaliationVisible}
                 onClose={() => setModalAvaliationVisible(false)}
+                book = {[bookImage, bookTitle, bookAuthor, avaliation, bookDescription]}
             />
 
             <ModalSynopsis 

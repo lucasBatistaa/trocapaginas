@@ -8,8 +8,12 @@ import { styles } from "./styles"
 import { THEME } from "../../../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
+import { useUserStore } from "../../../../store/badgeStore"
 
-export default function ModalAvaliation({ modalVisible, onClose }) {
+export default function ModalAvaliation({ modalVisible, onClose, book }) {
+    const user = useUserStore(state => state.data)
+    const [ messageError, setMessageError ] = useState('')
     const [ choicesUser, setChoicesUser ] = useState({
         totalAvaliation: 0,
         hasInterest: false,
@@ -25,12 +29,30 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
         })
     }, [])
 
-    const handleChoiceAvaliation = () => { 
-        if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
+    const handleChoiceAvaliation = async() => { 
+        /*if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
             // Update na API
-        }
+        }*/
+
+            if(choicesUser.hasInterest) {
+                try {
+                    const response = await axios.post('http://192.168.1.64:6005/save-book', {
+                        userEmail: user.email,
+                        imageBook: book[0],
+                        titleBook: book[1],
+                        writerBook: book[2],
+                        ratingBook: book[3],
+                        bookReview: book[4],
+                        choiceUser: 'hasInterest'
+                    })
+
+                    onClose()
+                    
+                } catch (error) {
+                    setMessageError(error)
+                }
+            }
         
-        onClose()
     }
 
     return (
