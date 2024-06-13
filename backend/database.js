@@ -83,4 +83,32 @@ export class Database {
 
         return receiverBook;
     }
+
+    async createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview) {
+        await sql `insert into books (id_user, title, writer, review, rating, cover) values (
+        ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook})`;
+    }
+
+    async getBooks() {
+        const books = await sql `select * from books`;
+        return books;
+    }
+
+    async setInterest(id_user, titleBook, imageBook, writerBook) {
+        await sql `insert into interests (id_user, titlebook, imagebook, writerbook) values (${id_user}, ${titleBook}, ${imageBook}, ${writerBook})`;
+    }
+
+    async getInterests() {
+        const interests = await sql `select * from interests`;
+        return interests;
+    }
+
+    async getMyInterests(email) {
+        const myInterests = await sql `select interests.titlebook, interests.imagebook, interests.writerbook, books.review 
+        from interests inner join users using(id_user)
+        inner join books on books.cover = interests.imagebook
+        where users.email = ${email}`;
+
+        return myInterests;
+    }
 }

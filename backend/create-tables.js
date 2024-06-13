@@ -265,12 +265,12 @@ create table reviews (
 	console.log('tabela interests criada')
 })*/
 
-sql `
+/*sql `
 	insert into interests (id_book_interest, id_myBook, id_user_owner, id_user_receiver, status) 
 	values (1, 2, 60, 63, 'pendente');
 `.then(() => {
 	console.log('livro inserido')
-})
+})*/
 
 /*sql `
 	insert into books (id_user, title, writer, year_edition, cover, review, rating)
@@ -280,7 +280,69 @@ sql `
 })*/
 
 /*sql `
-	drop table interests;`.then(() => {
+	drop table exchange;`.then(() => {
 		console.log('tabela apagada')
 	})*/
+
+/*sql `
+	alter table interests rename to exchange;
+`.then(() => {
+	console.log('tabela alterada')
+})*/
+
+/*sql `
+	create table interests (
+		id_interest serial not null,
+		id_book_interest integer not null,
+		id_user integer not null,
+
+		primary key(id_interest),
+		foreign key(id_book_interest) references books(id_book),
+		foreign key(id_user) references users(id_user)
+	);
+`.then(() => {
+	console.log('tabela interests criada')
+})*/
+
+/*sql `
+	alter table interests 
+	add column imageBook varchar(55);
+`.then(() => {
+	console.log('tabela books alterada')
+})*/
+
+/*sql `
+	drop table interests
+`.then(() => {
+	console.log('excluído')
+})*/
+/*sql `
+	create table interests (
+		id_interest serial not null,
+		id_user integer not null,
+		titlebook text not null,
+		imagebook text not null,
+
+		primary key(id_interest),
+		foreign key(id_user) references users(id_user)
+	)
+`.then(() => {
+	cons*/
+
+
+sql `
+	delete from interests
+	where titlebook = 'Diário de uma garota nada popular - vol. 2';
+`.then(() => {
+	console.log('tabela books excluída')
+})
+
+
+/*sql `
+	alter table interests
+	add column writerbook varchar(55);
+`.then(() => {
+	console.log('tabela books alterada')
+})*/
+
 

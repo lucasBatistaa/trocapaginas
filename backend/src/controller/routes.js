@@ -69,6 +69,24 @@ function sortPublications(publications) {
     })
 }
 
+async function getUserByEmail(email) {
+    if(email !== null) {
+        const user = await userExists(email);
+
+        return user.id_user;
+    }
+}
+
+async function bookExists(imageBook) {
+    const books = await database.getBooks();
+
+    if(books.find((book) => book.cover === imageBook)) {
+        return true;
+    }
+
+    return false;
+}
+
 //login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -306,7 +324,44 @@ routes.get('/notifications', async (req, res) => {
 });
 
 routes.post('/save-book', async (req, res) => {
-    const {userEmail, title, writer, year_edition, review}= req.body;
+    const {userEmail, imageBook, titleBook, writerBook, ratingBook, bookReview, choiceUser} = req.body;
+    let id_user = null
+
+    if(userEmail !== null) {
+        id_user = await getUserByEmail(userEmail);
+    }
+
+    try {
+        if(! await bookExists(imageBook)) {
+            await database.createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview);
+        }
+
+        if(choiceUser === 'hasInterest') {
+            const interests = await database.getInterests();
+
+            if(!interests.find((interest) => interest.imagebook === imageBook)) {
+                await database.setInterest(id_user, titleBook, imageBook, writerBook);
+            }
+        }
+
+        return res.status(200).send('Livro salvo com sucesso!');
+
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+});
+
+routes.post('/my-interests', async (req, res) => {
+    const {email} = req.body;
+
+    try {
+        const myInterests = await database.getMyInterests(email);
+
+        return res.status(200).send(myInterests);
+
+    }catch(error) {
+        return res.status(400).send('Interesses não encontrados');
+    }
 });
 
 export default routes;
