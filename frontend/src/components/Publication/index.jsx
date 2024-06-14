@@ -98,8 +98,7 @@ export default function Publication({ publication }) {
                 />
             </View>
 
-            <Comment idPublication={0} modalVisible={modalCommentVisible} onClose={() => setModalCommentVisible(false)} />
-        </View>
-
+            <Comment idPublication={publication.id_post} modalVisible={modalCommentVisible} onClose={() => setModalCommentVisible(false)} /> 
+        </View>   
     )
 }

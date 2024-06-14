@@ -19,12 +19,12 @@ import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useUserStore } from "../../store/badgeStore";
 
-export default function Comment({ id, modalVisible, onClose }) {
+export default function Comment({ idPublication, modalVisible, onClose }) {
     const [ textComment, setTextComment ] = useState('')
     const [ allComments, setAllComments] = useState([])
 
     const user = useUserStore(state => state.data);
-    
+    console.log(`isso é o id da publicação: ${idPublication}`);
 
     useEffect(() => {
 
@@ -41,6 +41,7 @@ export default function Comment({ id, modalVisible, onClose }) {
         // loadComments();
     }, [])
 
+    /*
     const loadComments = async () => {
         try {
             const response = await axios.get('http://localhost:6005/loadComments/' + id); //ainda falta terminar verificar tudo antes
@@ -48,7 +49,7 @@ export default function Comment({ id, modalVisible, onClose }) {
         } catch (error) {
             console.error('Erro ao carregar comentários:', error);
         }
-    };
+    };*/
 
     const handleSendComment = async () => {
 
@@ -61,19 +62,36 @@ export default function Comment({ id, modalVisible, onClose }) {
                 idUser: user.id_user,
                 image: user.photo,
                 username: user.name,
-                comment:`${textComment.trim()}`
+                comment:`${textComment.trim()}`,
+                id: idPublication
             }
 
-            console.log(newComment);
+            const  {idUser, id, comment} = newComment;
+            
+            const sendCommentDatabase = {idUser, id, comment};
+
+            console.log(sendCommentDatabase);
 
             setAllComments([ ...allComments, newComment ])
 
                 //envia os dados para o servidor
             try{ 
-              await  axios.post('http://localhost:6005/comment', newComment)
-            } catch(error) {
-                console.log(error)
-                console.error('Erro inesperado', error)
+              await axios.post('http://localhost:6005/comment', sendCommentDatabase).then(response => {
+                console.log('Dados enviados com sucesso!', response.data);
+              });
+
+            } catch(error) {if (error.response) {
+                // O servidor respondeu com um status diferente de 2xx
+                console.error('Erro de resposta do servidor:', error.response.data);
+                console.error('Status do erro:', error.response.status);
+            } else if (error.request) {
+                // A requisição foi feita, mas não houve resposta do servidor
+                console.error('Erro durante a requisição:', error.request);
+            } else {
+                // Ocorreu um erro ao configurar a requisição
+                console.error('Erro ao configurar a requisição:', error.message);
+            }
+            console.error('Configuração do erro:', error.config);
             }
             
             inputRef.current.blur() 
@@ -82,7 +100,6 @@ export default function Comment({ id, modalVisible, onClose }) {
             console.log('Enviado!')
         }
         
-           
     }
        
     // Fechar comentário com deslize para baixo

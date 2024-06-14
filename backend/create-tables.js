@@ -264,12 +264,7 @@ create table reviews (
 	console.log('tabela interests criada')
 })*/
 
-sql `
-	insert into interests (id_book_interest, id_myBook, id_user_owner, id_user_receiver) 
-	values (2, 1, 63, 60);
-`.then(() => {
-	console.log('livro inserido')
-})
+
 
 /*sql `
 	insert into books (id_user, title, writer, year_edition, cover, review, rating)
@@ -278,4 +273,24 @@ sql `
 	console.log('livro inserido')
 })*/
 
+/*
+sql `
+DROP TABLE comment`.then(() => {console.log('tabela comments excluída')});
+*/
+
+/*
+sql `
+CREATE TABLE comment (
+    id_comment serial NOT NULL,
+    id_user integer NOT NULL,
+    id_publication integer NOT NULL,
+    content_comment text NOT NULL,
+    time_comment timestamp NOT NULL DEFAULT current_timestamp,
+    PRIMARY KEY (id_comment),
+    FOREIGN KEY (id_user) REFERENCES users (id_user)
+);
+`.then(() => {
+    console.log('tabela de comentários criada')
+});
+*/
 

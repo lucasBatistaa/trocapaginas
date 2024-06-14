@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
 import {Post} from '../models/post.js';
 import {Review} from '../models/review.js';
+import {Comment} from '../models/comment.js';
 
 const routes = express.Router();
 const database = new Database();
@@ -14,6 +15,7 @@ const post = new Post();
 const review = new Review();
 const validationCode = [];
 const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
+const comments = new Comment();
 
 let contPost = 0;
 let contReview = 0; 
@@ -287,4 +289,24 @@ routes.post('/my-publications', async (req, res) => {
     }
 });
 
+routes.post('/comment', async (req, res) => {
+    const {idUser, id, comment} = req.body;
+    comments.idUser = idUser;
+    comments.idPublication = id;
+    comments.comment = comment;
+
+    console.log(comments);
+
+    try{
+        console.log('entrou no try')
+        await database.createComment(comments).then(() => {
+            return res.status(201).send('Comentario criado com sucesso!');
+        })
+        
+        
+    }catch(error) {
+        return res.status(500).send('Erro ao criar o comentario');
+    }
+});
+       
 export default routes;
