@@ -71,6 +71,24 @@ function sortPublications(publications) {
     })
 }
 
+async function getUserByEmail(email) {
+    if(email !== null) {
+        const user = await userExists(email);
+
+        return user.id_user;
+    }
+}
+
+async function bookExists(imageBook) {
+    const books = await database.getBooks();
+
+    if(books.find((book) => book.cover === imageBook)) {
+        return true;
+    }
+
+    return false;
+}
+
 //login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -289,24 +307,103 @@ routes.post('/my-publications', async (req, res) => {
     }
 });
 
-routes.post('/comment', async (req, res) => {
-    const {idUser, id, comment} = req.body;
-    comments.idUser = idUser;
-    comments.idPublication = id;
-    comments.comment = comment;
+routes.get('/notifications', async (req, res) => {
+    const notifications = [];
 
-    console.log(comments);
+    try {
+        const ownerBook = await database.getUserOwnerInfo();
+        const receiverBook = await database.getReceiverBookInfo();
 
-    try{
-        console.log('entrou no try')
-        await database.createComment(comments).then(() => {
-            return res.status(201).send('Comentario criado com sucesso!');
-        })
-        
-        
-    }catch(error) {
-        return res.status(500).send('Erro ao criar o comentario');
+        notifications.push(ownerBook, receiverBook);
+
+        console.log(notifications);
+
+        return res.status(200).send(notifications);
+
+    } catch (error) {
+        return res.status(404).send('Nenhuma notificação encontrada');
     }
 });
-       
+
+routes.post('/save-book', async (req, res) => {
+    const {userEmail, imageBook, titleBook, writerBook, ratingBook, bookReview, choiceUser} = req.body;
+    let id_user = null
+
+    if(userEmail !== null) {
+        id_user = await getUserByEmail(userEmail);
+    }
+
+    try {
+        if(! await bookExists(imageBook)) {
+            await database.createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview);
+        
+        }else {
+            const books = await database.getBookByImage(imageBook);
+            const totalRatings = books[0].totalratings + 1;
+            const sumRatings = books[0].sumratings + ratingBook;
+            const rating = Math.round(sumRatings / totalRatings)
+
+            await database.updateBook(imageBook, totalRatings, sumRatings, rating);
+
+        }
+
+        if(choiceUser === 'hasInterest') {
+            const interests = await database.getInterests();
+
+            if(!interests.find((interest) => interest.imagebook === imageBook)) {
+                await database.setInterest(id_user, titleBook, imageBook, writerBook);
+            }
+        }
+
+        return res.status(200).send('Livro salvo com sucesso!');
+
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+});
+
+routes.post('/my-interests', async (req, res) => {
+    const {email} = req.body;
+
+    try {
+        const myInterests = await database.getMyInterests(email);
+
+        return res.status(200).send(myInterests);
+
+    }catch(error) {
+        return res.status(400).send('Interesses não encontrados');
+    }
+});
+
+routes.post('/get-book', async (req, res) => {
+    const {imageBook} = req.body;
+
+    try {
+        const book = await database.getBookByImage(imageBook);
+
+        return res.status(200).send(book);
+
+    }catch(error) {
+        return res.status(400).send('Livro não encontrado');
+    }
+});
+
+routes.get('/book-reviews', async(req, res) => {
+    const {title} = req.query;
+
+    try {
+        const reviewsBook = await database.getBookReviews(title);
+
+        reviewsBook.map((review) => {
+            review.photo = review.photo.toString('utf8');
+        })
+        
+        console.log(reviewsBook);
+        return res.status(200).send(reviewsBook);
+
+    } catch (error) {
+        return res.status(500).send('Erro ao carregar as resenhas');
+    }
+});
+
 export default routes;

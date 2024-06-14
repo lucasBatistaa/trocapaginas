@@ -29,7 +29,7 @@ export default function Profile (props) {
     useEffect(() => {
         renderTabView()
         //interesses
-        setInterests([
+        /*setInterests([
             {
                 id: '34534',
                 image: require('../../assets/book.png'),
@@ -37,7 +37,7 @@ export default function Profile (props) {
                 authorBook: 'Jane Austen',
             }
             
-        ])
+        ])*/
 
     }, [selectedOption])
 
@@ -67,14 +67,38 @@ export default function Profile (props) {
         setPageIsLoading(false)
     }
 
+    const getInterests = async() => {
+        const response = await axios.post('http://192.168.1.64:6005/my-interests', {
+            email: user.email
+        })
+
+        const interests = response.data
+
+        if(interests.length === 0) {
+            setTabContent(
+                <Text style={THEME.fonts.h2.bold}> Sem interesse registrado </Text>
+            )
+
+        } else {
+            setTabContent(<TabInterests interests={interests} />)
+        }
+
+        setPageIsLoading(false)
+
+    }
+
     const renderTabView = async () => {
+        setPageIsLoading(true)
+        setTabContent(null)
+
         switch (selectedOption) {
             case 'showPublications':
                 await getPublications()
                 break
 
             case 'showInterests':
-                return <TabInterests interests={interests} />
+                await getInterests()
+                break
         }
     }
     

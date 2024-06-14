@@ -1,6 +1,7 @@
 import { StatusBar, View, FlatList, BackHandler} from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import * as Notifications from 'expo-notifications'
 
 import axios from 'axios'
 import { useUserStore } from '../../store/badgeStore'
@@ -17,11 +18,26 @@ export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
     const [pageIsLoading, setPageIsLoading] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [notification, setNotification] = useState(false)
 
-    //const user = useUserStore(state => state.data);
+    const user = useUserStore(state => state.data);
     const saveUser = useUserStore(state => state.save);
 
     const navigation = useNavigation();
+
+    useEffect(()=> {
+        // user.logout()
+
+        if(props.route.params?.page) {
+            getUser();
+        }
+
+        getPublications();
+        getNotificationPermission();
+        getNotifications();
+
+    }, []);
+    
     const getUser = async() => {
         try {
             const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
@@ -39,18 +55,62 @@ export default function InitialPage(props) {
         }
     }
 
-    
-    useEffect(()=> {
-        // user.logout()
+    const getNotifications = async () => {
+        try {
+            const response = await axios.get('http://192.168.43.70:6005/notifications');
+            const notifications = response.data;
 
-        if(props.route.params?.page) {
-            getUser();
+            const ownerBook = notifications[0]
+            const receiverBook = notifications[1]
+
+            ownerBook.forEach(async (userOwner) => {
+                if((userOwner.email === user.email) && userOwner.status === 'pendente') {
+                    receiverBook.forEach(async (userReceiver) => {
+                        if(userReceiver.id_interest === userOwner.id_interest) {
+                            await Notifications.scheduleNotificationAsync({
+                                content: {
+                                  title: `Interesse no livro "${userOwner.title}"`,
+                                  body: `${userReceiver.name} demonstrou interesse em trocar o livro "${userOwner.title}" por "${userReceiver.title}". Você aceita a troca?`,
+                                  data: {}
+                                  
+                                },
+                                trigger: {
+                                  seconds: 2
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+
+        } catch (error) {
+            setNotification(false);
         }
+    }
 
-        getPublications()
-    }, []);
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldPlaySound: true,
+          shouldShowAlert: true,
+          shouldSetBadge: true,
+        }),
+      })
+    
+    const getNotificationPermission = async () => {
+        const { status } = await Notifications.getPermissionsAsync();
+        
+        if (status !== 'granted') {
+          const { status: newStatus } = await Notifications.requestPermissionsAsync();
+          if (newStatus !== 'granted') {
+            alert('Permissão para notificações não concedida!');
+            return;
+          }
+        }
+  
+      };
+    
 
-     //impedir o usuário de voltar à tela de login 
+    //impedir o usuário de voltar à tela de login 
     useFocusEffect(
         useCallback(() => {
             const backAction = () => {

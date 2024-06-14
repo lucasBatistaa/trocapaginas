@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 12,
+        gap: 4,
     },
 
     publication: {
@@ -24,10 +24,18 @@ export const styles = StyleSheet.create({
     post: {
         flex: 1,
         gap: 12,
+        justifyContent: 'space-between'
     },  
 
     icons: {
         flexDirection: 'row',
         gap: 8,
+    },
+
+    imagePost: {
+        height: 80,
+        width: 80,
+        borderRadius: 8,
+        alignSelf: 'center'
     }
 })

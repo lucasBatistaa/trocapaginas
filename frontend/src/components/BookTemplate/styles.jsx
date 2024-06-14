@@ -9,15 +9,20 @@ export const styles = StyleSheet.create({
     },
 
     image: {
-        objectFit: 'contain'
+        // objectFit: 'contain'
+        height: 120,
+        width: 80
     },
 
     titleBook: {
         marginTop: 4,
-        textAlign: 'center'
+        textAlign: 'center',
+        alignSelf: 'stretch',
+        color: THEME.colors.brownDark
     },
 
-    colorBrownDark: {
+    authorBook: {
+        textAlign: 'center',
         color: THEME.colors.brownDark
     }
 })

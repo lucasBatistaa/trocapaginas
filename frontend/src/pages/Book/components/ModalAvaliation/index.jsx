@@ -8,30 +8,51 @@ import { styles } from "./styles"
 import { THEME } from "../../../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
+import { useUserStore } from "../../../../store/badgeStore"
 
-export default function ModalAvaliation({ modalVisible, onClose }) {
+export default function ModalAvaliation({ modalVisible, onClose, book }) {
+    const user = useUserStore(state => state.data)
+    const [ messageError, setMessageError ] = useState('')
     const [ choicesUser, setChoicesUser ] = useState({
         totalAvaliation: 0,
         hasInterest: false,
         exchange: false
     })
 
-    const navigation = useNavigation()
-
     useEffect(() => {
+        // Avaliação do livro feita pelo usuário
         setChoicesUser({
-            totalAvaliation: 1,
+            totalAvaliation: book[3],
             hasInterest: true,
             exchange: false
         })
     }, [])
 
-    const handleChoiceAvaliation = () => { 
-        if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
+    const handleChoiceAvaliation = async() => { 
+        /*if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
             // Update na API
-        }
+        }*/
+
+            if(choicesUser.hasInterest) {
+                try {
+                    const response = await axios.post('http://192.168.1.64:6005/save-book', {
+                        userEmail: user.email,
+                        imageBook: book[0],
+                        titleBook: book[1],
+                        writerBook: book[2],
+                        ratingBook: choicesUser.totalAvaliation,
+                        bookReview: book[4],
+                        choiceUser: 'hasInterest'
+                    })
+
+                    onClose()
+                    
+                } catch (error) {
+                    setMessageError(error)
+                }
+            }
         
-        onClose()
     }
 
     return (
@@ -46,12 +67,7 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                     <TouchableWithoutFeedback>
                         <View style={styles.content}>
                             <View style={styles.header}>
-                                <Text
-                                    style={[
-                                        THEME.fonts.h1.bold,
-                                        styles.brownDarkColor
-                                    ]}
-                                >
+                                <Text style={[ THEME.fonts.h1.bold, styles.brownDarkColor ]}>
                                     Avaliar livro
                                 </Text>
 
@@ -69,22 +85,14 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
                                 totalAvaliation={(avaliation) => setChoicesUser({...choicesUser, totalAvaliation: avaliation})}
                             />
                             
-                            <Text
-                                style={[
-                                    THEME.fonts.h1.bold,
-                                    styles.brownDarkColor
-                                ]}
-                            >
+                            <Text style={[ THEME.fonts.h1.bold, styles.brownDarkColor ]}>
                                 Adicionar ao perfil
                             </Text>
 
                             <View style={styles.viewButtonsActions}>
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    style={[
-                                        styles.buttonsActions,
-                                        styles.isActive(choicesUser.hasInterest)
-                                    ]}
+                                    style={[ styles.buttonsActions, styles.isActive(choicesUser.hasInterest) ]}
                                     onPress={() => {
                                         setChoicesUser({
                                             ...choicesUser,
@@ -98,10 +106,7 @@ export default function ModalAvaliation({ modalVisible, onClose }) {
 
                                 <TouchableOpacity
                                     activeOpacity={0.7}
-                                    style={[
-                                        styles.buttonsActions,
-                                        styles.isActive(choicesUser.exchange)
-                                    ]}
+                                    style={[ styles.buttonsActions, styles.isActive(choicesUser.exchange) ]}
                                     onPress={() => {
                                         setChoicesUser({
                                             ...choicesUser,

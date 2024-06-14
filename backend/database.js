@@ -9,7 +9,7 @@ export class Database {
 
     //retornar usuário 
     async getUsersById(id_user) {
-        const users_with_id = sql `select name, photo, email from users where id_user = ${id_user}`;
+        const users_with_id = await sql `select name, photo, email from users where id_user = ${id_user}`;
         return users_with_id;
     }
 
@@ -45,6 +45,13 @@ export class Database {
         return users_and_reviews;
     }
 
+    async getBookReviews(titleBook) {
+        const reviews = await sql `select reviews.*, users.name, users.photo 
+        from reviews inner join users using(id_user) 
+        where nameBook = ${titleBook}`;
+        return reviews;
+    }
+
     async createComment (comments) {
         console.log('entrou no comentário');
         await sql `insert into comment (id_user, id_publication, content_comment) 
@@ -53,8 +60,7 @@ export class Database {
     }
 
     async getMyPosts(email) {
-        console.log(email)
-        const myPosts = sql `select posts.*, users.name, users.photo 
+        const myPosts = await sql `select posts.*, users.name, users.photo 
         from posts inner join users using(id_user)
         where users.email = ${email}`;
 
@@ -62,10 +68,66 @@ export class Database {
     }
 
     async getMyReviews(email) {
-        const myReviews = sql `select reviews.*, users.name, users.photo
+        const myReviews = await sql `select reviews.*, users.name, users.photo
         from reviews inner join users using(id_user) 
         where users.email = ${email}`;
 
         return myReviews; 
+    }
+
+    async getUserOwnerInfo() {
+        const ownerBook = await sql `select interests.*, users.email, users.name, books.title
+        from interests 
+        inner join books on interests.id_book_interest = books.id_book
+        inner join users on interests.id_user_owner = users.id_user`
+
+        return ownerBook;
+    }
+
+    async getReceiverBookInfo() {
+        const receiverBook = await sql `select interests.*, users.email, users.name, books.title
+        from interests
+        inner join books on interests.id_mybook = books.id_book
+        inner join users on interests.id_user_receiver = users.id_user`;
+
+        return receiverBook;
+    }
+
+    async createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview) {
+        console.log('aaaa')
+        await sql `insert into books (id_user, title, writer, review, rating, cover, totalRatings, sumRatings) values (
+        ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook}, 1, ${ratingBook})`;
+    }
+
+    async getBooks() {
+        const books = await sql `select * from books`;
+        return books;
+    }
+
+    async getBookByImage(imageBook) {
+        const book = await sql `select * from books where cover = ${imageBook}`;
+        return book;
+    }
+
+    async updateBook(imageBook, totalRatings, sumRatings, rating) {
+        await sql `update books set totalRatings = ${totalRatings}, sumRatings = ${sumRatings}, rating = ${rating} where cover = ${imageBook}`;
+    }
+
+    async setInterest(id_user, titleBook, imageBook, writerBook) {
+        await sql `insert into interests (id_user, titlebook, imagebook, writerbook) values (${id_user}, ${titleBook}, ${imageBook}, ${writerBook})`;
+    }
+
+    async getInterests() {
+        const interests = await sql `select * from interests`;
+        return interests;
+    }
+
+    async getMyInterests(email) {
+        const myInterests = await sql `select interests.titlebook, interests.imagebook, interests.writerbook, books.review 
+        from interests inner join users using(id_user)
+        inner join books on books.cover = interests.imagebook
+        where users.email = ${email}`;
+
+        return myInterests;
     }
 }

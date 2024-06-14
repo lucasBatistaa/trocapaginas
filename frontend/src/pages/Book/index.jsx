@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
 
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import axios from "axios"
 
 import { TabReviews, TabExchanges } from './components/TabsView'
@@ -17,7 +17,11 @@ import { THEME } from "../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
 
 export default function Book() {
-    const [ publications, setPublications ] = useState([])
+    const route = useRoute()
+    const { bookId, bookImage, bookTitle, bookAuthor, bookDescription } = route.params
+
+    const [ reviews, setReviews ] = useState([])
+    const [ messageError, setMessageError ] = useState('')
     const [ bookExchanges, setBookExchanges ] = useState([])
     const [ book, setBook ] = useState({})
 
@@ -36,48 +40,71 @@ export default function Book() {
     useEffect(() => {
         setLoading(true)
         // CHAMADAS DA API
-        //BOOK
-        setBook({
-            id: '34534',
-            image: require('../../assets/book.png'),
-            name: 'Orgulho e Preconceito',
-            author: 'Jane Austen',
-            synopsys: 'Livro de romance de séculos passados.'
-        })
 
         // AVALIAÇÃO DO LIVRO
-        setAvalation(4)
+        getRatingBook()
 
-        getPublications()
+        // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
+        getBookReviews()
         
 
         // TROCAS DISPONÍVEIS
-        setBookExchanges([
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            },
-            {
-                idUser: 1,
-                imageUser: require('../../assets/foto-perfil.png'),
-                username: 'Lucas'
-            }
-        ])
+        //getExchanges()
     }, [])
 
-    const getPublications = async() => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
-        const posts = response.data
+    const getBookReviews = async() => {
+        try {
+            const response = await axios.get('http://192.168.1.64:6005/book-reviews', {
+                params: {
+                    title: bookTitle
+                }
+            })
 
-        setPublications(posts)
-        setLoading(false)
+            const reviews = response.data
+
+            reviews.length > 0 ? setReviews(reviews) : setMessageError('Nenhuma resenha disponível para esse livro')
+
+        } catch (error) {
+            setMessageError(error)
+
+        } finally {
+            setLoading(false)
+        }
+    }
+    
+    const getExchanges = async () => {
+        try {
+            const response = await axios.get()
+            const exchanges = response.data
+
+            setBookExchanges(exchanges)
+
+        } catch (error) {
+            console.error(error)
+
+        } finally {
+            setLoading(false)
+        }
+
     }
 
+    const getRatingBook = async () => {
+        try {
+            const response = await axios.post('http://192.168.1.64:6005/get-book', {
+                imageBook: bookImage
+            });
+
+
+            setAvalation(response.data[0].rating)
+
+        }catch (error) {
+            setAvalation(0)
+        }
+    }
     const renderTabView = () => {
         switch (tabView) {
             case 'review':
-                return <TabReviews publications={publications} />
+                return <TabReviews publications={reviews} />
         
             case 'exchange': 
                 return <TabExchanges bookExchanges={bookExchanges} />
@@ -100,20 +127,20 @@ export default function Book() {
 
             <View style={styles.bookOverview}>
                 <Image 
-                    source={book.image}
+                    source={{ uri: bookImage }}
                     style={styles.imageBook}
                 />
 
                 <View style={styles.resumeAndActions} >
                     <View>
-                        <Text style={THEME.fonts.h1.bold}>{book.name}</Text>
+                        <Text style={THEME.fonts.h1.bold}>{bookTitle}</Text>
                         <Text
                             style={[
                                 THEME.fonts.h2.normal,
                                 styles.nameAuthor
                             ]}
                         >
-                            {book.author}
+                            {bookAuthor}
                         </Text>
                     </View>
 
@@ -189,6 +216,11 @@ export default function Book() {
             </View>
 
             {/* Conteúdo das Abas */}
+
+            {
+                messageError && <Text style={[THEME.fonts.h2.bold, {marginTop: 20, marginLeft: 20}]}>{messageError}</Text>
+            }
+
             <ScrollView
                 contentContainerStyle={styles.viewContentOfTab}
                 showsVerticalScrollIndicator={false}
@@ -204,19 +236,21 @@ export default function Book() {
             <ModalAvaliation    
                 modalVisible={modalAvaliationVisible}
                 onClose={() => setModalAvaliationVisible(false)}
+                book = {[bookImage, bookTitle, bookAuthor, avaliation, bookDescription]}
             />
 
             <ModalSynopsis 
                 modalVisible={modalSynopsisVisible}
-                text={book.synopsys}
+                text={bookDescription}
                 onClose={() => setModalSynopsisVisible(false)}
             />
 
             <Comment 
-                id={book.id}
+                id={bookId}
                 modalVisible={modalCommentVisible} 
                 onClose={() => setModalCommentVisible(false)} 
             />
+
         </View>
     )   
 }

@@ -24,12 +24,14 @@ function TabInterests({ interests}) {
     return (
         <>
             {
-                interests.map((book, index) => (   
+                interests.map((book, index) => ( 
+                    console.log('book: ', book.titlebook),  
                     <BookTemplate 
                         key={index}
-                        image={book.image}
-                        titleBook={book.titleBook}
-                        authorBook={book.authorBook}
+                        image={book.imagebook}
+                        title={book.titlebook}
+                        author={book.writerbook}
+                        description={book.review}
                     />
                     
                 ))
