@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import {User} from '../models/user.js';
 import {Post} from '../models/post.js';
 import {Review} from '../models/review.js';
+import {Comment} from '../models/comment.js';
 
 const routes = express.Router();
 const database = new Database();
@@ -14,6 +15,7 @@ const post = new Post();
 const review = new Review();
 const validationCode = [];
 const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
+const comments = new Comment();
 
 let contPost = 0;
 let contReview = 0; 

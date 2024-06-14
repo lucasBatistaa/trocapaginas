@@ -2,11 +2,10 @@ import { User } from "./user.js";
 
 
 export class Comment{
-        constructor(idUser, idComment, comment, time){
+        constructor(idUser, idPublication, comment){
         this.idUser = idUser;
-        this.idComment = idComment;
+        this.idPublication = idPublication;
         this.comment = comment;
-        this.time = time;
     }   
 }
 
