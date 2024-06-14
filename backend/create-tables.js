@@ -337,10 +337,14 @@ create table reviews (
 	console.log('tabela books excluída')
 })*/
 
-
+sql `
+	drop table possibleExchanges;
+`.then(() => {
+	console.log('tabela apagada')
+})
 sql `
 	alter table books
-	add column sumRatings integer;
+	drop column id_book;
 `.then(() => {
 	console.log('tabela books alterada')
 })
