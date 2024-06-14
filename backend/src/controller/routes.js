@@ -398,12 +398,31 @@ routes.get('/book-reviews', async(req, res) => {
             review.photo = review.photo.toString('utf8');
         })
         
-        console.log(reviewsBook);
         return res.status(200).send(reviewsBook);
 
     } catch (error) {
         return res.status(500).send('Erro ao carregar as resenhas');
     }
 });
+
+routes.post('/update-profile', async(req, res) => {
+    const {email, name, oldPassword, newPassword} = req.body;
+
+    try {
+        const user = await userExists(email);
+
+        if(bcrypt.compareSync(oldPassword, user.password)) {
+            await database.updateUser(name, email, bcrypt.hashSync(newPassword, salt));
+
+            return res.status(200).send('Informações atualizadas com sucesso!');
+
+        }else {
+            return res.status(401).send('Senha atual não confere, tente novamente!');
+        }
+
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+})
 
 export default routes;

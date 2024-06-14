@@ -21,6 +21,10 @@ export class Database {
         await sql `insert into users (name, email, password, photo) values (${user.name}, ${user.email}, ${user.password}, ${user.photo})`;	
     }
 
+    async updateUser(name, email, password) {
+        await sql `update users set name = ${name}, password = ${password} where email = ${email}`;
+    }
+
     async createPost(post) {
         await sql `insert into posts (id_user, content, timepost, nameBook, image_post) values (${post.idUser}, ${post.content}, ${post.timePost}, ${post.nameBook}, ${post.imageBook})`;
     }

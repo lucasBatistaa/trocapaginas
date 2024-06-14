@@ -11,6 +11,7 @@ import CreatePassword from "../../../components/Forms/CreatePassword"
 import { styles } from "./styles"
 import { THEME } from "../../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useUserStore } from "../../../store/badgeStore"
 
 export default function ConfirmationCode () {
     const [nextPage, setNextPage] = useState(false)
@@ -75,7 +76,7 @@ export default function ConfirmationCode () {
                 headers: {'Content-Type': 'application/json'}
             })
             
-            navigation.navigate('InitialPage');
+            navigation.navigate('Login');
     
         } catch(error) {
             setIsLoading(false)
@@ -134,8 +135,8 @@ export default function ConfirmationCode () {
                 :
                 <CreatePassword
                     titleButton={"ALTERAR"}
-                    isLoading={isLoading}
                     onSubmit={handleSubmitReset}
+                    isLoading={isLoading}
                 />
             }
         </>

@@ -1,4 +1,4 @@
-import {View, Image, Text, ScrollView} from 'react-native'
+import {View, Image, Text, ScrollView, Alert} from 'react-native'
 import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native"
 
@@ -10,6 +10,7 @@ import CreatePassword from '../../components/Forms/CreatePassword';
 import { THEME } from '../../styles/Theme';
 import { styles } from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons'
+import axios from 'axios';
 
 export default function EditProfile () {
     const user = useUserStore(state => state.data) 
@@ -20,8 +21,31 @@ export default function EditProfile () {
     const[oldPassword, setOldPassword] = useState('')
     const [newName, setNewName] = useState(user.name)
 
-    const updateProfileInfo = (password) => {
+    const updateProfileInfo = async (password) => {
+        try {
+            const response = await axios.post('http://192.168.1.64:6005/update-profile', {
+                email: user.email,
+                name: newName,
+                oldPassword: oldPassword,
+                newPassword: password
+            })
 
+            console.log(response.data)
+
+            user.name = newName
+
+            Alert.alert('Sucesso', 'Informações do perfil atualizadas!', [
+                {text: 'OK', onPress: () => navigation.navigate('Profile', {user: user})}
+            ])
+
+        }catch (error) {
+            if(!error?.response) {
+                Alert.alert('Erro', 'Erro ao atualizar informações do perfil, tente novamente mais tarde!')
+            
+            }else if(error.response?.status === 401) {
+                Alert.alert('Erro', 'Senha atual não confere, tente novamente!')
+            }
+        }
     }
 
     return (
