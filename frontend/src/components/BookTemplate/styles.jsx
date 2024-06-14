@@ -3,8 +3,7 @@ import { THEME } from "../../styles/Theme"
 
 export const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'start',
         width: 120
     },
 
@@ -16,13 +15,16 @@ export const styles = StyleSheet.create({
 
     titleBook: {
         marginTop: 4,
-        textAlign: 'center',
+        textAlign: 'start',
         alignSelf: 'stretch',
-        color: THEME.colors.brownDark
+        color: THEME.colors.brownDark,
+        fontSize: 18
     },
 
     authorBook: {
-        textAlign: 'center',
+        marginTop: 4,
+        alignSelf: 'stretch',
+        textAlign: 'start',
         color: THEME.colors.brownDark
     }
 })

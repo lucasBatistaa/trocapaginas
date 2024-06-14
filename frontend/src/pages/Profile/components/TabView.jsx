@@ -22,10 +22,9 @@ function TabPublications ({publications}) {
 
 function TabInterests({ interests}) {
     return (
-        <>
+        <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'start', padding: 2, gap: 3.7}}>
             {
                 interests.map((book, index) => ( 
-                    console.log('book: ', book.titlebook),  
                     <BookTemplate 
                         key={index}
                         image={book.imagebook}
@@ -36,7 +35,7 @@ function TabInterests({ interests}) {
                     
                 ))
             }
-        </>
+        </View>
     )
 }
 

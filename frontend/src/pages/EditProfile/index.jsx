@@ -16,6 +16,13 @@ export default function EditProfile () {
     const navigation = useNavigation()
 
     const [securePassword, setSecurePassword] = useState(true)
+    const [newPassword, setNewPassword] = useState('')
+    const[oldPassword, setOldPassword] = useState('')
+    const [newName, setNewName] = useState(user.name)
+
+    const updateProfileInfo = (password) => {
+
+    }
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -28,7 +35,7 @@ export default function EditProfile () {
 
             <View style={{alignItems: "center"}}>
                 <Image
-                    style={{width: 141, height:141}}
+                    style={{width: 141, height:141, borderRadius: 70}}
                     source={{ uri: user.photo }}
                 />
             </View>
@@ -36,7 +43,8 @@ export default function EditProfile () {
             <Text style={[styles.label, THEME.fonts.text]}>Nome</Text>
             <Input>
                 <Input.Field 
-                    placeholder={user.name}                    
+                    placeholder={user.name}
+                    onChangeText={(name) => setNewName(name)}                    
                 />
             </Input>
 
@@ -45,6 +53,7 @@ export default function EditProfile () {
                 <Input.Field 
                     placeholder={"Insira sua senha atual"}
                     secureTextEntry={securePassword}
+                    onChangeText={(password) => setOldPassword(password)}
                 />
 
                 { 
@@ -67,6 +76,7 @@ export default function EditProfile () {
             
             <CreatePassword
                 titleButton="ATUALIZAR"
+                onSubmit={updateProfileInfo}
             />
         </ScrollView>
     )

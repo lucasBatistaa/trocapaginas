@@ -26,7 +26,7 @@ export default function BookTemplate({ id, image, title, author, description }) 
 
             <Text
                 style={[ THEME.fonts.h2.normal, styles.titleBook ]}
-                numberOfLines={1}
+                numberOfLines={2}
                 ellipsizeMode='tail'
             >
                 {title}
