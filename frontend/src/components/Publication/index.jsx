@@ -1,5 +1,5 @@
 import { View, Image, Text, TouchableOpacity, Share } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Comment from '../Comment'
 
@@ -16,6 +16,8 @@ export default function Publication({ publication }) {
     const [ userOwner, setUserOwner ] = useState({})
 
     const navigation = useNavigation()
+
+    const id_publication = publication.id_post !== undefined ? publication.id_post : publication.id_review;
 
     // Compartilhar 
     const onShare = async () => {
@@ -38,6 +40,7 @@ export default function Publication({ publication }) {
     }
 
     const getUserOwner = async () => {
+
         try{
             const response = await axios.post('https://trocapaginas-server-production.up.railway.app/user-publication', {
                 id_user: publication.id_user
@@ -98,7 +101,7 @@ export default function Publication({ publication }) {
                 />
             </View>
 
-            <Comment idPublication={publication.id_post} modalVisible={modalCommentVisible} onClose={() => setModalCommentVisible(false)} /> 
+            <Comment idPublication={id_publication} modalVisible={modalCommentVisible} onClose={() => setModalCommentVisible(false)} /> 
         </View>   
     )
 }

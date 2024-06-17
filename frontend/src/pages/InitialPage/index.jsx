@@ -40,7 +40,7 @@ export default function InitialPage(props) {
     
     const getUser = async() => {
         try {
-            const response = await axios.get('https://trocapaginas-server-production.up.railway.app/login/success')
+            const response = await axios.get('http://localhost:6005/login/success')
             
             if(response.data.email !== null) {
                 //setUserData(response.data);
@@ -57,7 +57,7 @@ export default function InitialPage(props) {
 
     const getNotifications = async () => {
         try {
-            const response = await axios.get('http://192.168.43.70:6005/notifications');
+            const response = await axios.get('http://localhost:6005/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]
@@ -129,7 +129,7 @@ export default function InitialPage(props) {
     );
 
     const getPublications = async () => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const response = await axios.get('http://localhost:6005/publications')
         const posts = response.data
 
         setPublications(posts)

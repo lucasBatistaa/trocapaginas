@@ -42,7 +42,7 @@ export default function CreatePost() {
                     imageURI: imageURI,
                 }
 
-                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/post', 
+                const response = await axios.post('https://http://192.168.0.42:6005/post', 
                 data_post);
 
                 setIsLoading(false)
@@ -74,7 +74,7 @@ export default function CreatePost() {
                     rating: avaliation
                 }
 
-                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/review', 
+                const response = await axios.post('http://192.168.0.42:6005/review', 
                 data_review);
                 
                 setIsLoading(false)

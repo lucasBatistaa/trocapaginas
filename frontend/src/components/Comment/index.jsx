@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { 
     Modal, 
     View, 
@@ -18,38 +18,43 @@ import { styles } from "./style";
 import { THEME } from "../../styles/Theme";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useUserStore } from "../../store/badgeStore";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Comment({ idPublication, modalVisible, onClose }) {
     const [ textComment, setTextComment ] = useState('')
     const [ allComments, setAllComments] = useState([])
 
     const user = useUserStore(state => state.data);
-    console.log(`isso é o id da publicação: ${idPublication}`);
+  
+    useFocusEffect(
+        useCallback(()=> {
+            loadComments();
+        },[idPublication]
+        ))
 
-    useEffect(() => {
-
-        // exemplo de comentário
-        setAllComments([
-            {
-                idUser: '1',
-                image: require('../../assets/foto-perfil.png'),
-                username: 'Nome da usuária',
-                time: `${FormatDate()}`,
-                comment: 'sim amigaa, esse livro é maravilhoso'
-            },
-        ]);
-        // loadComments();
-    }, [])
-
-    /*
     const loadComments = async () => {
         try {
-            const response = await axios.get('http://localhost:6005/loadComments/' + id); //ainda falta terminar verificar tudo antes
-            setAllComments(response.data);
+
+            const response = await axios.get('http://localhost:6005/loadComments',{
+                params:{
+                    idPublication:idPublication
+                }
+            }); 
+            console.log('esse é o retono do backend',response.data);
+            
+            const fetchedComments = response.data.map(comment => ({
+                idUser: comment.idUser,
+                image: user.photo,
+                username: user.name, 
+                comment: comment.content_comment
+            }));
+        
+            setAllComments(fetchedComments);    
+
         } catch (error) {
             console.error('Erro ao carregar comentários:', error);
         }
-    };*/
+    };
 
     const handleSendComment = async () => {
 
@@ -58,7 +63,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
 
             //rota pra puxar dados do usuário
                         
-            const newComment = {
+             const newComment = {
                 idUser: user.id_user,
                 image: user.photo,
                 username: user.name,
@@ -67,37 +72,27 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             }
 
             const  {idUser, id, comment} = newComment;
-            
             const sendCommentDatabase = {idUser, id, comment};
 
             console.log(sendCommentDatabase);
 
-            setAllComments([ ...allComments, newComment ])
+
 
                 //envia os dados para o servidor
             try{ 
               await axios.post('http://localhost:6005/comment', sendCommentDatabase).then(response => {
                 console.log('Dados enviados com sucesso!', response.data);
+
+                setAllComments(prevComments => [...prevComments, newComment]);
+                setTextComment('');
+                inputRef.current.blur();
+                Keyboard.dismiss(); 
+
               });
 
-            } catch(error) {if (error.response) {
-                // O servidor respondeu com um status diferente de 2xx
-                console.error('Erro de resposta do servidor:', error.response.data);
-                console.error('Status do erro:', error.response.status);
-            } else if (error.request) {
-                // A requisição foi feita, mas não houve resposta do servidor
-                console.error('Erro durante a requisição:', error.request);
-            } else {
-                // Ocorreu um erro ao configurar a requisição
-                console.error('Erro ao configurar a requisição:', error.message);
+            } catch (error) {
+                console.error('Erro ao enviar comentário:', error);
             }
-            console.error('Configuração do erro:', error.config);
-            }
-            
-            inputRef.current.blur() 
-            Keyboard.dismiss()
-            setTextComment('')
-            console.log('Enviado!')
         }
         
     }
