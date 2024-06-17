@@ -6,13 +6,13 @@ import axios from 'axios'
 
 import Button from '../../components/Button'
 import { Input } from '../../components/Input'
-import ConfirmationCode from './ConfirmationCode'
 
 import isEmail from '../../utils/isEmail.jsx'
 
 import { styles } from './styles.jsx'
 import { THEME } from '../../styles/Theme.jsx'
 import Ionicons from '@expo/vector-icons/Ionicons'
+import ConfirmationCode from './ConfirmationCode/'
 
 export default function Reset() {
     const [email, setEmail] = useState ("")

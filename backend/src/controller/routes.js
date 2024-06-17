@@ -398,7 +398,6 @@ routes.get('/book-reviews', async(req, res) => {
             review.photo = review.photo.toString('utf8');
         })
         
-        console.log(reviewsBook);
         return res.status(200).send(reviewsBook);
 
     } catch (error) {
@@ -433,5 +432,4 @@ routes.get('/loadComments', async(req, res) => {
         return res.status(500).send('Erro interno ao carregar os comentários da publicação');
     }
 });
-
-export default routes;
+export default routes;1

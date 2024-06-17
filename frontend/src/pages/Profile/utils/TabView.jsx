@@ -1,5 +1,6 @@
 import Publication from "../../../components/Publication";
 import BookTemplate from '../../../components/BookTemplate';
+import Exchange from "../components/Exchange";
 import { View } from "react-native";
 
 function TabPublications ({publications}) {
@@ -22,10 +23,9 @@ function TabPublications ({publications}) {
 
 function TabInterests({ interests}) {
     return (
-        <>
+        <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'start', padding: 2, gap: 3.7}}>
             {
                 interests.map((book, index) => ( 
-                    console.log('book: ', book.titlebook),  
                     <BookTemplate 
                         key={index}
                         image={book.imagebook}
@@ -36,8 +36,30 @@ function TabInterests({ interests}) {
                     
                 ))
             }
-        </>
+        </View>
     )
 }
 
-export {TabPublications, TabInterests}
+function TabExchange ({exchange}) {
+
+    return (
+        <View>
+            {
+                exchange.map((book, index) => ( 
+                    <Exchange 
+                        id={index}
+                        image={book.imagebook}
+                        title={book.titlebook}
+                        author={book.writerbook}
+                    />
+                    
+                ))
+            }
+            
+        </View>
+    )
+       
+  
+}
+
+export {TabPublications, TabInterests, TabExchange}

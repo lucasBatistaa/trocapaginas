@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useUserStore } from '../../store/badgeStore'
 
-import {TabPublications, TabInterests} from './components/TabView'
+import {TabPublications, TabInterests, TabExchange} from './utils/TabView'
 import MenuIcon from '../../assets/menu-icon.svg'
 import LateralMenu from '../../components/Menus/LateralMenu'
 import BottomMenu from '../../components/Menus/BottomMenu'
@@ -19,7 +19,7 @@ export default function Profile (props) {
     const [menuVisible, setMenuVisible] = useState(false)
 
     const [ publications, setPublications ] = useState([])
-    const [ interests, setInterests ] = useState([])
+    const [ exchange, setExchange ] = useState([])
     const [ tabContent, setTabContent ] = useState(null)
     const [ pageIsLoading, setPageIsLoading ] = useState(true)
     
@@ -28,16 +28,23 @@ export default function Profile (props) {
 
     useEffect(() => {
         renderTabView()
-        //interesses
-        /*setInterests([
+       
+        setExchange([
             {
                 id: '34534',
-                image: require('../../assets/book.png'),
-                titleBook: 'Orgulho e Preconceito',
-                authorBook: 'Jane Austen',
+                imagebook: require('../../assets/book.png'),
+                titlebook: 'Orgulho e Preconceito',
+                writerbook: 'Jane Austen',
+            },
+
+            {
+                id: '34535',
+                imagebook: require('../../assets/book.png'),
+                titlebook: 'Orgulho e Preconceito',
+                writerbook: 'Jane Austen',
             }
             
-        ])*/
+        ])
 
     }, [selectedOption])
 
@@ -99,6 +106,11 @@ export default function Profile (props) {
             case 'showInterests':
                 await getInterests()
                 break
+            
+            case 'showExchange':
+                setTabContent(<TabExchange exchange={exchange}/>)
+                setPageIsLoading(false)
+               
         }
     }
     
