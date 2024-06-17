@@ -406,4 +406,32 @@ routes.get('/book-reviews', async(req, res) => {
     }
 });
 
+routes.post('/comment', async (req, res) => {
+    const {idUser, id, comment} = req.body;
+    comments.idUser = idUser;
+    comments.idPublication = id;
+    comments.comment = comment;
+
+    try{
+        await database.createComment(comments).then(() => {
+            return res.status(201).send('Comentario criado com sucesso!');
+        });
+    } catch(error) {
+        return res.status(500).send('Erro ao criar o comentario');
+    }
+});
+
+
+routes.get('/loadComments', async(req, res) => {
+    const {idPublication} = req.query;
+
+    try {
+        const loadComment = await database.getloadComments(idPublication);
+        console.log('Esse é o resultado da consulta',loadComment);
+        return res.status(200).send(loadComment);
+    } catch (error) {
+        return res.status(500).send('Erro interno ao carregar os comentários da publicação');
+    }
+});
+
 export default routes;

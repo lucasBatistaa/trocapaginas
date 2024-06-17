@@ -130,4 +130,12 @@ export class Database {
 
         return myInterests;
     }
+    async getloadComments(idPublication) {
+        const comments = await sql `
+        SELECT * 
+        FROM comment 
+        WHERE id_publication = ${idPublication} 
+        ORDER BY id_comment ASC`;
+        return comments;
+    }
 }

@@ -338,13 +338,14 @@ create table reviews (
 	console.log('tabela books excluída')
 })*/
 
-
+/*
 sql `
 	alter table books
 	add column sumRatings integer;
 `.then(() => {
 	console.log('tabela books alterada')
 })
+*/
 
 /*
 sql `
