@@ -35,7 +35,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
     const loadComments = async () => {
         try {
 
-            const response = await axios.get('http://localhost:6005/loadComments',{
+            const response = await axios.get('http://192.168.1.64:6005/loadComments',{
                 params:{
                     idPublication:idPublication
                 }
@@ -44,8 +44,8 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             
             const fetchedComments = response.data.map(comment => ({
                 idUser: comment.idUser,
-                image: user.photo,
-                username: user.name, 
+                image: comment.photo,
+                username: comment.name, 
                 comment: comment.content_comment
             }));
         
@@ -74,18 +74,12 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             const  {idUser, id, comment} = newComment;
             const sendCommentDatabase = {idUser, id, comment};
 
-            console.log(sendCommentDatabase);
-
-
-
-                //envia os dados para o servidor
             try{ 
-              await axios.post('http://localhost:6005/comment', sendCommentDatabase).then(response => {
-                console.log('Dados enviados com sucesso!', response.data);
+              await axios.post('http://192.168.1.64:6005/comment', sendCommentDatabase).then(response => {
 
                 setAllComments(prevComments => [...prevComments, newComment]);
                 setTextComment('');
-                inputRef.current.blur();
+                //inputRef.current.blur();
                 Keyboard.dismiss(); 
 
               });
@@ -149,7 +143,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
                                     style={styles.comment}
                                 >
                                     <Image 
-                                        source={comment.image}
+                                        source={{ uri: comment.image }}
                                         style={styles.userPhotoOfComment}
                                     />
 

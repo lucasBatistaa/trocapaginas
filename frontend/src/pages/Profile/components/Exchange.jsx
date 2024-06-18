@@ -9,7 +9,7 @@ export default function Exchange ({id, image, title, author}) {
     return (
         <View style={style.container}>
             <Image 
-                source={image}
+                source={{uri: image}}
                 style={style.imageBook}
             />
 

@@ -57,10 +57,8 @@ export class Database {
     }
 
     async createComment (comments) {
-        console.log('entrou no comentário');
         await sql `insert into comment (id_user, id_publication, content_comment) 
         values (${comments.idUser}, ${comments.idPublication}, ${comments.comment})`;
-        console.log('enviou comentário');
     }
 
     async getMyPosts(email) {
@@ -134,12 +132,28 @@ export class Database {
 
         return myInterests;
     }
+
+    async setMyExchanges(id_user, titleBook, imageBook, writerBook) {
+        await sql `insert into myExchanges (id_user, titlebook, imagebook, writerbook) values (${id_user}, ${titleBook}, ${imageBook}, ${writerBook})`;
+    }
+
+    async getMyExchanges() {
+        const myExchanges = await sql `select * from myExchanges`;
+        return myExchanges;
+    }
+
+    async myExchangesByEmail(email) {
+        const myExchangesByEmail = await sql `select myExchanges.* from myExchanges inner join users using(id_user) where users.email = ${email}`
+
+        return myExchangesByEmail;
+    }
     async getloadComments(idPublication) {
         const comments = await sql `
-        SELECT * 
-        FROM comment 
+        SELECT comment.*, users.name, users.photo 
+        FROM comment inner join users using(id_user) 
         WHERE id_publication = ${idPublication} 
         ORDER BY id_comment ASC`;
+
         return comments;
     }
 }

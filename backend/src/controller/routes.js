@@ -344,7 +344,6 @@ routes.post('/save-book', async (req, res) => {
             const rating = Math.round(sumRatings / totalRatings)
 
             await database.updateBook(imageBook, totalRatings, sumRatings, rating);
-
         }
 
         if(choiceUser === 'hasInterest') {
@@ -352,6 +351,13 @@ routes.post('/save-book', async (req, res) => {
 
             if(!interests.find((interest) => interest.imagebook === imageBook)) {
                 await database.setInterest(id_user, titleBook, imageBook, writerBook);
+            }
+        
+        }else if(choiceUser === 'exchange') {
+            const myExchanges = await database.getMyExchanges();
+
+            if(!myExchanges.find((exchange) => exchange.imagebook === imageBook)) {
+                await database.setMyExchanges(id_user, titleBook, imageBook, writerBook);
             }
         }
 
@@ -374,6 +380,19 @@ routes.post('/my-interests', async (req, res) => {
         return res.status(400).send('Interesses não encontrados');
     }
 });
+
+routes.post('/my-book-for-exchange', async (req, res) => {
+    const {email} = req.body;
+
+    try {
+        const myExchangesByEmail = await database.myExchangesByEmail(email);
+
+        return res.status(200).send(myExchangesByEmail);
+        
+    } catch (error) {
+        return res.status(400).send('Nenhum livro encontrado para troca');
+    }
+})
 
 routes.post('/get-book', async (req, res) => {
     const {imageBook} = req.body;
@@ -405,6 +424,26 @@ routes.get('/book-reviews', async(req, res) => {
     }
 });
 
+routes.post('/update-profile', async(req, res) => {
+    const {email, name, oldPassword, newPassword} = req.body;
+
+    try {
+        const user = await userExists(email);
+
+        if(bcrypt.compareSync(oldPassword, user.password)) {
+            await database.updateUser(name, email, bcrypt.hashSync(newPassword, salt));
+
+            return res.status(200).send('Informações atualizadas com sucesso!');
+
+        }else {
+            return res.status(401).send('Senha atual não confere, tente novamente!');
+        }
+
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+});
+
 routes.post('/comment', async (req, res) => {
     const {idUser, id, comment} = req.body;
     comments.idUser = idUser;
@@ -426,10 +465,14 @@ routes.get('/loadComments', async(req, res) => {
 
     try {
         const loadComment = await database.getloadComments(idPublication);
-        console.log('Esse é o resultado da consulta',loadComment);
+
+        loadComment.map((comment) => {
+            comment.photo = comment.photo.toString('utf-8');
+        })
         return res.status(200).send(loadComment);
     } catch (error) {
         return res.status(500).send('Erro interno ao carregar os comentários da publicação');
     }
 });
-export default routes;1
+
+export default routes;

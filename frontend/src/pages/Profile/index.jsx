@@ -28,23 +28,6 @@ export default function Profile (props) {
 
     useEffect(() => {
         renderTabView()
-       
-        setExchange([
-            {
-                id: '34534',
-                imagebook: require('../../assets/book.png'),
-                titlebook: 'Orgulho e Preconceito',
-                writerbook: 'Jane Austen',
-            },
-
-            {
-                id: '34535',
-                imagebook: require('../../assets/book.png'),
-                titlebook: 'Orgulho e Preconceito',
-                writerbook: 'Jane Austen',
-            }
-            
-        ])
 
     }, [selectedOption])
 
@@ -91,8 +74,26 @@ export default function Profile (props) {
         }
 
         setPageIsLoading(false)
-
     }
+
+    const getMyExchanges = async() => {
+        const response = await axios.post('http://192.168.1.64:6005/my-book-for-exchange', {
+            email: user.email
+        })
+
+        const myExchanges = response.data
+
+        if(myExchanges.length === 0) {
+            setTabContent(
+                <Text style={THEME.fonts.h2.bold}> Nenhum livro disponível para troca </Text>
+            )
+
+        } else {
+            setTabContent(<TabExchange exchange={myExchanges} />)
+        }
+
+        setPageIsLoading(false)
+    } 
 
     const renderTabView = async () => {
         setPageIsLoading(true)
@@ -108,9 +109,8 @@ export default function Profile (props) {
                 break
             
             case 'showExchange':
-                setTabContent(<TabExchange exchange={exchange}/>)
-                setPageIsLoading(false)
-               
+                await getMyExchanges()
+                break
         }
     }
     

@@ -20,37 +20,44 @@ export default function ModalAvaliation({ modalVisible, onClose, book }) {
         exchange: false
     })
 
-    useEffect(() => {
+    /*useEffect(() => {
         // Avaliação do livro feita pelo usuário
         setChoicesUser({
             totalAvaliation: book[3],
             hasInterest: true,
             exchange: false
         })
-    }, [])
+    }, [])*/
 
     const handleChoiceAvaliation = async() => { 
         /*if (choicesUser.totalAvaliation >= 1 || choicesUser.hasInterest || choicesUser.exchange) {
             // Update na API
         }*/
 
-            if(choicesUser.hasInterest) {
-                try {
-                    const response = await axios.post('http://192.168.1.64:6005/save-book', {
-                        userEmail: user.email,
-                        imageBook: book[0],
-                        titleBook: book[1],
-                        writerBook: book[2],
-                        ratingBook: choicesUser.totalAvaliation,
-                        bookReview: book[4],
-                        choiceUser: 'hasInterest'
-                    })
+        let choiceUser;
 
-                    onClose()
-                    
-                } catch (error) {
-                    setMessageError(error)
-                }
+            if(choicesUser.hasInterest) {
+                choiceUser = 'hasInterest'
+            
+            }else if(choicesUser.exchange) {
+                choiceUser = 'exchange'
+            }
+
+            try {
+                const response = await axios.post('http://192.168.1.64:6005/save-book', {
+                    userEmail: user.email,
+                    imageBook: book[0],
+                    titleBook: book[1],
+                    writerBook: book[2],
+                    ratingBook: choicesUser.totalAvaliation,
+                    bookReview: book[4],
+                    choiceUser: choiceUser
+                })
+
+                onClose()
+                
+            } catch (error) {
+                setMessageError(error)
             }
         
     }
