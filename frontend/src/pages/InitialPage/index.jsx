@@ -29,6 +29,7 @@ export default function InitialPage(props) {
         // user.logout()
 
         if(props.route.params?.page) {
+            console.log(props.route.params.page)
             getUser();
         }
 
@@ -129,7 +130,7 @@ export default function InitialPage(props) {
     );
 
     const getPublications = async () => {
-        const response = await axios.get('https://trocapaginas-server-production.up.railway.app/publications')
+        const response = await axios.get('https://trocapaginas-server.onrender.com/publications')
         const posts = response.data
 
         setPublications(posts)
@@ -141,7 +142,7 @@ export default function InitialPage(props) {
             <View style={styles.container}> 
                 <StatusBar barStyle={'light-content'} />
 
-                <TopMenu/>
+                { user && <TopMenu/> }
 
                 <FlatList
                     contentContainerStyle = {styles.viewPublications}

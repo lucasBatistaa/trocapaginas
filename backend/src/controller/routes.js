@@ -6,6 +6,7 @@ import {User} from '../models/user.js';
 import {Post} from '../models/post.js';
 import {Review} from '../models/review.js';
 import {Comment} from '../models/comment.js';
+import {Controller} from '../controller/controller.js';
 
 const routes = express.Router();
 const database = new Database();
@@ -16,12 +17,13 @@ const review = new Review();
 const validationCode = [];
 const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
 const comments = new Comment();
+const controller = new Controller(database, user);
 
 let contPost = 0;
 let contReview = 0; 
 let allPublications = [];
 
-async function userExists(email) {
+/*async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
         return user.email === email;
@@ -87,7 +89,7 @@ async function bookExists(imageBook) {
     }
 
     return false;
-}
+}*/
 
 //login
 routes.post('/login', (req, res) => {
@@ -134,7 +136,7 @@ routes.post('/create', async (req, res) => {
 routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
-    if(await userExists(email) != undefined) {
+    if(await controller.userExists(email) != undefined) {
         return res.status(422).send('E-mail já cadastrado!');
 
     }else {
@@ -146,7 +148,7 @@ routes.post('/verificar-email', async (req, res) => {
 routes.post('/esqueciMinhaSenha', async (req, res) => {
     const {email} = req.body; //receber um e-mail
 
-    if(await userExists(email) != undefined) {
+    if(await controller.userExists(email) != undefined) {
         user.email = email;//setando email para usar depois
 
         for(let i = 0; i < 4; i++) {
@@ -193,10 +195,9 @@ routes.post('/post', async (req, res) => {
 
     const {userEmail, text, nameBook, imageURI} = req.body; // recebendo o objeto review
 
-    const user_owner_post = await userExists(userEmail);
-    
-    validateImage(imageURI);
+    const user_owner_post = await controller.userExists(userEmail);
 
+    post.imageBook = imageURI;
     post.idUser = user_owner_post.id_user;
     post.content = text;
     post.timePost = timeNow;
@@ -205,7 +206,6 @@ routes.post('/post', async (req, res) => {
     post.user_photo = await database.getUsersById(post.idUser).photo;
     
     try{
-
         await database.createPost(post).then(() => { //criando o post no banco de dados
             return res.status(201).send('Post criado com sucesso!');
         });
@@ -219,10 +219,9 @@ routes.post('/post', async (req, res) => {
 routes.post('/review', async (req, res) => {
 
     const {userEmail, text, nameBook, imageURI, title, rating} = req.body; // recebendo o objeto review
-    const user_owner_post = await userExists(userEmail);
+    const user_owner_post = await controller.userExists(userEmail);
 
-    validateImage(imageURI);
-
+    review.imageBook = imageURI;
     review.idUser = user_owner_post.id_user;
     review.title = title;
     review.content = text;
@@ -247,14 +246,14 @@ routes.post('/review', async (req, res) => {
 
 routes.get('/publications', async (req, res) => {
     try{
-        const posts = await getPosts();
-        const reviews = await getReviews();
+        const posts = await controller.getPosts();
+        const reviews = await controller.getReviews();
         const publications = posts.concat(reviews);
 
         posts.length === 0 ? contPost = 0 : contPost += 5;
         reviews.length === 0 ? contReview = 0 : contReview += 5;
 
-        sortPublications(publications);
+        controller.sortPublications(publications);
         
         publications.map((publication) => {
             if((!(allPublications.some(pub => pub.id_post === publication.id_post))) || (!(allPublications.some(pub => pub.id_review === publication.id_review)))) {
@@ -293,7 +292,7 @@ routes.post('/my-publications', async (req, res) => {
         const myReviews = await database.getMyReviews(email);
         const myPublications = myPosts.concat(myReviews);
 
-        sortPublications(myPublications);
+        controller.sortPublications(myPublications);
         myPublications.reverse();
 
         myPublications.map((publication) => {
@@ -330,11 +329,11 @@ routes.post('/save-book', async (req, res) => {
     let id_user = null
 
     if(userEmail !== null) {
-        id_user = await getUserByEmail(userEmail);
+        id_user = await controller.getUserByEmail(userEmail);
     }
 
     try {
-        if(! await bookExists(imageBook)) {
+        if(! await controller.bookExists(imageBook)) {
             await database.createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview);
         
         }else {
@@ -428,7 +427,7 @@ routes.post('/update-profile', async(req, res) => {
     const {email, name, oldPassword, newPassword} = req.body;
 
     try {
-        const user = await userExists(email);
+        const user = await controller.userExists(email);
 
         if(bcrypt.compareSync(oldPassword, user.password)) {
             await database.updateUser(name, email, bcrypt.hashSync(newPassword, salt));
