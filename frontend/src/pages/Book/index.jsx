@@ -54,7 +54,7 @@ export default function Book() {
 
     const getBookReviews = async() => {
         try {
-            const response = await axios.get('http://192.168.1.64:6005/book-reviews', {
+            const response = await axios.get('https://trocapaginas-server.onrender.com/book-reviews', {
                 params: {
                     title: bookTitle
                 }
@@ -90,7 +90,7 @@ export default function Book() {
 
     const getRatingBook = async () => {
         try {
-            const response = await axios.post('http://192.168.1.64:6005/get-book', {
+            const response = await axios.post('https://trocapaginas-server.onrender.com/get-book', {
                 imageBook: bookImage
             });
 

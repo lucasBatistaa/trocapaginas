@@ -42,7 +42,7 @@ export default function Publication({ publication }) {
     const getUserOwner = async () => {
 
         try{
-            const response = await axios.post('https://trocapaginas-server-production.up.railway.app/user-publication', {
+            const response = await axios.post('https://trocapaginas-server.onrender.com/user-publication', {
                 id_user: publication.id_user
             });
 

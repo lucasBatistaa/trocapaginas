@@ -44,7 +44,7 @@ export default function ModalAvaliation({ modalVisible, onClose, book }) {
             }
 
             try {
-                const response = await axios.post('http://192.168.1.64:6005/save-book', {
+                const response = await axios.post('https://trocapaginas-server.onrender.com/save-book', {
                     userEmail: user.email,
                     imageBook: book[0],
                     titleBook: book[1],

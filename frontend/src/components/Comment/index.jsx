@@ -35,7 +35,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
     const loadComments = async () => {
         try {
 
-            const response = await axios.get('http://192.168.1.64:6005/loadComments',{
+            const response = await axios.get('https://trocapaginas-server.onrender.com/loadComments',{
                 params:{
                     idPublication:idPublication
                 }
@@ -75,7 +75,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             const sendCommentDatabase = {idUser, id, comment};
 
             try{ 
-              await axios.post('http://192.168.1.64:6005/comment', sendCommentDatabase).then(response => {
+              await axios.post('https://trocapaginas-server.onrender.com/comment', sendCommentDatabase).then(response => {
 
                 setAllComments(prevComments => [...prevComments, newComment]);
                 setTextComment('');

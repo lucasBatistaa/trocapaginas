@@ -38,7 +38,7 @@ export default function Profile (props) {
     }
 
     const getPublications = async() => {
-        const response = await axios.post('https://trocapaginas-server-production.up.railway.app/my-publications', {
+        const response = await axios.post('https://trocapaginas-server.onrender.com/my-publications', {
             email: user.email
         })
         
@@ -58,7 +58,7 @@ export default function Profile (props) {
     }
 
     const getInterests = async() => {
-        const response = await axios.post('http://192.168.1.64:6005/my-interests', {
+        const response = await axios.post('https://trocapaginas-server.onrender.com/my-interests', {
             email: user.email
         })
 
@@ -77,7 +77,7 @@ export default function Profile (props) {
     }
 
     const getMyExchanges = async() => {
-        const response = await axios.post('http://192.168.1.64:6005/my-book-for-exchange', {
+        const response = await axios.post('https://trocapaginas-server.onrender.com/my-book-for-exchange', {
             email: user.email
         })
 

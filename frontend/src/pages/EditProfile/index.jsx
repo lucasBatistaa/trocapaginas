@@ -23,7 +23,7 @@ export default function EditProfile () {
 
     const updateProfileInfo = async (password) => {
         try {
-            const response = await axios.post('http://192.168.1.64:6005/update-profile', {
+            const response = await axios.post('https://trocapaginas-server.onrender.com/update-profile', {
                 email: user.email,
                 name: newName,
                 oldPassword: oldPassword,
