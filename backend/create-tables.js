@@ -372,7 +372,7 @@ CREATE TABLE comment (
 });
 */
 
-sql `
+/*sql `
 	create table myExchanges (
 		id_myExchange serial not null,
 		id_user integer not null,
@@ -385,4 +385,9 @@ sql `
 	)
 `.then(() => {
 	console.log('QUalquer coisa')
-})
+})*/
+
+
+sql `alter table exchange
+add column myBook text not null;`.then(() => {
+	console.log('tabela books alterada')})

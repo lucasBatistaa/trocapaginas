@@ -78,10 +78,10 @@ export class Database {
     }
 
     async getUserOwnerInfo() {
-        const ownerBook = await sql `select interests.*, users.email, users.name, books.title
-        from interests 
-        inner join books on interests.id_book_interest = books.id_book
-        inner join users on interests.id_user_owner = users.id_user`
+        const ownerBook = await sql `select exchange.*, users.email, users.name, books.title
+        from exchange 
+        inner join books on exchange.bookexchange = books.title
+        inner join users on exchange.id_user_owner = users.id_user`
 
         return ownerBook;
     }
@@ -155,5 +155,10 @@ export class Database {
         ORDER BY id_comment ASC`;
 
         return comments;
+    }
+
+    async setExchangeWish(id_user_owner, id_user_receiver, status, myBook, bookExchange) {
+        await sql `insert into exchange (id_user_owner, id_user_receiver, status, mybook, bookexchange) values (${id_user_owner}, ${id_user_receiver}, ${status}, ${myBook}, ${bookExchange})`;
+
     }
 }

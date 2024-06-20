@@ -246,8 +246,8 @@ routes.post('/review', async (req, res) => {
 
 routes.get('/publications', async (req, res) => {
     try{
-        const posts = await controller.getPosts();
-        const reviews = await controller.getReviews();
+        const posts = await controller.getPosts(contPost);
+        const reviews = await controller.getReviews(contReview);
         const publications = posts.concat(reviews);
 
         posts.length === 0 ? contPost = 0 : contPost += 5;
@@ -472,6 +472,23 @@ routes.get('/loadComments', async(req, res) => {
     } catch (error) {
         return res.status(500).send('Erro interno ao carregar os comentários da publicação');
     }
+});
+
+routes.post('/exchange', async(req, res) => {
+    const {email, dateExchange, localExchange, myBook, bookExchange, emailOwnerBook} = req.body;
+
+    const idUserReceiver = await controller.getUserByEmail(email);
+    const idUserOwner = await controller.getUserByEmail(emailOwnerBook);
+
+    try{
+        await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange);
+
+        return res.status(200).send('Troca solicitada com sucesso!');
+    
+    }catch(error) {
+        return res.status(500).send('Erro ao solicitar troca...')
+    }
+
 });
 
 export default routes;

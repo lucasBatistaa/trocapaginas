@@ -14,9 +14,8 @@ export class Controller {
         });
     }
 
-    async getPosts() {
-        const posts = await database.getUsersPosts(contPost).then((posts) => {
-                
+    async getPosts(contPost) {
+        const posts = await this.database.getUsersPosts(contPost).then((posts) => {
             posts.forEach(post => {
                 post.photo = post.photo.toString('utf-8');
             })
@@ -26,8 +25,8 @@ export class Controller {
         return posts;
     }
 
-    async getReviews() {
-        const reviews = await database.getUsersReviews(contReview).then((reviews) => {
+    async getReviews(contReview) {
+        const reviews = await this.database.getUsersReviews(contReview).then((reviews) => {
             reviews.forEach(review => {
                 review.photo = review.photo.toString('utf-8');
             })
@@ -45,14 +44,14 @@ export class Controller {
 
     async getUserByEmail(email) {
         if(email !== null) {
-            const user = await userExists(email);
+            const user = await this.userExists(email);
 
             return user.id_user;
         }
     }
 
     async bookExists(imageBook) {
-        const books = await database.getBooks();
+        const books = await this.database.getBooks();
 
         if(books.find((book) => book.cover === imageBook)) {
             return true;
