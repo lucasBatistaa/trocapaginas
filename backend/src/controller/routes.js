@@ -313,14 +313,28 @@ routes.get('/notifications', async (req, res) => {
         const ownerBook = await database.getUserOwnerInfo();
         const receiverBook = await database.getReceiverBookInfo();
 
-        notifications.push(ownerBook, receiverBook);
+        console.log('aaa:', receiverBook)
 
-        console.log(notifications);
+        notifications.push(ownerBook, receiverBook);
 
         return res.status(200).send(notifications);
 
     } catch (error) {
         return res.status(404).send('Nenhuma notificação encontrada');
+    }
+});
+
+routes.post('/accept-exchange', async(req, res) => {
+    const{email, titleBook, status} = req.body;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+        await database.acceptExchange(id_user, titleBook, status);
+
+        return res.status(200).send(`Troca ${status} com sucesso!`)
+        
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor de banco de dados');
     }
 });
 

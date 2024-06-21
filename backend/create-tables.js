@@ -388,6 +388,6 @@ CREATE TABLE comment (
 })*/
 
 
-sql `alter table exchange
-add column myBook text not null;`.then(() => {
+sql ` create extension if not exists unaccent;
+`.then(() => {
 	console.log('tabela books alterada')})

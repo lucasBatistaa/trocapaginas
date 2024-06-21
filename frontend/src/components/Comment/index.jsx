@@ -40,7 +40,6 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
                     idPublication:idPublication
                 }
             }); 
-            console.log('esse é o retono do backend',response.data);
             
             const fetchedComments = response.data.map(comment => ({
                 idUser: comment.idUser,

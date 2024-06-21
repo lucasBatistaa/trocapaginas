@@ -78,25 +78,31 @@ export class Database {
     }
 
     async getUserOwnerInfo() {
-        const ownerBook = await sql `select exchange.*, users.email, users.name, books.title
-        from exchange 
-        inner join books on exchange.bookexchange = books.title
-        inner join users on exchange.id_user_owner = users.id_user`
-
+        const ownerBook = await sql ` 
+            select exchange.*, books.title, users.email, users.name
+            from exchange       
+            inner join books on unaccent(bookexchange) ilike unaccent(books.title)
+            inner join users on exchange.id_user_owner = users.id_user
+        `
         return ownerBook;
     }
 
     async getReceiverBookInfo() {
-        const receiverBook = await sql `select interests.*, users.email, users.name, books.title
-        from interests
-        inner join books on interests.id_mybook = books.id_book
-        inner join users on interests.id_user_receiver = users.id_user`;
-
+        const receiverBook = await sql `
+            select exchange.*, books.title, books.writer, users.email, users.name
+            from exchange       
+            inner join books on unaccent(mybook) ilike unaccent(books.title)
+            inner join users on exchange.id_user_receiver = users.id_user`
         return receiverBook;
     }
 
+    async acceptExchange(id_user, titleBook, status) {
+        await sql `update exchange
+        set status = ${status}
+        where id_user_owner = ${id_user} and unaccent(bookexchange) ilike unaccent(${titleBook})`
+    }
+
     async createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview) {
-        console.log('aaaa')
         await sql `insert into books (id_user, title, writer, review, rating, cover, totalRatings, sumRatings) values (
         ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook}, 1, ${ratingBook})`;
     }

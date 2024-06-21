@@ -96,7 +96,7 @@ export default function Publication({ publication }) {
                 </View>
                 
                 <Image 
-                    source={{uri: publication.image_post}} 
+                    source={{uri: publication.image_post ? publication.image_post : 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png'}} 
                     style={styles.imagePost}
                 />
             </View>

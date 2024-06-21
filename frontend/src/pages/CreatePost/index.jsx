@@ -17,7 +17,7 @@ import axios from 'axios'
 
 export default function CreatePost() {
     const [isSelectedPost, setIsSelectedPost] = useState(true)
-    const [imageURI, setImageURI] = useState('https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png')
+    const [imageURI, setImageURI] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [messageError, setMessageError] = useState('')
     

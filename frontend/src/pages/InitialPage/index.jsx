@@ -1,4 +1,4 @@
-import { StatusBar, View, FlatList, BackHandler} from 'react-native'
+import { StatusBar, View, FlatList, BackHandler, Alert} from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import * as Notifications from 'expo-notifications'
@@ -18,8 +18,8 @@ export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
     const [pageIsLoading, setPageIsLoading] = useState(true)
     const [loading, setLoading] = useState(false)
-    const [notification, setNotification] = useState(false)
 
+    const notification = [];
     const user = useUserStore(state => state.data);
     const saveUser = useUserStore(state => state.save);
 
@@ -29,7 +29,6 @@ export default function InitialPage(props) {
         // user.logout()
 
         if(props.route.params?.page) {
-            console.log(props.route.params.page)
             getUser();
         }
 
@@ -37,6 +36,7 @@ export default function InitialPage(props) {
         getNotificationPermission();
         getNotifications();
 
+        console.log('aaaa')
     }, []);
     
     const getUser = async() => {
@@ -58,7 +58,7 @@ export default function InitialPage(props) {
 
     const getNotifications = async () => {
         try {
-            const response = await axios.get('https://trocapaginas-server.onrender.com/notifications');
+            const response = await axios.get('http://192.168.1.65:6005/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]
@@ -79,13 +79,20 @@ export default function InitialPage(props) {
                                   seconds: 2
                                 }
                             })
+
+                            notification.push({
+                                title: `Interesse no livro "${userOwner.title}"`,
+                                body: `${userReceiver.name} demonstrou interesse em trocar o livro "${userOwner.title}" por "${userReceiver.title} - ${userReceiver.writer}". \n\nVocê aceita a troca?`
+                            })
+
+                            showNotification(userOwner.title, userReceiver.title)
                         }
                     })
                 }
             })
 
         } catch (error) {
-            setNotification(false);
+            Alert.alert("Erro!", error)
         }
     }
 
@@ -95,6 +102,7 @@ export default function InitialPage(props) {
           shouldShowAlert: true,
           shouldSetBadge: true,
         }),
+
       })
     
     const getNotificationPermission = async () => {
@@ -109,6 +117,43 @@ export default function InitialPage(props) {
         }
   
       };
+
+    const showNotification = (titleBook, titleBookReceiver) => {
+        if(notification.length > 0) {
+            notification.map((message) => {
+                Alert.alert(message.title, message.body, 
+                    [
+                        {
+                            text: 'Sim', 
+                            onPress: () => exchangeAccept(titleBook, titleBookReceiver)
+                        },
+
+                        {
+                            text: 'Não',
+                            onPress: navigation.navigate('InitialPage')
+                        }
+                ])
+            })
+        }
+    }
+
+    const exchangeAccept = async (titleBook, titleBookReceiver) => {
+        try {
+            await axios.post('http://192.168.1.65:6005/accept-exchange', {
+                email: user.email,
+                titleBook: titleBook,
+                status: 'aceita'
+            })
+
+            Alert.alert("Troca aceita!", `Deixe "${titleBook}" na FUNDACC (R. Santa Cruz, 396 - Centro) até 00/00/0000 e retire o livro "${titleBookReceiver}"\n\nBoa leitura!`, [
+                    {text: 'Ok'}
+                ]
+            )
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
 
     //impedir o usuário de voltar à tela de login 
