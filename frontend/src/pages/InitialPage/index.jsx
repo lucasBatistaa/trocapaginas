@@ -73,7 +73,7 @@ export default function InitialPage(props) {
 
     const getNotifications = async () => {
         try {
-            const response = await axios.get('http://192.168.1.65:6005/notifications');
+            const response = await axios.get('https://trocapaginas-server.onrender.com/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]
@@ -102,6 +102,42 @@ export default function InitialPage(props) {
                             myBook = userOwner.title
                             bookExchange = userReceiver.title
                             showNotification(userOwner.title, userReceiver.title)
+                        }
+                    })
+                }
+            })
+
+            receiverBook.forEach(async (userReceiver) => {
+                if((userReceiver.email === user.email) && userReceiver.status === 'recusada' || userReceiver.status === 'aceita') {
+                    ownerBook.forEach(async (userOwner) => {
+                        if(userOwner.id_interest === userReceiver.id_interest) {
+                            let userDecision;
+                            const titleNotification = `Solicitação de troca ${userReceiver.status}`
+
+                            if(userReceiver.status === 'recusada') {
+                                userDecision = 'recusou'
+                            
+                            }else if(userReceiver.status === 'aceita') {
+                                userDecision = 'aceitou'
+                            }
+
+                            let message = `${userOwner.name} ${userDecision} a troca do livro "${userOwner.title}" por "${userReceiver.title}".`
+
+                            userDecision === 'aceitou' ? message += `\n\nRetire o livro solicitado na FUNDACC (R. Santa Cruz, 396 - Centro) no dia 00/00/0000 e deixe o livro "${userReceiver.title}" na mesma data. \n\nAguardamos você!` : message = message
+
+                            await Notifications.scheduleNotificationAsync({
+                                content: {
+                                  title: titleNotification,
+                                  body: message,
+                                  data: {}
+                                },
+                                trigger: {
+                                  seconds: 2
+                                }
+                            })
+
+                            showNotificationUserReceiver(titleNotification, message)
+
                         }
                     })
                 }
@@ -141,28 +177,36 @@ export default function InitialPage(props) {
                     [
                         {
                             text: 'Sim', 
-                            onPress: () => exchangeAccept(titleBook, titleBookReceiver)
+                            onPress: () => exchangeAccept(titleBook, titleBookReceiver, 'aceita')
                         },
 
                         {
                             text: 'Não',
-                            onPress: navigation.navigate('InitialPage')
+                            onPress: () => exchangeAccept(titleBook, titleBookReceiver, 'recusada')
                         }
                 ])
             })
         }
     }
 
-    const exchangeAccept = async (titleBook, titleBookReceiver) => {
+    const showNotificationUserReceiver = (titleNotification, message) => {
+        Alert.alert(titleNotification, message, [
+            {text: 'Ok'}
+        ])
+    }
+
+    const exchangeAccept = async (titleBook, titleBookReceiver, status) => {
         setBookAccepted(true)
         try {
-            await axios.post('http://192.168.1.65:6005/accept-exchange', {
+            await axios.post('https://trocapaginas-server.onrender.com/accept-exchange', {
                 email: user.email,
                 titleBook: titleBook,
-                status: 'aceita'
+                status: status
             })
 
-            Alert.alert("Troca aceita!", `Deixe "${titleBook}" na FUNDACC (R. Santa Cruz, 396 - Centro) até 00/00/0000 e retire o livro "${titleBookReceiver}"\n\nBoa leitura!`, [
+            const message = status === 'aceita' ? `Deixe "${titleBook}" na FUNDACC (R. Santa Cruz, 396 - Centro) até 00/00/0000 e retire o livro "${titleBookReceiver}"\n\nBoa leitura!` : `Você optou por não trocar o livro "${titleBook}" por "${titleBookReceiver}"\n\nNotificaremos o usuário que solicitou a troca. Obrigado por utilizar nosso aplicativo!`
+
+            Alert.alert(`Troca ${status}`, message, [
                     {text: 'Ok'}
                 ]
             )
@@ -172,7 +216,6 @@ export default function InitialPage(props) {
         }
     }
     
-
     //impedir o usuário de voltar à tela de login 
     useFocusEffect(
         useCallback(() => {

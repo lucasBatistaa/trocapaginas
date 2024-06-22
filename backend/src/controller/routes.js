@@ -315,6 +315,8 @@ routes.get('/notifications', async (req, res) => {
 
         notifications.push(ownerBook, receiverBook);
 
+        console.log(notifications)
+
         return res.status(200).send(notifications);
 
     } catch (error) {

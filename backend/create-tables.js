@@ -388,6 +388,13 @@ CREATE TABLE comment (
 })*/
 
 
-sql ` create extension if not exists unaccent;
+/*sql ` create extension if not exists unaccent;
 `.then(() => {
-	console.log('tabela books alterada')})
+	console.log('tabela books alterada')})*/
+
+sql `
+	insert into exchange (id_user_owner, id_user_receiver, status, bookexchange, mybook)
+	values(63, 60, 'pendente', 'Um dia', 'Os últimos dias de Krypton')
+`.then(() => {
+	console.log('Troca inserida')
+})
