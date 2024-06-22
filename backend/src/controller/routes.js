@@ -313,8 +313,6 @@ routes.get('/notifications', async (req, res) => {
         const ownerBook = await database.getUserOwnerInfo();
         const receiverBook = await database.getReceiverBookInfo();
 
-        console.log('aaa:', receiverBook)
-
         notifications.push(ownerBook, receiverBook);
 
         return res.status(200).send(notifications);

@@ -18,12 +18,16 @@ export default function InitialPage(props) {
     const [ publications, setPublications ] = useState([])
     const [pageIsLoading, setPageIsLoading] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [bookAccepted, setBookAccepted] = useState(false)
 
     const notification = [];
     const user = useUserStore(state => state.data);
     const saveUser = useUserStore(state => state.save);
 
     const navigation = useNavigation();
+
+    let myBook;
+    let bookExchange;
 
     useEffect(()=> {
         // user.logout()
@@ -36,8 +40,19 @@ export default function InitialPage(props) {
         getNotificationPermission();
         getNotifications();
 
-        console.log('aaaa')
     }, []);
+
+    useEffect(() => {
+        if(!bookAccepted) {
+            const intervalId = setInterval(() => {
+                showNotification(myBook, bookExchange);
+    
+            }, 10000); 
+    
+            return () => clearInterval(intervalId); 
+        }
+        
+    }, [bookAccepted]);
     
     const getUser = async() => {
         try {
@@ -72,8 +87,7 @@ export default function InitialPage(props) {
                                 content: {
                                   title: `Interesse no livro "${userOwner.title}"`,
                                   body: `${userReceiver.name} demonstrou interesse em trocar o livro "${userOwner.title}" por "${userReceiver.title}". Você aceita a troca?`,
-                                  data: {}
-                                  
+                                  data: {message: `${userReceiver.name} demonstrou interesse em trocar o livro "${userOwner.title}" por "${userReceiver.title}". Você aceita a troca?`}
                                 },
                                 trigger: {
                                   seconds: 2
@@ -85,6 +99,8 @@ export default function InitialPage(props) {
                                 body: `${userReceiver.name} demonstrou interesse em trocar o livro "${userOwner.title}" por "${userReceiver.title} - ${userReceiver.writer}". \n\nVocê aceita a troca?`
                             })
 
+                            myBook = userOwner.title
+                            bookExchange = userReceiver.title
                             showNotification(userOwner.title, userReceiver.title)
                         }
                     })
@@ -103,7 +119,7 @@ export default function InitialPage(props) {
           shouldSetBadge: true,
         }),
 
-      })
+    })
     
     const getNotificationPermission = async () => {
         const { status } = await Notifications.getPermissionsAsync();
@@ -138,6 +154,7 @@ export default function InitialPage(props) {
     }
 
     const exchangeAccept = async (titleBook, titleBookReceiver) => {
+        setBookAccepted(true)
         try {
             await axios.post('http://192.168.1.65:6005/accept-exchange', {
                 email: user.email,
