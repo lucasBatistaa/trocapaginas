@@ -17,7 +17,7 @@ export default function ExchangeBook({ idUser, username, imageUser }) {
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.user}
-                onPress={() => navigation.navigate('Profile')}
+                // onPress={() => navigation.navigate('Profile', {user: idUser})}
             >
                 <Image 
                     source={imageUser}

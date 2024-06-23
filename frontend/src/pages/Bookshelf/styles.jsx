@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     },
 
     bookshelf: {
-        
         justifyContent: 'center',
         flexWrap: 'wrap',
         flexDirection: 'row',

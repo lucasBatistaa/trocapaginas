@@ -15,6 +15,7 @@ import ModalSynopsis from "./components/ModalSynopsis"
 import { styles } from "./styles"
 import { THEME } from "../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import ExchangeBook from "../../components/ExchangeBook"
 
 export default function Book() {
     const route = useRoute()
@@ -23,7 +24,6 @@ export default function Book() {
     const [ reviews, setReviews ] = useState([])
     const [ messageError, setMessageError ] = useState('')
     const [ bookExchanges, setBookExchanges ] = useState([])
-    const [ book, setBook ] = useState({})
 
     const [ tabView, setTabView ] = useState('review')
     const [ avaliation, setAvalation ] = useState(0)
@@ -50,6 +50,13 @@ export default function Book() {
 
         // TROCAS DISPONÍVEIS
         //getExchanges()
+
+        //TESTE 
+        setBookExchanges([
+            {idUser: '3', username: 'Lucas', imageUser: 'book.png'},
+            {idUser: '5', username: 'Stephanie', imageUser: 'book.png'}
+        ])
+
     }, [])
 
     const getBookReviews = async() => {
@@ -62,7 +69,7 @@ export default function Book() {
 
             const reviews = response.data
 
-            reviews.length > 0 ? setReviews(reviews) : setMessageError('Nenhuma resenha disponível para esse livro')
+            reviews.length > 0 && tabView === 'review' ? setReviews(reviews) : setMessageError('Nenhuma resenha disponível para esse livro')
 
         } catch (error) {
             setMessageError(error)
@@ -217,9 +224,9 @@ export default function Book() {
 
             {/* Conteúdo das Abas */}
 
-            {
+            {/* {
                 messageError && <Text style={[THEME.fonts.h2.bold, {marginTop: 20, marginLeft: 20}]}>{messageError}</Text>
-            }
+            } */}
 
             <ScrollView
                 contentContainerStyle={styles.viewContentOfTab}
