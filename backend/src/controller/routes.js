@@ -505,4 +505,54 @@ routes.post('/exchange', async(req, res) => {
 
 });
 
+routes.get('/set-like', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        const likes = await database.getLikes(id_publication, id_user);
+
+        if(likes.length === 0) {
+            await database.setLike(id_user, id_publication);
+        } 
+
+        return res.status(200).send('Curtida registrada com sucesso!');
+
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');   
+    }
+});
+
+routes.get('/set-dislike', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        await database.setDislike(id_user, id_publication);
+
+        return res.status(200).send('Dislike registrado com sucesso!');
+        
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');
+    }
+});
+
+routes.get('/get-like', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        const likes = await database.getLikes(id_publication, id_user);
+        const isLike = likes.length > 0 ? true : false;
+
+        return res.status(200).send(isLike);
+
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');   
+    }
+})
+
 export default routes;

@@ -1,4 +1,4 @@
-import { View, Image, Text, TouchableOpacity, Share } from 'react-native'
+import { View, Image, Text, TouchableOpacity, Share, Alert } from 'react-native'
 import { useEffect, useState } from 'react'
 
 import Comment from '../Comment'
@@ -9,6 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
+import { useUserStore } from '../../store/badgeStore'
 
 export default function Publication({ publication }) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(false)
@@ -18,7 +19,11 @@ export default function Publication({ publication }) {
     const navigation = useNavigation()
 
     const id_publication = publication.id_post !== undefined ? publication.id_post : publication.id_review;
+    const user = useUserStore(state => state.data)
 
+    useEffect(() => {
+        getLike()
+    }, [])
     // Compartilhar 
     const onShare = async () => {
         try {
@@ -52,6 +57,53 @@ export default function Publication({ publication }) {
             console.log(error);
         }
     }
+
+    const saveLike = async (clickHeartIcon) => {
+        setClickHeartIcon(clickHeartIcon)
+
+        if(clickHeartIcon){
+            try {
+                await axios.get('http://192.168.1.64:6005/set-like', {
+                    params: {
+                        email: user.email,
+                        id_publication: id_publication
+                    }
+                })
+    
+            } catch (error) {
+                Alert.alert('Erro', error)
+            }
+
+        }else {
+            try {
+                await axios.get('http://192.168.1.64:6005/set-dislike', {
+                    params: {
+                        email: user.email,
+                        id_publication: id_publication
+                    }
+                })
+            } catch (error) {
+                Alert.alert('Erro', error)
+
+            }
+        }        
+    }
+
+    const getLike = async() => {
+        try {
+            const response = await axios.get('http://192.168.1.64:6005/get-like', {
+                params: {
+                    email: user.email,
+                    id_publication: id_publication
+                }
+            })
+
+            setClickHeartIcon(response.data)
+
+        } catch (error) {
+            Alert.alert('Erro', error)
+        }
+    }
     
     return (
         <View style={styles.container}>
@@ -76,7 +128,7 @@ export default function Publication({ publication }) {
 
                     <View style={styles.icons}>
                         <TouchableOpacity 
-                            onPress={() => setClickHeartIcon(!clickHeartIcon)}
+                            onPress={async() => saveLike(!clickHeartIcon)}
                         >
                             <Ionicons name={clickHeartIcon ? 'heart-sharp' : 'heart-outline'} size={24} color={THEME.colors.brownDark} />
                         </TouchableOpacity>

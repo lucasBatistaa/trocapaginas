@@ -252,11 +252,13 @@ export default function Book() {
                 onClose={() => setModalSynopsisVisible(false)}
             />
 
-            <Comment 
-                id={bookId}
-                modalVisible={modalCommentVisible} 
-                onClose={() => setModalCommentVisible(false)} 
-            />
+            {reviews.length > 0 &&
+                <Comment 
+                    id={bookId}
+                    modalVisible={modalCommentVisible} 
+                    onClose={() => setModalCommentVisible(false)} 
+                />
+            }
 
         </View>
     )   

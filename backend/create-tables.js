@@ -392,9 +392,18 @@ CREATE TABLE comment (
 `.then(() => {
 	console.log('tabela books alterada')})*/
 
-sql `
+/*sql `
 	insert into exchange (id_user_owner, id_user_receiver, status, bookexchange, mybook)
 	values(63, 60, 'pendente', 'Um dia', 'Os últimos dias de Krypton')
 `.then(() => {
 	console.log('Troca inserida')
+})*/
+
+sql `
+	create table likes (
+		id_user integer not null,
+		id_publication integer not null
+	)
+`.then(() => {
+	console.log('tabela de likes criada')
 })
