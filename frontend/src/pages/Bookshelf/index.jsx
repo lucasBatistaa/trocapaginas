@@ -66,9 +66,9 @@ export default function Bookshelf() {
                 </Text>
 
                 {
-                    books.map((book, index) => (
+                    books.map((book) => (
                         <BookTemplate 
-                            key={index}
+                            key={book.id}
                             id={book.id}
                             image={book.image}
                             title={book.title}

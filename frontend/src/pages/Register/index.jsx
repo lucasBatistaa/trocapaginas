@@ -26,7 +26,7 @@ export default function Register(props) {
         props.route.params = undefined;
 
         try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server.onrender.com/login-google', '_self');
         
             //setIsLoading(true)
             setModalVisible(true)

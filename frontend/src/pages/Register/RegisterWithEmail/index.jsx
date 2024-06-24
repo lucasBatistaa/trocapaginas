@@ -37,7 +37,7 @@ export default function RegisterEmail() {
         if (username.trim() && email.trim()) {
             if (isEmail.test(email)){
                 try {
-                    await axios.post('https://trocapaginas-server-production.up.railway.app/verificar-email/',
+                    await axios.post('https://trocapaginas-server.onrender.com/verificar-email/',
                     JSON.stringify({email}),
                     {
                         headers: {'Content-Type': 'application/json'}
@@ -87,7 +87,7 @@ export default function RegisterEmail() {
 
             setIsLoading(true)
 
-            const response = await axios.post('https://trocapaginas-server-production.up.railway.app/create',
+            const response = await axios.post('https://trocapaginas-server.onrender.com/create',
             JSON.stringify({username, email, password, photo}),
             {
                 headers: {'Content-Type': 'application/json'}

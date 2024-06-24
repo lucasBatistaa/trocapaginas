@@ -46,7 +46,8 @@ export const styles = StyleSheet.create({
 
     userPhotoOfComment: {
         width: 36, 
-        height: 36
+        height: 36,
+        borderRadius: 20
     },
 
     commentHeader: {

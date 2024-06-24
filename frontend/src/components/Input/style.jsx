@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
 
     field: {
         flex: 1,
-        fontFamily: 'EBGaramond_400Regular',
         fontSize: 16,
     }
 })

@@ -6,6 +6,7 @@ import {User} from '../models/user.js';
 import {Post} from '../models/post.js';
 import {Review} from '../models/review.js';
 import {Comment} from '../models/comment.js';
+import {Controller} from '../controller/controller.js';
 
 const routes = express.Router();
 const database = new Database();
@@ -16,12 +17,13 @@ const review = new Review();
 const validationCode = [];
 const timeNow = new Date().toLocaleString(Intl.DateTimeFormat("pt-BR"));
 const comments = new Comment();
+const controller = new Controller(database, user);
 
 let contPost = 0;
 let contReview = 0; 
 let allPublications = [];
 
-async function userExists(email) {
+/*async function userExists(email) {
     return await database.getUsers().then(users => {
       const userWithEmail = users.find(user => {
         return user.email === email;
@@ -87,7 +89,7 @@ async function bookExists(imageBook) {
     }
 
     return false;
-}
+}*/
 
 //login
 routes.post('/login', (req, res) => {
@@ -134,7 +136,7 @@ routes.post('/create', async (req, res) => {
 routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
-    if(await userExists(email) != undefined) {
+    if(await controller.userExists(email) != undefined) {
         return res.status(422).send('E-mail já cadastrado!');
 
     }else {
@@ -146,7 +148,7 @@ routes.post('/verificar-email', async (req, res) => {
 routes.post('/esqueciMinhaSenha', async (req, res) => {
     const {email} = req.body; //receber um e-mail
 
-    if(await userExists(email) != undefined) {
+    if(await controller.userExists(email) != undefined) {
         user.email = email;//setando email para usar depois
 
         for(let i = 0; i < 4; i++) {
@@ -193,10 +195,9 @@ routes.post('/post', async (req, res) => {
 
     const {userEmail, text, nameBook, imageURI} = req.body; // recebendo o objeto review
 
-    const user_owner_post = await userExists(userEmail);
-    
-    validateImage(imageURI);
+    const user_owner_post = await controller.userExists(userEmail);
 
+    post.imageBook = imageURI;
     post.idUser = user_owner_post.id_user;
     post.content = text;
     post.timePost = timeNow;
@@ -205,7 +206,6 @@ routes.post('/post', async (req, res) => {
     post.user_photo = await database.getUsersById(post.idUser).photo;
     
     try{
-
         await database.createPost(post).then(() => { //criando o post no banco de dados
             return res.status(201).send('Post criado com sucesso!');
         });
@@ -219,10 +219,9 @@ routes.post('/post', async (req, res) => {
 routes.post('/review', async (req, res) => {
 
     const {userEmail, text, nameBook, imageURI, title, rating} = req.body; // recebendo o objeto review
-    const user_owner_post = await userExists(userEmail);
+    const user_owner_post = await controller.userExists(userEmail);
 
-    validateImage(imageURI);
-
+    review.imageBook = imageURI;
     review.idUser = user_owner_post.id_user;
     review.title = title;
     review.content = text;
@@ -247,14 +246,14 @@ routes.post('/review', async (req, res) => {
 
 routes.get('/publications', async (req, res) => {
     try{
-        const posts = await getPosts();
-        const reviews = await getReviews();
+        const posts = await controller.getPosts(contPost);
+        const reviews = await controller.getReviews(contReview);
         const publications = posts.concat(reviews);
 
         posts.length === 0 ? contPost = 0 : contPost += 5;
         reviews.length === 0 ? contReview = 0 : contReview += 5;
 
-        sortPublications(publications);
+        controller.sortPublications(publications);
         
         publications.map((publication) => {
             if((!(allPublications.some(pub => pub.id_post === publication.id_post))) || (!(allPublications.some(pub => pub.id_review === publication.id_review)))) {
@@ -293,7 +292,7 @@ routes.post('/my-publications', async (req, res) => {
         const myReviews = await database.getMyReviews(email);
         const myPublications = myPosts.concat(myReviews);
 
-        sortPublications(myPublications);
+        controller.sortPublications(myPublications);
         myPublications.reverse();
 
         myPublications.map((publication) => {
@@ -316,7 +315,7 @@ routes.get('/notifications', async (req, res) => {
 
         notifications.push(ownerBook, receiverBook);
 
-        console.log(notifications);
+        console.log(notifications)
 
         return res.status(200).send(notifications);
 
@@ -325,16 +324,30 @@ routes.get('/notifications', async (req, res) => {
     }
 });
 
+routes.post('/accept-exchange', async(req, res) => {
+    const{email, titleBook, status} = req.body;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+        await database.acceptExchange(id_user, titleBook, status);
+
+        return res.status(200).send(`Troca ${status} com sucesso!`)
+        
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor de banco de dados');
+    }
+});
+
 routes.post('/save-book', async (req, res) => {
     const {userEmail, imageBook, titleBook, writerBook, ratingBook, bookReview, choiceUser} = req.body;
     let id_user = null
 
     if(userEmail !== null) {
-        id_user = await getUserByEmail(userEmail);
+        id_user = await controller.getUserByEmail(userEmail);
     }
 
     try {
-        if(! await bookExists(imageBook)) {
+        if(! await controller.bookExists(imageBook)) {
             await database.createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview);
         
         }else {
@@ -344,7 +357,6 @@ routes.post('/save-book', async (req, res) => {
             const rating = Math.round(sumRatings / totalRatings)
 
             await database.updateBook(imageBook, totalRatings, sumRatings, rating);
-
         }
 
         if(choiceUser === 'hasInterest') {
@@ -352,6 +364,13 @@ routes.post('/save-book', async (req, res) => {
 
             if(!interests.find((interest) => interest.imagebook === imageBook)) {
                 await database.setInterest(id_user, titleBook, imageBook, writerBook);
+            }
+        
+        }else if(choiceUser === 'exchange') {
+            const myExchanges = await database.getMyExchanges();
+
+            if(!myExchanges.find((exchange) => exchange.imagebook === imageBook)) {
+                await database.setMyExchanges(id_user, titleBook, imageBook, writerBook);
             }
         }
 
@@ -374,6 +393,19 @@ routes.post('/my-interests', async (req, res) => {
         return res.status(400).send('Interesses não encontrados');
     }
 });
+
+routes.post('/my-book-for-exchange', async (req, res) => {
+    const {email} = req.body;
+
+    try {
+        const myExchangesByEmail = await database.myExchangesByEmail(email);
+
+        return res.status(200).send(myExchangesByEmail);
+        
+    } catch (error) {
+        return res.status(400).send('Nenhum livro encontrado para troca');
+    }
+})
 
 routes.post('/get-book', async (req, res) => {
     const {imageBook} = req.body;
@@ -405,6 +437,26 @@ routes.get('/book-reviews', async(req, res) => {
     }
 });
 
+routes.post('/update-profile', async(req, res) => {
+    const {email, name, oldPassword, newPassword} = req.body;
+
+    try {
+        const user = await controller.userExists(email);
+
+        if(bcrypt.compareSync(oldPassword, user.password)) {
+            await database.updateUser(name, email, bcrypt.hashSync(newPassword, salt));
+
+            return res.status(200).send('Informações atualizadas com sucesso!');
+
+        }else {
+            return res.status(401).send('Senha atual não confere, tente novamente!');
+        }
+
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+});
+
 routes.post('/comment', async (req, res) => {
     const {idUser, id, comment} = req.body;
     comments.idUser = idUser;
@@ -426,11 +478,81 @@ routes.get('/loadComments', async(req, res) => {
 
     try {
         const loadComment = await database.getloadComments(idPublication);
-        console.log('Esse é o resultado da consulta',loadComment);
+
+        loadComment.map((comment) => {
+            comment.photo = comment.photo.toString('utf-8');
+        })
         return res.status(200).send(loadComment);
     } catch (error) {
         return res.status(500).send('Erro interno ao carregar os comentários da publicação');
     }
 });
+
+routes.post('/exchange', async(req, res) => {
+    const {email, dateExchange, localExchange, myBook, bookExchange, emailOwnerBook} = req.body;
+
+    const idUserReceiver = await controller.getUserByEmail(email);
+    const idUserOwner = await controller.getUserByEmail(emailOwnerBook);
+
+    try{
+        await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange);
+
+        return res.status(200).send('Troca solicitada com sucesso!');
+    
+    }catch(error) {
+        return res.status(500).send('Erro ao solicitar troca...')
+    }
+
+});
+
+routes.get('/set-like', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        const likes = await database.getLikes(id_publication, id_user);
+
+        if(likes.length === 0) {
+            await database.setLike(id_user, id_publication);
+        } 
+
+        return res.status(200).send('Curtida registrada com sucesso!');
+
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');   
+    }
+});
+
+routes.get('/set-dislike', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        await database.setDislike(id_user, id_publication);
+
+        return res.status(200).send('Dislike registrado com sucesso!');
+        
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');
+    }
+});
+
+routes.get('/get-like', async(req, res) => {
+    const {email, id_publication} = req.query;
+    const id_user = await controller.getUserByEmail(email);
+
+    try {
+
+        const likes = await database.getLikes(id_publication, id_user);
+        const isLike = likes.length > 0 ? true : false;
+
+        return res.status(200).send(isLike);
+
+    } catch (error) {
+        return res.status(500).send('Erro ao acessar o servidor');   
+    }
+})
 
 export default routes;

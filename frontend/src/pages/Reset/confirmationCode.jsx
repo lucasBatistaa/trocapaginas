@@ -39,7 +39,7 @@ export default function ConfirmationCode () {
         }else if(codeValid) {
             try {
 
-                const response = await axios.get('https://trocapaginas-server-production.up.railway.app/getCode', {
+                const response = await axios.get('https://trocapaginas-server.onrender.com/getCode', {
                     params: {
                         confirmationCode: code
                     }
@@ -60,7 +60,7 @@ export default function ConfirmationCode () {
 
     const handleSubmitReset = async (password) => {
         try{
-            const response = await axios.post('https://trocapaginas-server-production.up.railway.app/alterar-senha',
+            const response = await axios.post('https://trocapaginas-server.onrender.com/alterar-senha',
             JSON.stringify({password}),
 
             {

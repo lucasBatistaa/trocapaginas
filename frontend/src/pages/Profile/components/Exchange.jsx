@@ -9,11 +9,11 @@ export default function Exchange ({id, image, title, author}) {
     return (
         <View style={style.container}>
             <Image 
-                source={image}
+                source={{uri: image}}
                 style={style.imageBook}
             />
 
-            <View>
+            <View style={{width: 250, flex: 1, flexDirection: 'column'}}>
                 <Text  style={[THEME.fonts.h2.bold, {color: THEME.colors.brownDark}]}>
                     {title}
                 </Text>
@@ -21,12 +21,11 @@ export default function Exchange ({id, image, title, author}) {
                 <Text style={[ THEME.fonts.text, {color: THEME.colors.brownMedium}]}>
                     {author}
                 </Text>
-            </View>
 
-            <TouchableOpacity>
-                <ExchangeIcon style={{right: 30, top: 66}}/>
-            </TouchableOpacity>
-            
+                <TouchableOpacity>
+                    <ExchangeIcon style={{left: 220}}/>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }

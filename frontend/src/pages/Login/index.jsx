@@ -37,7 +37,7 @@ export default function Login(props) {
         props.route.params = undefined;
 
         try {
-            await WebBrowser.openBrowserAsync('https://trocapaginas-server-production.up.railway.app/login-google', '_self');
+            await WebBrowser.openBrowserAsync('https://trocapaginas-server.onrender.com/login-google', '_self');
 
             setModalVisible(true);
 
@@ -58,7 +58,7 @@ export default function Login(props) {
 
         if (email.trim() && password.trim()) {
             try {
-                const response = await axios.post('https://trocapaginas-server-production.up.railway.app/login',
+                const response = await axios.post('https://trocapaginas-server.onrender.com/login',
                 JSON.stringify({email, password}),
                 {
                     headers: {'Content-Type': 'application/json'}

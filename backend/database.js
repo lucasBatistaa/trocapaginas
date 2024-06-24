@@ -57,10 +57,8 @@ export class Database {
     }
 
     async createComment (comments) {
-        console.log('entrou no comentário');
         await sql `insert into comment (id_user, id_publication, content_comment) 
         values (${comments.idUser}, ${comments.idPublication}, ${comments.comment})`;
-        console.log('enviou comentário');
     }
 
     async getMyPosts(email) {
@@ -80,25 +78,31 @@ export class Database {
     }
 
     async getUserOwnerInfo() {
-        const ownerBook = await sql `select interests.*, users.email, users.name, books.title
-        from interests 
-        inner join books on interests.id_book_interest = books.id_book
-        inner join users on interests.id_user_owner = users.id_user`
-
+        const ownerBook = await sql ` 
+            select exchange.*, books.title, users.email, users.name
+            from exchange       
+            inner join books on unaccent(bookexchange) ilike unaccent(books.title)
+            inner join users on exchange.id_user_owner = users.id_user
+        `
         return ownerBook;
     }
 
     async getReceiverBookInfo() {
-        const receiverBook = await sql `select interests.*, users.email, users.name, books.title
-        from interests
-        inner join books on interests.id_mybook = books.id_book
-        inner join users on interests.id_user_receiver = users.id_user`;
-
+        const receiverBook = await sql `
+            select exchange.*, books.title, books.writer, users.email, users.name
+            from exchange       
+            inner join books on unaccent(mybook) ilike unaccent(books.title)
+            inner join users on exchange.id_user_receiver = users.id_user`
         return receiverBook;
     }
 
+    async acceptExchange(id_user, titleBook, status) {
+        await sql `update exchange
+        set status = ${status}
+        where id_user_owner = ${id_user} and unaccent(bookexchange) ilike unaccent(${titleBook})`
+    }
+
     async createBook(id_user, imageBook, titleBook, writerBook, ratingBook, bookReview) {
-        console.log('aaaa')
         await sql `insert into books (id_user, title, writer, review, rating, cover, totalRatings, sumRatings) values (
         ${id_user}, ${titleBook}, ${writerBook}, ${bookReview}, ${ratingBook}, ${imageBook}, 1, ${ratingBook})`;
     }
@@ -134,12 +138,48 @@ export class Database {
 
         return myInterests;
     }
+
+    async setMyExchanges(id_user, titleBook, imageBook, writerBook) {
+        await sql `insert into myExchanges (id_user, titlebook, imagebook, writerbook) values (${id_user}, ${titleBook}, ${imageBook}, ${writerBook})`;
+    }
+
+    async getMyExchanges() {
+        const myExchanges = await sql `select * from myExchanges`;
+        return myExchanges;
+    }
+
+    async myExchangesByEmail(email) {
+        const myExchangesByEmail = await sql `select myExchanges.* from myExchanges inner join users using(id_user) where users.email = ${email}`
+
+        return myExchangesByEmail;
+    }
     async getloadComments(idPublication) {
         const comments = await sql `
-        SELECT * 
-        FROM comment 
+        SELECT comment.*, users.name, users.photo 
+        FROM comment inner join users using(id_user) 
         WHERE id_publication = ${idPublication} 
         ORDER BY id_comment ASC`;
+
         return comments;
+    }
+
+    async setExchangeWish(id_user_owner, id_user_receiver, status, myBook, bookExchange) {
+        await sql `insert into exchange (id_user_owner, id_user_receiver, status, mybook, bookexchange) values (${id_user_owner}, ${id_user_receiver}, ${status}, ${myBook}, ${bookExchange})`;
+
+    }
+
+    async setLike(id_user, id_publication) {
+        await sql `insert into likes (id_user, id_publication) values (${id_user}, ${id_publication})`;
+    }
+
+    async getLikes(id_publication, id_user) {
+        const likes = await sql `select * from likes where id_publication = ${id_publication} and id_user = ${id_user}`;
+
+        return likes;
+    }
+
+    async setDislike(id_user, id_publication) {
+        console.log(id_user, id_publication)
+        await sql `delete from likes where id_publication = ${id_publication} and id_user = ${id_user}`;
     }
 }
