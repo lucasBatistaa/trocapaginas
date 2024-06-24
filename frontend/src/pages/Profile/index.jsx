@@ -26,6 +26,8 @@ export default function Profile (props) {
     //const user = useUserStore(state => state.data)
     const user = props.route.params.user;
 
+    console.log(user);
+
     useEffect(() => {
         renderTabView()
        
@@ -55,7 +57,7 @@ export default function Profile (props) {
     }
 
     const getPublications = async() => {
-        const response = await axios.post('https://trocapaginas-server-production.up.railway.app/my-publications', {
+        const response = await axios.post('https://trocapaginas-server-production.up.railway.app5/my-publications', {
             email: user.email
         })
         
@@ -75,7 +77,7 @@ export default function Profile (props) {
     }
 
     const getInterests = async() => {
-        const response = await axios.post('http://192.168.1.64:6005/my-interests', {
+        const response = await axios.post('https://trocapaginas-server-production.up.railway.app/my-interests', {
             email: user.email
         })
 
@@ -93,6 +95,7 @@ export default function Profile (props) {
         setPageIsLoading(false)
 
     }
+
 
     const renderTabView = async () => {
         setPageIsLoading(true)
@@ -189,4 +192,4 @@ export default function Profile (props) {
             { pageIsLoading && <AppLoader /> }
         </View>
     )
-}
+} 

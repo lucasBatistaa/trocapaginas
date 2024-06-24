@@ -432,4 +432,5 @@ routes.get('/loadComments', async(req, res) => {
         return res.status(500).send('Erro interno ao carregar os comentários da publicação');
     }
 });
-export default routes;1
+
+export default routes;
