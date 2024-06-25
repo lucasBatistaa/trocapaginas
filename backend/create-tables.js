@@ -399,11 +399,17 @@ CREATE TABLE comment (
 	console.log('Troca inserida')
 })*/
 
-sql `
+/*sql `
 	create table likes (
 		id_user integer not null,
 		id_publication integer not null
 	)
 `.then(() => {
 	console.log('tabela de likes criada')
-})
+})*/
+
+const users = await sql `
+	select * from users
+`
+
+console.log(users)

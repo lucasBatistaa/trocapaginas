@@ -23,75 +23,6 @@ let contPost = 0;
 let contReview = 0; 
 let allPublications = [];
 
-/*async function userExists(email) {
-    return await database.getUsers().then(users => {
-      const userWithEmail = users.find(user => {
-        return user.email === email;
-      });
-  
-      return userWithEmail;
-    });
-}
-
-function validateImage(imageURI){
-    if(imageURI === undefined) {
-        review.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
-        post.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
-
-    } else {
-        review.imageBook = imageURI;
-        post.imageBook = imageURI;
-    }    
-} 
-
-async function getPosts() {
-    const posts = await database.getUsersPosts(contPost).then((posts) => {
-            
-        posts.forEach(post => {
-            post.photo = post.photo.toString('utf-8');
-        })
-        return posts;
-    }); 
-
-    return posts;
-}
-
-async function getReviews() {
-    const reviews = await database.getUsersReviews(contReview).then((reviews) => {
-        reviews.forEach(review => {
-            review.photo = review.photo.toString('utf-8');
-        })
-       return reviews;
-    });
-
-    return reviews;
-}
-
-function sortPublications(publications) {
-    publications.sort((a, b) => {
-        return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
-    })
-}
-
-async function getUserByEmail(email) {
-    if(email !== null) {
-        const user = await userExists(email);
-
-        return user.id_user;
-    }
-}
-
-async function bookExists(imageBook) {
-    const books = await database.getBooks();
-
-    if(books.find((book) => book.cover === imageBook)) {
-        return true;
-    }
-
-    return false;
-}*/
-
-//login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
 
@@ -99,8 +30,6 @@ routes.post('/login', (req, res) => {
         const validateUser = users.find(user => user.email === email && bcrypt.compareSync(password, user.password));
         
         if(validateUser !== undefined) {
-            validateUser.photo = validateUser.photo.toString('utf8');
-
             user.idUser = validateUser.idUser;
             user.email = validateUser.email;
             user.name = validateUser.name;
@@ -115,12 +44,10 @@ routes.post('/login', (req, res) => {
     });
 });
 
-
-// criação de conta
 routes.post('/create', async (req, res) => {
-    const {username, email, password, photo} = req.body;
+    const {username, email, password} = req.body;
 
-    const passwordHash = bcrypt.hashSync(password, salt); //criptografando a senha
+    const passwordHash = bcrypt.hashSync(password, salt); 
 
     user.email = email;
     user.name = username;
@@ -132,7 +59,6 @@ routes.post('/create', async (req, res) => {
     }); 
 });
 
-//verificar se email existe
 routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
@@ -144,29 +70,26 @@ routes.post('/verificar-email', async (req, res) => {
     }
 });
 
-//Esqueci minha senha
 routes.post('/esqueciMinhaSenha', async (req, res) => {
-    const {email} = req.body; //receber um e-mail
+    const {email} = req.body; 
 
     if(await controller.userExists(email) != undefined) {
-        user.email = email;//setando email para usar depois
+        user.email = email;
 
         for(let i = 0; i < 4; i++) {
             validationCode[i] = Math.floor(Math.random() * 9 + 1);
         }
 
-        //se e-mail existe -> enviar link de reset
         const reset = new ResetSenha(email, validationCode.join(''));
         reset.sendEmail();
 
         return res.status(200).send('E-mail enviado com sucesso!');
 
     }else {
-        return res.status(401).send('Usuário não encontrado! Tente novamente'); //se e-mail não existe -> informar usuário
+        return res.status(401).send('Usuário não encontrado! Tente novamente'); 
     }
 });
 
-//validar código
 routes.get('/getCode', async (req, res) => {
     const {confirmationCode} = req.query;
     
@@ -178,22 +101,19 @@ routes.get('/getCode', async (req, res) => {
     }
 });
 
-//alterar a senha
 routes.post('/alterar-senha', async (req, res) => {
-    const {password} = req.body; //recebendo nova senha
-    const passCript = bcrypt.hashSync(password, salt); //criptografando a senha
+    const {password} = req.body; 
+    const passCript = bcrypt.hashSync(password, salt); 
 
-    //alterando no banco de dados
     await database.updatePassword(user.email, passCript).then(() => {
         return res.status(200).send("Senha alterada com sucesso!");
     });
 
 });
 
-//criação da rota post
 routes.post('/post', async (req, res) => {
 
-    const {userEmail, text, nameBook, imageURI} = req.body; // recebendo o objeto review
+    const {userEmail, text, nameBook, imageURI} = req.body; 
 
     const user_owner_post = await controller.userExists(userEmail);
 
@@ -206,7 +126,7 @@ routes.post('/post', async (req, res) => {
     post.user_photo = await database.getUsersById(post.idUser).photo;
     
     try{
-        await database.createPost(post).then(() => { //criando o post no banco de dados
+        await database.createPost(post).then(() => { 
             return res.status(201).send('Post criado com sucesso!');
         });
 
@@ -218,7 +138,7 @@ routes.post('/post', async (req, res) => {
 
 routes.post('/review', async (req, res) => {
 
-    const {userEmail, text, nameBook, imageURI, title, rating} = req.body; // recebendo o objeto review
+    const {userEmail, text, nameBook, imageURI, title, rating} = req.body; 
     const user_owner_post = await controller.userExists(userEmail);
 
     review.imageBook = imageURI;
@@ -232,7 +152,7 @@ routes.post('/review', async (req, res) => {
     review.user_photo = await database.getUsersById(review.idUser).photo;
 
     try{
-        await database.createReview(review).then(() => { //criando o review no banco de dados
+        await database.createReview(review).then(() => { 
             return res.status(201).send('Resenha criada com sucesso!');
         });    
 
@@ -458,10 +378,13 @@ routes.post('/update-profile', async(req, res) => {
 });
 
 routes.post('/comment', async (req, res) => {
-    const {idUser, id, comment} = req.body;
+    const {email, id, comment} = req.body;
+    const idUser = await controller.getUserByEmail(email);
     comments.idUser = idUser;
     comments.idPublication = id;
     comments.comment = comment;
+
+    console.log(idUser, id, comment)
 
     try{
         await database.createComment(comments).then(() => {
@@ -553,7 +476,7 @@ routes.get('/get-like', async(req, res) => {
     } catch (error) {
         return res.status(500).send('Erro ao acessar o servidor');   
     }
-})
+});
 
 routes.get('/my-exchange', async (req, res) => {
     const {email} = req.query;

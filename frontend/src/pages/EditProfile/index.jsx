@@ -14,6 +14,7 @@ import axios from 'axios';
 
 export default function EditProfile () {
     const user = useUserStore(state => state.data) 
+    const newInfoUser = useUserStore(state => state.save)
     const navigation = useNavigation()
 
     const [securePassword, setSecurePassword] = useState(true)
@@ -30,9 +31,8 @@ export default function EditProfile () {
                 newPassword: password
             })
 
-            console.log(response.data)
-
             user.name = newName
+            newInfoUser(user)
 
             Alert.alert('Sucesso', 'Informações do perfil atualizadas!', [
                 {text: 'OK', onPress: () => navigation.navigate('Profile', {user: user})}

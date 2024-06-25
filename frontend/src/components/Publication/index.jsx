@@ -23,7 +23,7 @@ export default function Publication({ publication }) {
 
     useEffect(() => {
         getLike()
-    }, [])
+    }, [publication])
     // Compartilhar 
     const onShare = async () => {
         try {
@@ -65,7 +65,7 @@ export default function Publication({ publication }) {
             try {
                 await axios.get('https://trocapaginas-server.onrender.com/set-like', {
                     params: {
-                        email: user.email,
+                        email: user?.email,
                         id_publication: id_publication
                     }
                 })

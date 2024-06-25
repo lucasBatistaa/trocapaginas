@@ -58,7 +58,7 @@ export default function InitialPage(props) {
         try {
             const response = await axios.get('https://trocapaginas-server.onrender.com/login/success')
             
-            if(response.data.email !== null) {
+            if(response.data?.email !== null) {
                 //setUserData(response.data);
                 saveUser(response.data);
 
@@ -80,7 +80,7 @@ export default function InitialPage(props) {
             const receiverBook = notifications[1]
 
             ownerBook.forEach(async (userOwner) => {
-                if((userOwner.email === user.email) && userOwner.status === 'pendente') {
+                if((userOwner?.email === user?.email) && userOwner.status === 'pendente') {
                     receiverBook.forEach(async (userReceiver) => {
                         if(userReceiver.id_interest === userOwner.id_interest) {
                             await Notifications.scheduleNotificationAsync({
@@ -108,7 +108,7 @@ export default function InitialPage(props) {
             })
 
             receiverBook.forEach(async (userReceiver) => {
-                if((userReceiver.email === user.email) && userReceiver.status === 'recusada' || userReceiver.status === 'aceita') {
+                if((userReceiver?.email === user?.email) && (userReceiver.status === 'recusada' || userReceiver.status === 'aceita')) {
                     ownerBook.forEach(async (userOwner) => {
                         if(userOwner.id_interest === userReceiver.id_interest) {
                             let userDecision;
@@ -199,7 +199,7 @@ export default function InitialPage(props) {
         setBookAccepted(true)
         try {
             await axios.post('https://trocapaginas-server.onrender.com/accept-exchange', {
-                email: user.email,
+                email: user?.email,
                 titleBook: titleBook,
                 status: status
             })
@@ -235,11 +235,16 @@ export default function InitialPage(props) {
     );
 
     const getPublications = async () => {
-        const response = await axios.get('https://trocapaginas-server.onrender.com/publications')
-        const posts = response.data
+        try {
+            const response = await axios.get('https://trocapaginas-server.onrender.com/publications')
+            const posts = response.data
+    
+            setPublications(posts)
+            setPageIsLoading(false)
+        }catch (error) {
+            console.log(error)
+        }
 
-        setPublications(posts)
-        setPageIsLoading(false)
     }
 
     return (

@@ -49,7 +49,7 @@ export default function Reset() {
 
         if (validateForm()) {
             try {
-                await axios.post('https://trocapaginas-server-production.up.railway.app/esqueciMinhaSenha',
+                await axios.post('https://trocapaginas-server.onrender.com/esqueciMinhaSenha',
                 JSON.stringify({email}),
             
                 {

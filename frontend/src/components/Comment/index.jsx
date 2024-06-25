@@ -8,7 +8,8 @@ import {
     ScrollView, 
     TouchableOpacity, 
     Keyboard, 
-    PanResponder 
+    PanResponder, 
+    Alert
 } from "react-native"
 
 import axios from 'axios'
@@ -28,11 +29,13 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
   
     useFocusEffect(
         useCallback(()=> {
-            loadComments();
+            loadComments()
+
         },[idPublication]
         ))
 
     const loadComments = async () => {
+
         try {
 
             const response = await axios.get('https://trocapaginas-server.onrender.com/loadComments',{
@@ -48,7 +51,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
                 comment: comment.content_comment
             }));
         
-            setAllComments(fetchedComments);    
+            setAllComments(fetchedComments);  
 
         } catch (error) {
             console.error('Erro ao carregar comentários:', error);
@@ -63,18 +66,18 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             //rota pra puxar dados do usuário
                         
              const newComment = {
-                idUser: user.id_user,
+                email: user.email,
                 image: user.photo,
                 username: user.name,
                 comment:`${textComment.trim()}`,
                 id: idPublication
             }
 
-            const  {idUser, id, comment} = newComment;
-            const sendCommentDatabase = {idUser, id, comment};
+            const  {email, id, comment} = newComment;
+            const sendCommentDatabase = {email, id, comment};
 
             try{ 
-              await axios.post('https://trocapaginas-server.onrender.com/comment', sendCommentDatabase).then(response => {
+              await axios.post('http://192.168.1.64:6005/comment', sendCommentDatabase).then(response => {
 
                 setAllComments(prevComments => [...prevComments, newComment]);
                 setTextComment('');
@@ -155,7 +158,8 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
                                         <Text style={THEME.fonts.text}>{comment.comment}</Text>
                                     </View>
                                 </View>    
-                            ))
+                            )) 
+
                         }                    
                     </ScrollView>
 

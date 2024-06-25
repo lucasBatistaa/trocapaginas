@@ -24,7 +24,6 @@ export default function RegisterEmail() {
 
     const [ nextPage, setNextPage ] = useState(false)
     const [ isLoading , setIsLoading ] = useState(false)
-    const [ photo, setPhoto] = useState(null)
     
     const isEmail = /.+@.+/
     const navigation = useNavigation()
@@ -88,7 +87,7 @@ export default function RegisterEmail() {
             setIsLoading(true)
 
             const response = await axios.post('https://trocapaginas-server.onrender.com/create',
-            JSON.stringify({username, email, password, photo}),
+            JSON.stringify({username, email, password }),
             {
                 headers: {'Content-Type': 'application/json'}
             })
