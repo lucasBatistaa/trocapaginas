@@ -26,6 +26,8 @@ export default function Profile (props) {
     //const user = useUserStore(state => state.data)
     const user = props.route.params.user;
 
+    console.log(user);
+
     useEffect(() => {
         renderTabView()
 
@@ -189,4 +191,4 @@ export default function Profile (props) {
             { pageIsLoading && <AppLoader /> }
         </View>
     )
-}
+} 
