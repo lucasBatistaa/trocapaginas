@@ -23,74 +23,6 @@ let contPost = 0;
 let contReview = 0; 
 let allPublications = [];
 
-/*async function userExists(email) {
-    return await database.getUsers().then(users => {
-      const userWithEmail = users.find(user => {
-        return user.email === email;
-      });
-  
-      return userWithEmail;
-    });
-}
-
-function validateImage(imageURI){
-    if(imageURI === undefined) {
-        review.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
-        post.imageBook = 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png';
-
-    } else {
-        review.imageBook = imageURI;
-        post.imageBook = imageURI;
-    }    
-} 
-
-async function getPosts() {
-    const posts = await database.getUsersPosts(contPost).then((posts) => {
-            
-        posts.forEach(post => {
-            post.photo = post.photo.toString('utf-8');
-        })
-        return posts;
-    }); 
-
-    return posts;
-}
-
-async function getReviews() {
-    const reviews = await database.getUsersReviews(contReview).then((reviews) => {
-        reviews.forEach(review => {
-            review.photo = review.photo.toString('utf-8');
-        })
-       return reviews;
-    });
-
-    return reviews;
-}
-
-function sortPublications(publications) {
-    publications.sort((a, b) => {
-        return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
-    })
-}
-
-async function getUserByEmail(email) {
-    if(email !== null) {
-        const user = await userExists(email);
-
-        return user.id_user;
-    }
-}
-
-async function bookExists(imageBook) {
-    const books = await database.getBooks();
-
-    if(books.find((book) => book.cover === imageBook)) {
-        return true;
-    }
-
-    return false;
-}*/
-
 //login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
@@ -458,10 +390,13 @@ routes.post('/update-profile', async(req, res) => {
 });
 
 routes.post('/comment', async (req, res) => {
-    const {idUser, id, comment} = req.body;
+    const {email, id, comment} = req.body;
+    const idUser = await controller.getUserByEmail(email);
     comments.idUser = idUser;
     comments.idPublication = id;
     comments.comment = comment;
+
+    console.log(idUser, id, comment)
 
     try{
         await database.createComment(comments).then(() => {
@@ -553,6 +488,6 @@ routes.get('/get-like', async(req, res) => {
     } catch (error) {
         return res.status(500).send('Erro ao acessar o servidor');   
     }
-})
+});
 
 export default routes;

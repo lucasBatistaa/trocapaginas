@@ -23,7 +23,7 @@ export default function Publication({ publication }) {
 
     useEffect(() => {
         getLike()
-    }, [])
+    }, [publication])
     // Compartilhar 
     const onShare = async () => {
         try {

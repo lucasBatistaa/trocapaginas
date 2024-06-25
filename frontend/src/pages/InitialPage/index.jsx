@@ -26,6 +26,8 @@ export default function InitialPage(props) {
 
     const navigation = useNavigation();
 
+    console.log(user)
+
     let myBook;
     let bookExchange;
 
@@ -108,7 +110,7 @@ export default function InitialPage(props) {
             })
 
             receiverBook.forEach(async (userReceiver) => {
-                if((userReceiver.email === user.email) && userReceiver.status === 'recusada' || userReceiver.status === 'aceita') {
+                if((userReceiver.email === user.email) && (userReceiver.status === 'recusada' || userReceiver.status === 'aceita')) {
                     ownerBook.forEach(async (userOwner) => {
                         if(userOwner.id_interest === userReceiver.id_interest) {
                             let userDecision;

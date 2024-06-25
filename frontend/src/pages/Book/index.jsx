@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ScrollView, TouchableOpacity, View, Image, Text } from "react-native"
+import { ScrollView, TouchableOpacity, View, Image, Text, Alert } from "react-native"
 
 import { useNavigation, useRoute } from "@react-navigation/native"
 import axios from "axios"
@@ -24,6 +24,7 @@ export default function Book() {
     const [ reviews, setReviews ] = useState([])
     const [ messageError, setMessageError ] = useState('')
     const [ bookExchanges, setBookExchanges ] = useState([])
+    const [ commentsBook, setCommentsBook ] = useState([])
 
     const [ tabView, setTabView ] = useState('review')
     const [ avaliation, setAvalation ] = useState(0)
@@ -46,7 +47,6 @@ export default function Book() {
 
         // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
         getBookReviews()
-        
 
         // TROCAS DISPONÍVEIS
         //getExchanges()
@@ -108,6 +108,7 @@ export default function Book() {
             setAvalation(0)
         }
     }
+
     const renderTabView = () => {
         switch (tabView) {
             case 'review':
@@ -181,14 +182,6 @@ export default function Book() {
                                     sinopse
                                 </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={0.7}
-                                onPress={() => setModalCommentVisible(true)}
-                            >
-                                <Text style={styles.actions}>
-                                    comentários
-                                </Text>
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -251,15 +244,7 @@ export default function Book() {
                 text={bookDescription}
                 onClose={() => setModalSynopsisVisible(false)}
             />
-
-            {reviews.length > 0 &&
-                <Comment 
-                    id={bookId}
-                    modalVisible={modalCommentVisible} 
-                    onClose={() => setModalCommentVisible(false)} 
-                />
-            }
-
+            
         </View>
     )   
 }
