@@ -69,11 +69,12 @@ passport.use(
 
             if(await userExists(profile.emails[0].value) === undefined) {
 
-                await database.create(user.name, user.email, user.password, user.photo).then(() => {
+                await database.create(user).then(() => {
                     console.log('user add');
                 });  
 
             }else {
+                await database.updatePhotoUser(user.email, user.photo);
                 console.log('Usuário já cadastrado!');
             }
 

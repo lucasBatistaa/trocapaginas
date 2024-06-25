@@ -16,9 +16,6 @@ export class Controller {
 
     async getPosts(contPost) {
         const posts = await this.database.getUsersPosts(contPost).then((posts) => {
-            posts.forEach(post => {
-                post.photo = post.photo.toString('utf-8');
-            })
             return posts;
         }); 
 
@@ -27,10 +24,7 @@ export class Controller {
 
     async getReviews(contReview) {
         const reviews = await this.database.getUsersReviews(contReview).then((reviews) => {
-            reviews.forEach(review => {
-                review.photo = review.photo.toString('utf-8');
-            })
-        return reviews;
+            return reviews;
         });
 
         return reviews;

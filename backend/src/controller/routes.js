@@ -23,7 +23,6 @@ let contPost = 0;
 let contReview = 0; 
 let allPublications = [];
 
-//login
 routes.post('/login', (req, res) => {
     const {email, password} = req.body;
 
@@ -31,8 +30,6 @@ routes.post('/login', (req, res) => {
         const validateUser = users.find(user => user.email === email && bcrypt.compareSync(password, user.password));
         
         if(validateUser !== undefined) {
-            validateUser.photo = validateUser.photo.toString('utf8');
-
             user.idUser = validateUser.idUser;
             user.email = validateUser.email;
             user.name = validateUser.name;
@@ -47,12 +44,10 @@ routes.post('/login', (req, res) => {
     });
 });
 
-
-// criação de conta
 routes.post('/create', async (req, res) => {
-    const {username, email, password, photo} = req.body;
+    const {username, email, password} = req.body;
 
-    const passwordHash = bcrypt.hashSync(password, salt); //criptografando a senha
+    const passwordHash = bcrypt.hashSync(password, salt); 
 
     user.email = email;
     user.name = username;
@@ -64,7 +59,6 @@ routes.post('/create', async (req, res) => {
     }); 
 });
 
-//verificar se email existe
 routes.post('/verificar-email', async (req, res) => {
     const {email} = req.body;
 
@@ -76,29 +70,26 @@ routes.post('/verificar-email', async (req, res) => {
     }
 });
 
-//Esqueci minha senha
 routes.post('/esqueciMinhaSenha', async (req, res) => {
-    const {email} = req.body; //receber um e-mail
+    const {email} = req.body; 
 
     if(await controller.userExists(email) != undefined) {
-        user.email = email;//setando email para usar depois
+        user.email = email;
 
         for(let i = 0; i < 4; i++) {
             validationCode[i] = Math.floor(Math.random() * 9 + 1);
         }
 
-        //se e-mail existe -> enviar link de reset
         const reset = new ResetSenha(email, validationCode.join(''));
         reset.sendEmail();
 
         return res.status(200).send('E-mail enviado com sucesso!');
 
     }else {
-        return res.status(401).send('Usuário não encontrado! Tente novamente'); //se e-mail não existe -> informar usuário
+        return res.status(401).send('Usuário não encontrado! Tente novamente'); 
     }
 });
 
-//validar código
 routes.get('/getCode', async (req, res) => {
     const {confirmationCode} = req.query;
     
@@ -110,22 +101,19 @@ routes.get('/getCode', async (req, res) => {
     }
 });
 
-//alterar a senha
 routes.post('/alterar-senha', async (req, res) => {
-    const {password} = req.body; //recebendo nova senha
-    const passCript = bcrypt.hashSync(password, salt); //criptografando a senha
+    const {password} = req.body; 
+    const passCript = bcrypt.hashSync(password, salt); 
 
-    //alterando no banco de dados
     await database.updatePassword(user.email, passCript).then(() => {
         return res.status(200).send("Senha alterada com sucesso!");
     });
 
 });
 
-//criação da rota post
 routes.post('/post', async (req, res) => {
 
-    const {userEmail, text, nameBook, imageURI} = req.body; // recebendo o objeto review
+    const {userEmail, text, nameBook, imageURI} = req.body; 
 
     const user_owner_post = await controller.userExists(userEmail);
 
@@ -138,7 +126,7 @@ routes.post('/post', async (req, res) => {
     post.user_photo = await database.getUsersById(post.idUser).photo;
     
     try{
-        await database.createPost(post).then(() => { //criando o post no banco de dados
+        await database.createPost(post).then(() => { 
             return res.status(201).send('Post criado com sucesso!');
         });
 
@@ -150,7 +138,7 @@ routes.post('/post', async (req, res) => {
 
 routes.post('/review', async (req, res) => {
 
-    const {userEmail, text, nameBook, imageURI, title, rating} = req.body; // recebendo o objeto review
+    const {userEmail, text, nameBook, imageURI, title, rating} = req.body; 
     const user_owner_post = await controller.userExists(userEmail);
 
     review.imageBook = imageURI;
@@ -164,7 +152,7 @@ routes.post('/review', async (req, res) => {
     review.user_photo = await database.getUsersById(review.idUser).photo;
 
     try{
-        await database.createReview(review).then(() => { //criando o review no banco de dados
+        await database.createReview(review).then(() => { 
             return res.status(201).send('Resenha criada com sucesso!');
         });    
 

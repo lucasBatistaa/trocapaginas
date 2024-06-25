@@ -34,6 +34,7 @@ export default function Login(props) {
     const navigation = useNavigation()
 
     const handleGoogleLogin =  async () => {
+        setMessageError('');
         props.route.params = undefined;
 
         try {
@@ -55,6 +56,7 @@ export default function Login(props) {
 
     const handleSubmitLogin = async () => {
         setIsLoading(true)
+        props.route.params = undefined;
 
         if (email.trim() && password.trim()) {
             try {
@@ -69,7 +71,6 @@ export default function Login(props) {
                 navigation.navigate('InitialPage');
 
             } catch (error) {
-                console.log(error)
                 if (!error?.response) {
                     setMessageError('Erro ao acessar a página');
                 
@@ -93,9 +94,6 @@ export default function Login(props) {
     useEffect(() => {
         if(props.route.params != undefined) {
             setMessageError(props.route.params.error);
-        
-        }else {
-            setMessageError('');
         }
     })
         

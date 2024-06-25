@@ -65,7 +65,7 @@ export default function Publication({ publication }) {
             try {
                 await axios.get('http://192.168.1.64:6005/set-like', {
                     params: {
-                        email: user.email,
+                        email: user?.email,
                         id_publication: id_publication
                     }
                 })
