@@ -13,6 +13,8 @@ export default function Slogan () {
     const navigation = useNavigation()
     const user = useUserStore(state => state.data)
 
+    console.log('Slogan user: ', user)
+
     useEffect(() => {
 
         if (user) {
