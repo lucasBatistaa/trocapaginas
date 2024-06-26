@@ -63,7 +63,7 @@ export default function Publication({ publication }) {
 
         if(clickHeartIcon){
             try {
-                await axios.get('http://192.168.1.64:6005/set-like', {
+                await axios.get('https://trocapaginas-server.onrender.com/set-like', {
                     params: {
                         email: user?.email,
                         id_publication: id_publication
@@ -76,7 +76,7 @@ export default function Publication({ publication }) {
 
         }else {
             try {
-                await axios.get('http://192.168.1.64:6005/set-dislike', {
+                await axios.get('https://trocapaginas-server.onrender.com/set-dislike', {
                     params: {
                         email: user.email,
                         id_publication: id_publication
@@ -91,7 +91,7 @@ export default function Publication({ publication }) {
 
     const getLike = async() => {
         try {
-            const response = await axios.get('http://192.168.1.64:6005/get-like', {
+            const response = await axios.get('https://trocapaginas-server.onrender.com/get-like', {
                 params: {
                     email: user.email,
                     id_publication: id_publication

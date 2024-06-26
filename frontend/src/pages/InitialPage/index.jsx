@@ -216,7 +216,6 @@ export default function InitialPage(props) {
         }
     }
     
-    //impedir o usuário de voltar à tela de login 
     useFocusEffect(
         useCallback(() => {
             const backAction = () => {

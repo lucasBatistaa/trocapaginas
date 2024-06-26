@@ -1,9 +1,7 @@
-import {View, Image, Text, TouchableOpacity, ScrollView} from 'react-native'
+import {View, Image, Text, TouchableOpacity, ScrollView, Alert} from 'react-native'
 import { useEffect, useState } from 'react'
 
 import axios from 'axios'
-import { useUserStore } from '../../store/badgeStore'
-
 import {TabPublications, TabInterests, TabExchange} from './utils/TabView'
 import MenuIcon from '../../assets/menu-icon.svg'
 import LateralMenu from '../../components/Menus/LateralMenu'
@@ -17,16 +15,10 @@ import { THEME } from '../../styles/Theme'
 export default function Profile (props) {
     const [selectedOption, setSelectedOption] = useState('showPublications');
     const [menuVisible, setMenuVisible] = useState(false)
-
-    const [ publications, setPublications ] = useState([])
-    const [ exchange, setExchange ] = useState([])
     const [ tabContent, setTabContent ] = useState(null)
     const [ pageIsLoading, setPageIsLoading ] = useState(true)
     
-    //const user = useUserStore(state => state.data)
-    const user = props.route.params.user;
-
-    console.log(user);
+    const user = props.route.params.user
 
     useEffect(() => {
         renderTabView()
@@ -40,61 +32,75 @@ export default function Profile (props) {
     }
 
     const getPublications = async() => {
-        const response = await axios.post('https://trocapaginas-server.onrender.com/my-publications', {
-            email: user.email
-        })
-        
-        const posts = response.data
-        setPublications(posts)
+        try{
+            const response = await axios.post('https://trocapaginas-server.onrender.com/my-publications', {
+                email: user.email
+            })
+            
+            const posts = response.data
+    
+            if(posts.length === 0) {
+                setTabContent(
+                    <Text style={THEME.fonts.h2.bold}> Nenhuma publicação encontrada </Text>
+                )
+    
+            } else {
+                setTabContent(<TabPublications publications={posts} />)
+            }
+    
+            setPageIsLoading(false)
 
-        if(posts.length === 0) {
-            setTabContent(
-                <Text style={THEME.fonts.h2.bold}> Nenhuma publicação encontrada </Text>
-            )
-
-        } else {
-            setTabContent(<TabPublications publications={posts} />)
+        }catch(error) {
+            Alert.alert('Erro', error)
         }
-
-        setPageIsLoading(false)
+        
     }
 
     const getInterests = async() => {
-        const response = await axios.post('https://trocapaginas-server.onrender.com/my-interests', {
-            email: user.email
-        })
-
-        const interests = response.data
-
-        if(interests.length === 0) {
-            setTabContent(
-                <Text style={THEME.fonts.h2.bold}> Sem interesse registrado </Text>
-            )
-
-        } else {
-            setTabContent(<TabInterests interests={interests} />)
+        try{
+            const response = await axios.post('https://trocapaginas-server.onrender.com/my-interests', {
+                email: user.email
+            })
+    
+            const interests = response.data
+    
+            if(interests.length === 0) {
+                setTabContent(
+                    <Text style={THEME.fonts.h2.bold}> Sem interesse registrado </Text>
+                )
+    
+            } else {
+                setTabContent(<TabInterests interests={interests} />)
+            }
+    
+            setPageIsLoading(false)
+        }catch(error) {
+            Alert.alert('Erro', error)
         }
-
-        setPageIsLoading(false)
     }
 
     const getMyExchanges = async() => {
-        const response = await axios.post('https://trocapaginas-server.onrender.com/my-book-for-exchange', {
-            email: user.email
-        })
-
-        const myExchanges = response.data
-
-        if(myExchanges.length === 0) {
-            setTabContent(
-                <Text style={THEME.fonts.h2.bold}> Nenhum livro disponível para troca </Text>
-            )
-
-        } else {
-            setTabContent(<TabExchange exchange={myExchanges} />)
+        try{
+            const response = await axios.post('https://trocapaginas-server.onrender.com/my-book-for-exchange', {
+                email: user.email
+            })
+    
+            const myExchanges = response.data
+    
+            if(myExchanges.length === 0) {
+                setTabContent(
+                    <Text style={THEME.fonts.h2.bold}> Nenhum livro disponível para troca </Text>
+                )
+    
+            } else {
+                setTabContent(<TabExchange exchange={myExchanges} />)
+            }
+    
+            setPageIsLoading(false)
+        }catch(error) {
+            Alert.alert('Erro', error)
         }
-
-        setPageIsLoading(false)
+        
     } 
 
     const renderTabView = async () => {

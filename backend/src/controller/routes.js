@@ -172,8 +172,6 @@ routes.get('/publications', async (req, res) => {
 
         posts.length === 0 ? contPost = 0 : contPost += 5;
         reviews.length === 0 ? contReview = 0 : contReview += 5;
-
-        controller.sortPublications(publications);
         
         publications.map((publication) => {
             if((!(allPublications.some(pub => pub.id_post === publication.id_post))) || (!(allPublications.some(pub => pub.id_review === publication.id_review)))) {
@@ -181,6 +179,9 @@ routes.get('/publications', async (req, res) => {
             }    
         })
         
+        controller.changeDateFormat(allPublications);
+        controller.sortPublications(allPublications);
+
         return res.status(200).send(allPublications);
 
     }catch(error) {
@@ -212,8 +213,8 @@ routes.post('/my-publications', async (req, res) => {
         const myReviews = await database.getMyReviews(email);
         const myPublications = myPosts.concat(myReviews);
 
+        controller.changeDateFormat(myPublications);
         controller.sortPublications(myPublications);
-        myPublications.reverse();
 
         myPublications.map((publication) => {
             publication.photo = publication.photo.toString('utf8');
