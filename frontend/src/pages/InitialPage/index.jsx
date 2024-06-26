@@ -19,6 +19,7 @@ export default function InitialPage(props) {
     const [pageIsLoading, setPageIsLoading] = useState(true)
     const [loading, setLoading] = useState(false)
     const [bookAccepted, setBookAccepted] = useState(false)
+    const [notificationViewed, setNotificationViewed] = useState(false)
 
     const notification = [];
     const user = useUserStore(state => state.data);
@@ -28,6 +29,7 @@ export default function InitialPage(props) {
 
     let myBook;
     let bookExchange;
+    let dateExchange;
 
     useEffect(()=> {
 
@@ -46,7 +48,7 @@ export default function InitialPage(props) {
     useEffect(() => {
         if(!bookAccepted) {
             const intervalId = setInterval(() => {
-                showNotification(myBook, bookExchange);
+                showNotification(myBook, bookExchange, dateExchange);
     
             }, 10000); 
     
@@ -60,8 +62,6 @@ export default function InitialPage(props) {
             const response = await axios.get('https://trocapaginas-server.onrender.com/login/success')
             
             if(response.data?.email !== null) {
-                console.log(response.data);
-                //setUserData(response.data);
                 saveUser(response.data);
 
             }else {
@@ -74,22 +74,18 @@ export default function InitialPage(props) {
     }
 
     const getNotifications = async () => {
+        setNotificationViewed(false)
         try {
-            const response = await axios.get('http://192.168.43.70:6005/notifications');
+            const response = await axios.get('https://trocapaginas-server.onrender.com/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]
             const receiverBook = notifications[1]
 
-            console.log('owner: ', ownerBook)
-            console.log('receiver: ', receiverBook)
-
             ownerBook.forEach(async (userOwner) => {
                 if((userOwner?.email === user?.email) && userOwner.status === 'pendente') {
                     receiverBook.forEach(async (userReceiver) => {
-                        console.log(userOwner.id_interest)
                         if(userReceiver.id_interest === userOwner.id_interest) {
-                            console.log(userReceiver.name)
                             await Notifications.scheduleNotificationAsync({
                                 content: {
                                   title: `Interesse no livro "${userOwner.title}"`,
@@ -108,7 +104,8 @@ export default function InitialPage(props) {
 
                             myBook = userOwner.title
                             bookExchange = userReceiver.title
-                            showNotification(userOwner.title, userReceiver.title)
+                            dateExchange = userReceiver.dateexchange
+                            showNotification(userOwner.title, userReceiver.title, userReceiver.dateexchange)
                         }
                     })
                 }
@@ -130,7 +127,9 @@ export default function InitialPage(props) {
 
                             let message = `${userOwner.name} ${userDecision} a troca do livro "${userOwner.title}" por "${userReceiver.title}".`
 
-                            userDecision === 'aceitou' ? message += `\n\nRetire o livro solicitado na FUNDACC (R. Santa Cruz, 396 - Centro) no dia 00/00/0000 e deixe o livro "${userReceiver.title}" na mesma data. \n\nAguardamos você!` : message = message
+                            console.log('recebedor : ', userReceiver)
+
+                            userDecision === 'aceitou' ? message += `\n\nRetire o livro solicitado na FUNDACC (R. Santa Cruz, 396 - Centro) no dia ${userReceiver.dateexchange} e deixe o livro "${userReceiver.title}" na mesma data. \n\nAguardamos você!` : message = message
 
                             await Notifications.scheduleNotificationAsync({
                                 content: {
@@ -143,7 +142,10 @@ export default function InitialPage(props) {
                                 }
                             })
 
-                            showNotificationUserReceiver(titleNotification, message)
+                            if(!notificationViewed) {
+                                showNotificationUserReceiver(titleNotification, message)
+
+                            }
 
                         }
                     })
@@ -177,14 +179,14 @@ export default function InitialPage(props) {
   
       };
 
-    const showNotification = (titleBook, titleBookReceiver) => {
+    const showNotification = (titleBook, titleBookReceiver, dateExchange) => {
         if(notification.length > 0) {
             notification.map((message) => {
                 Alert.alert(message.title, message.body, 
                     [
                         {
                             text: 'Sim', 
-                            onPress: () => exchangeAccept(titleBook, titleBookReceiver, 'aceita')
+                            onPress: () => exchangeAccept(titleBook, titleBookReceiver, 'aceita', dateExchange)
                         },
 
                         {
@@ -197,12 +199,13 @@ export default function InitialPage(props) {
     }
 
     const showNotificationUserReceiver = (titleNotification, message) => {
+        setNotificationViewed(true)
         Alert.alert(titleNotification, message, [
             {text: 'Ok'}
         ])
     }
 
-    const exchangeAccept = async (titleBook, titleBookReceiver, status) => {
+    const exchangeAccept = async (titleBook, titleBookReceiver, status, dateExchange) => {
         setBookAccepted(true)
         try {
             await axios.post('https://trocapaginas-server.onrender.com/accept-exchange', {
@@ -211,7 +214,7 @@ export default function InitialPage(props) {
                 status: status
             })
 
-            const message = status === 'aceita' ? `Deixe "${titleBook}" na FUNDACC (R. Santa Cruz, 396 - Centro) até 00/00/0000 e retire o livro "${titleBookReceiver}"\n\nBoa leitura!` : `Você optou por não trocar o livro "${titleBook}" por "${titleBookReceiver}"\n\nNotificaremos o usuário que solicitou a troca. Obrigado por utilizar nosso aplicativo!`
+            const message = status === 'aceita' ? `Deixe "${titleBook}" na FUNDACC (R. Santa Cruz, 396 - Centro) até ${dateExchange} e retire o livro "${titleBookReceiver}"\n\nBoa leitura!` : `Você optou por não trocar o livro "${titleBook}" por "${titleBookReceiver}"\n\nNotificaremos o usuário que solicitou a troca. Obrigado por utilizar nosso aplicativo!`
 
             Alert.alert(`Troca ${status}`, message, [
                     {text: 'Ok'}

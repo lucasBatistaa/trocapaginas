@@ -64,7 +64,7 @@ export default function Book() {
     const getExchanges = async () => {
         
         try {
-            const response = await axios.get('http://192.168.1.64:6005/book-exchanges', {
+            const response = await axios.get('https://trocapaginas-server.onrender.com/book-exchanges', {
                 params: {
                     titleBook: bookTitle
                 }

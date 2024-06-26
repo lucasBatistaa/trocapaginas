@@ -234,9 +234,6 @@ routes.get('/notifications', async (req, res) => {
         const ownerBook = await database.getUserOwnerInfo();
         const receiverBook = await database.getReceiverBookInfo();
 
-        console.log(ownerBook)
-        console.log(receiverBook)
-
         notifications.push(ownerBook, receiverBook);
 
         console.log(notifications)
@@ -285,7 +282,6 @@ routes.post('/save-book', async (req, res) => {
 
         if(choiceUser === 'hasInterest') {
             const interests = await database.getInterests();
-            console.log('a:', imageBook)
 
             interests.forEach((interest) => {
                 console.log(interest.imagebook)
@@ -425,11 +421,16 @@ routes.post('/exchange', async(req, res) => {
 
     const idUserReceiver = await controller.getUserByEmail(email);
 
-    console.log(email, dateExchange, myBook, bookExchange, idUserOwner)
     try{
-        await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange, dateExchange);
+        if(idUserOwner !== idUserReceiver) {
+            await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange, dateExchange);
 
-        return res.status(200).send('Troca solicitada com sucesso!');
+            return res.status(200).send(['Sucesso', 'Troca solicitada com sucesso!']);
+        
+        }else {
+            return res.status(200).send(['Erro','Você não pode trocar um livro com você mesmo!']);
+        }
+        
     
     }catch(error) {
         return res.status(500).send('Erro ao solicitar troca...')
@@ -487,11 +488,11 @@ routes.get('/get-like', async(req, res) => {
     }
 });
 
-routes.get('/my-exchange', async (req, res) => {
-    const { bookTitle } = req.query;
+routes.get('/book-exchanges', async (req, res) => {
+    const { titleBook } = req.query;
     try {
         console.log('entrou na chamada da rota rsrsr');
-        const loadExchange = await database.getExchangeBooks(bookTitle);
+        const loadExchange = await database.getExchangeBooks(titleBook);
         
         return res.status(200).send(loadExchange);
 

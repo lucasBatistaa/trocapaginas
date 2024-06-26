@@ -116,18 +116,17 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
         if (dateString && bookId) {
             try {
 
-                console.log(bookChoiced)
-                await axios.post('http://192.168.43.70:6005/save-book', {
+                await axios.post('http://192.168.1.64:6005/save-book', {
                     userEmail: user.email,
                     imageBook: bookImage,
                     titleBook: bookChoiced,
                     writerBook: bookWriter,
                     ratingBook: 0,
                     bookReview: '',
-                    choiceUser: 'hasInterest'
+                    choiceUser: 'exchange'
                 })
 
-                const response = await axios.post('http://192.168.43.70:6005/exchange', {
+                const response = await axios.post('http://192.168.1.64:6005/exchange', {
                         email: user.email,
                         dateExchange: dateString,
                         myBook: bookChoiced,
@@ -142,6 +141,8 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
                 setBookChoiced('')
                 setDateString('')
                 onClose()
+
+                Alert.alert(`${response.data[0]}`, `${response.data[1]}`)
             
             }catch(error) {
                 console.log('deu ruim')
