@@ -1,7 +1,8 @@
 import { useState } from "react"
-import { View, Text } from "react-native"
+import { View, Text, TouchableOpacity } from "react-native"
 
 import { Input } from "../../../components/Input"
+import ListOfBooks from "../../../components/ListOfBooks"
 import Button from "../../../components/Button"
 import TextArea from "../../../components/Forms/TextArea"
 
@@ -15,6 +16,8 @@ export default function Post({ onSubmit, isLoading=false }) {
     const [ errorText, setErrorText ] = useState(false)
     const [ errorNameBook, setErrorNameBook ] = useState(false)
     const [ messageError, setMessageError ] = useState('')
+
+    const [ visibleModal, setVisibleModal] = useState(false)
 
     const validateForm = () => {
         if (text.trim() && nameBook.trim()) return true
@@ -39,12 +42,15 @@ export default function Post({ onSubmit, isLoading=false }) {
                 maxLength={200}
                 onChangeText={setText}
             />
-            <Input error={errorNameBook}>
-                <Input.Field
-                    placeholder={'Escolher livro'}
-                    onChangeText={setNameBook}
-                />
-            </Input>
+
+            <TouchableOpacity
+                style={styles.input(errorNameBook)}
+                onPress={() => setVisibleModal(true)}
+            >
+                <Text style={styles.textInput}>
+                    { nameBook ? nameBook : 'Escolher livro'}
+                </Text> 
+            </TouchableOpacity>
             {
                 messageError &&
                 <Text
@@ -62,6 +68,8 @@ export default function Post({ onSubmit, isLoading=false }) {
                 isLoading={isLoading}
                 onPress={handleValidatePost}
             />
+
+            <ListOfBooks visibleModal={visibleModal} title='Escolher' onClose={() => setVisibleModal(false)} setNameBook={setNameBook}/>
         </View> 
     )
 }

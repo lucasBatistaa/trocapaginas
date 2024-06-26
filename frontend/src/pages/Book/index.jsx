@@ -62,6 +62,7 @@ export default function Book() {
     }
     
     const getExchanges = async () => {
+        
         try {
             const response = await axios.get('http://192.168.1.64:6005/book-exchanges', {
                 params: {
@@ -77,10 +78,10 @@ export default function Book() {
             setMessageError('Erro ao buscar trocas, tente novamente mais tarde!')
 
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
-    }
+    };
+    
 
     const getRatingBook = async () => {
         try {
@@ -114,7 +115,7 @@ export default function Book() {
     if (loading) return <Loading />
         
     return (
-        <View style={styles.container}>
+        <View key={bookId} style={styles.container}>
 
             {/* Botão de voltar */}
             <Ionicons 

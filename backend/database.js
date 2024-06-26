@@ -192,14 +192,15 @@ export class Database {
         await sql `delete from likes where id_publication = ${id_publication} and id_user = ${id_user}`;
     }
 
-    async getExchangeBooks(titleBook) {
-        const myExchange = await sql `
-        SELECT myexchanges.*, users.name, users.photo, books.review, books.rating
-        FROM myexchanges
-        INNER JOIN users ON myexchanges.id_user = users.id_user
-        INNER JOIN books on myexchanges.imagebook = books.cover
-        WHERE myexchanges.titlebook = ${titleBook}
-        ` 
+    
+    async getExchangeBooks(bookTitle) {
+        const myExchange = await sql`
+            SELECT users.name, users.photo, myexchanges.*
+            FROM users
+            INNER JOIN myexchanges ON myexchanges.id_user = users.id_user
+            WHERE myexchanges.titlebook = ${bookTitle}
+        `;
         return myExchange;
     }
+    
 }
