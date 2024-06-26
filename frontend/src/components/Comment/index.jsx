@@ -77,7 +77,7 @@ export default function Comment({ idPublication, modalVisible, onClose }) {
             const sendCommentDatabase = {email, id, comment};
 
             try{ 
-              await axios.post('http://192.168.1.64:6005/comment', sendCommentDatabase).then(response => {
+              await axios.post('http://192.168.0.42:6005/comment', sendCommentDatabase).then(response => {
 
                 setAllComments(prevComments => [...prevComments, newComment]);
                 setTextComment('');

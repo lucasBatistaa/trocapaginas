@@ -49,7 +49,7 @@ export default function Book() {
         getBookReviews()
 
         // TROCAS DISPONÍVEIS
-        //getExchanges()
+        getExchanges()
 
         //TESTE 
         setBookExchanges([
@@ -80,20 +80,24 @@ export default function Book() {
     }
     
     const getExchanges = async () => {
+        console.log(bookTitle);
         try {
-            const response = await axios.get()
-            const exchanges = response.data
-
-            setBookExchanges(exchanges)
-
+            console.log('entrou na chamada');
+            const response = await axios.get('http://localhost:6005/my-exchange', {
+                params: {
+                    bookTitle: bookTitle
+                }
+            });
+            const exchanges = response.data;
+    
+            setBookExchanges(exchanges);
         } catch (error) {
-            console.error(error)
-
+            console.error(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
-    }
+    };
+    
 
     const getRatingBook = async () => {
         try {

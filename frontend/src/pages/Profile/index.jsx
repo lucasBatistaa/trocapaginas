@@ -98,25 +98,6 @@ export default function Profile (props) {
         setPageIsLoading(false)
     } 
 
-    const getExchange = async() => {
-        const response = await axios.get('http://localhost:6005/my-exchange', {
-            email: user.email
-        })
-
-        const exchange =response.data;
-        
-        if(exchange.length === 0) {
-            setExchange(
-                <Text style={THEME.fonts.h2.bold}> Sem trocas registradas </Text>
-            )
-        
-        } else {
-            setTabContent(<TabExchange exchange={exchange}/>)
-        }
-
-        setPageIsLoading(false)
-
-    }
 
     const renderTabView = async () => {
         setPageIsLoading(true)

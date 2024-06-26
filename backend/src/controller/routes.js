@@ -479,15 +479,17 @@ routes.get('/get-like', async(req, res) => {
 });
 
 routes.get('/my-exchange', async (req, res) => {
-    const {email} = req.query;
-
+    const { bookTitle } = req.query;
+    console.log('requisição do título do livro é', bookTitle);
     try {
-        const loadExchange = await database.getExchangeBooks(email);
-        console.log('Esse é o resultado da consulta',loadExchange);
+        console.log('entrou na chamada da rota rsrsr');
+        const loadExchange = await database.getExchangeBooks(bookTitle);
+        console.log('Esse é o resultado da consulta', loadExchange);
         return res.status(200).send(loadExchange);
     } catch (error) {
-        return res.status(500).send('Erro interno ao carregar as o livros para troca');
+        return res.status(500).send('Erro interno ao carregar as trocas');
     }
-    });
+});
+
     
 export default routes;
