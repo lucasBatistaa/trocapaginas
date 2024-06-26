@@ -75,6 +75,8 @@ passport.use(
 
             }else {
                 await database.updatePhotoUser(user.email, user.photo);
+                user.name = await database.getUsername(user.email);
+                
                 console.log('Usuário já cadastrado!');
             }
 
@@ -130,8 +132,6 @@ app.get('/success', (req, res) => {
 });
 
 app.get('/login/success', (req, res) => {
-
-  console.log(user.email);
   res.send(user);
 });
 

@@ -126,7 +126,7 @@ export default function Book() {
     if (loading) return <Loading />
         
     return (
-        <View style={styles.container}>
+        <View key={bookId} style={styles.container}>
 
             {/* Botão de voltar */}
             <Ionicons 

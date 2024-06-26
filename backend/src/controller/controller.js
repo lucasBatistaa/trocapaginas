@@ -30,9 +30,34 @@ export class Controller {
         return reviews;
     }
 
+    changeDateFormat(publications) {
+        publications.forEach((publication) => {
+            if(publication.timepost.includes('PM') || publication.timepost.includes('AM')) {
+                let [date, time] = publication.timepost.split(', ');
+                const [month, day, year] = date.split('/');
+
+                const [timePart, amOrPm] = time.split(' ');
+                let [hours, minutes, seconds] = timePart.split(':');
+
+                if(amOrPm === 'PM' && hours < 12) {
+                    hours = parseInt(hours) +12;
+        
+                }else if(amOrPm === 'AM' && hours === '12') {
+                    hours = 0;
+                }
+
+                time = `${hours}:${minutes}:${seconds}`;
+
+                publication.timepost = `${day}/${month}/${year}, ${time}`
+            }
+        })
+
+        return publications
+    }
+
     sortPublications(publications) {
         publications.sort((a, b) => {
-            return new Date(a.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(b.timepost.split(', ')[0].split('/').reverse().join('-'));
+            return new Date(b.timepost.split(', ')[0].split('/').reverse().join('-')) - new Date(a.timepost.split(', ')[0].split('/').reverse().join('-'));
         })
     }
 

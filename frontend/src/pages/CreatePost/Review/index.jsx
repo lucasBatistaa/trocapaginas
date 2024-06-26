@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { View, TextInput, TouchableOpacity, Text } from "react-native"
+import { View, TouchableOpacity, Text } from "react-native"
 
 import Button from '../../../components/Button'
 import TextArea from "../../../components/Forms/TextArea"
@@ -8,6 +8,7 @@ import { Input } from '../../../components/Input'
 import { styles } from "./style"
 import { THEME } from "../../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import ListOfBooks from "../../../components/ListOfBooks"
 
 export default function Review({ onSubmit, isLoading=false}) {
     const [ title, setTitle ] = useState('')
@@ -18,6 +19,8 @@ export default function Review({ onSubmit, isLoading=false}) {
     const [ errorText, setErrorText ] = useState('')
     const [ errorNameBook, setErrorNameBook ] = useState('')
     const [ messageError, setMessageError ] = useState('')
+
+    const [ visibleModal, setVisibleModal] = useState(false)
 
     const [ starsAvaliation, setStarsAvaliation ] = useState({
         0: false,
@@ -45,7 +48,7 @@ export default function Review({ onSubmit, isLoading=false}) {
     }
 
     const validateForm = () => {
-        if (title.trim() && text.trim() && nameBook.trim()) return true
+        if (title.trim() && text.trim() && nameBook.trim() && totalStarsAvaliation > 0) return true
        
         title.trim() ? setErrorTitle(false) : setErrorTitle(true)
         text.trim() ? setErrorText(false) : setErrorText(true)
@@ -78,12 +81,14 @@ export default function Review({ onSubmit, isLoading=false}) {
                 onChangeText={setText}
             />
 
-            <Input error={errorNameBook}>
-                <Input.Field 
-                    placeholder={'Escolher livro'}
-                    onChangeText={setNameBook}
-                />
-            </Input>
+            <TouchableOpacity
+                style={styles.input(errorNameBook)}
+                onPress={() => setVisibleModal(true)}
+            >
+                <Text style={styles.textInput}>
+                    { nameBook ? nameBook : 'Escolher livro'}
+                </Text> 
+            </TouchableOpacity>
 
             <View style={styles.avaliation}>
                 {
@@ -129,6 +134,8 @@ export default function Review({ onSubmit, isLoading=false}) {
                 isLoading={isLoading}
                 onPress={handleValidatePost}
             />
+
+            <ListOfBooks visibleModal={visibleModal} title='Escolher' onClose={() => setVisibleModal(false)} setNameBook={setNameBook}/>
         </View>
     )
 }
