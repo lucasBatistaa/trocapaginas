@@ -23,9 +23,13 @@ export const styles = StyleSheet.create({
 
     post: {
         flex: 1,
-        gap: 12,
+        gap: 8,
         justifyContent: 'space-between'
     },  
+
+    viewStars: {
+        flexDirection: 'row',
+    },
 
     icons: {
         flexDirection: 'row',

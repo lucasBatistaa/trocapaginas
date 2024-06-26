@@ -239,6 +239,7 @@ export default function InitialPage(props) {
             const response = await axios.get('https://trocapaginas-server.onrender.com/publications')
             const posts = response.data
     
+            console.log(posts[0])
             setPublications(posts)
             setPageIsLoading(false)
         }catch (error) {
@@ -257,7 +258,8 @@ export default function InitialPage(props) {
                 <FlatList
                     contentContainerStyle = {styles.viewPublications}
                     data={publications}
-                    renderItem={({ item }) => <Publication publication = {item}/>}
+                    renderItem={({ item }) => <Publication publication={item} />}
+                    keyExtractor={(item) => item.id_post}
                     refreshing={loading}
                     onRefresh={getPublications}
                 />

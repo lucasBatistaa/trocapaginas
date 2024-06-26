@@ -18,6 +18,7 @@ export default function BookTemplate({ id, image, title, author, description }) 
                     bookDescription: description,
                 })
             }}
+            key={id}
         >
             <Image
                 style={styles.image}

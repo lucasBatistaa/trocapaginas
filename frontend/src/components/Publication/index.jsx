@@ -14,7 +14,8 @@ import { useUserStore } from '../../store/badgeStore'
 export default function Publication({ publication }) {
     const [ clickHeartIcon, setClickHeartIcon ] = useState(false)
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
-    const [ userOwner, setUserOwner ] = useState({})
+
+    const stars = new Array(5).fill(null)
 
     const navigation = useNavigation()
 
@@ -122,9 +123,24 @@ export default function Publication({ publication }) {
             </TouchableOpacity>
             <View style={styles.publication}>
                 <View style={styles.post}>
+
+                    {/* <Text style={THEME.fonts.link}>
+                        {publication.namebook}
+                    </Text> */}
+
                     <Text style={THEME.fonts.text}>
                         {publication.content}
                     </Text>
+
+
+                    <View style={styles.viewStars}>
+                        { 
+                            publication.rating &&
+                                stars.map((star, index) => (
+                                    <Ionicons name={publication.rating - 1 >= index ? 'star' : 'star-outline'} size={16} color={THEME.colors.brownLight} />
+                                ))
+                        }
+                    </View>
 
                     <View style={styles.icons}>
                         <TouchableOpacity 
@@ -149,6 +165,7 @@ export default function Publication({ publication }) {
                 
                 <Image 
                     source={{uri: publication.image_post ? publication.image_post : 'https://cdn2.iconfinder.com/data/icons/new-year-resolutions/64/resolutions-05-256.png'}} 
+                    // source={{ uri: publication.image_post }}
                     style={styles.imagePost}
                 />
             </View>
