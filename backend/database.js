@@ -13,6 +13,12 @@ export class Database {
         return users_with_id;
     }
 
+    async getUsername(email) {
+        const username = await sql `select name from users where email = ${email}`
+
+        return username
+    }
+
     async updatePassword(email, password) {
         await sql `update users set password = ${password} where email = ${email}`;
     }
