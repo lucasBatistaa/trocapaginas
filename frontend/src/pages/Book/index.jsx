@@ -80,7 +80,7 @@ export default function Book() {
     }
     
     const getExchanges = async () => {
-        console.log(bookTitle);
+        
         try {
             console.log('entrou na chamada');
             const response = await axios.get('http://localhost:6005/my-exchange', {
