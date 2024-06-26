@@ -10,6 +10,7 @@ export default function TopMenu({ search, onPress }) {
     const user = useUserStore(state => state.data) 
     const navigation = useNavigation()
 
+    console.log(user)
     return (
             <View style={styles.container}>
                 <TouchableOpacity 

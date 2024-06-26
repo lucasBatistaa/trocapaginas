@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { View, Image, Modal, Text, TouchableWithoutFeedback, TouchableOpacity } from "react-native"
+import { View, Image, Modal, Text, TouchableWithoutFeedback, TouchableOpacity, Alert } from "react-native"
 
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { Input } from '../Input'
@@ -10,8 +10,9 @@ import axios from "axios";
 import { styles } from "./styles"
 import { THEME } from "../../styles/Theme"
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useUserStore } from "../../store/badgeStore";
 
-export default function ExchangeForm({ visibleExchangeForm, onClose }) {
+export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, idUser }) {
     const [ date, setDate ] = useState(new Date())
     const [ dateString, setDateString ] = useState('')
     const [ dateIsChoiced, setDateIsChoiced ] = useState(false)
@@ -20,13 +21,16 @@ export default function ExchangeForm({ visibleExchangeForm, onClose }) {
     const [ search, setSearch ] = useState('')
     const [ books, setBooks ] = useState([])
     const [ bookChoiced, setBookChoiced] = useState('')
+    const [ bookImage, setBookImage ] = useState('')
     const [ bookId, setBookId ] = useState('')
+    const [bookWriter, setBookWriter] = useState('')
     const [ errorBook, setErrorBook ] = useState(false)
     const [ errorInput, setErrorInput ] = useState({
         date: false,
         book: false,
     })
 
+    const user = useUserStore(state => state.data)
     useEffect(() => {
         if (dateIsChoiced) {
             dateToString()
@@ -108,17 +112,42 @@ export default function ExchangeForm({ visibleExchangeForm, onClose }) {
     }
 
     // ENVIAR DADOS DE TROCA PARA O BACKEND
-    const handleSendExchangeConfirmation = () => {
-        console.log(dateString)
+    const handleSendExchangeConfirmation = async () => {
         if (dateString && bookId) {
-            console.log('ENVIAR DADOS PARA O BACKEND', date, bookId)
+            try {
 
-            setErrorInput({ date: false, book: false})
-            setBookId('')
-            setDateIsChoiced(false)
-            setBookChoiced('')
-            setDateString('')
-            onClose()
+                console.log(bookChoiced)
+                await axios.post('http://192.168.43.70:6005/save-book', {
+                    userEmail: user.email,
+                    imageBook: bookImage,
+                    titleBook: bookChoiced,
+                    writerBook: bookWriter,
+                    ratingBook: 0,
+                    bookReview: '',
+                    choiceUser: 'hasInterest'
+                })
+
+                const response = await axios.post('http://192.168.43.70:6005/exchange', {
+                        email: user.email,
+                        dateExchange: dateString,
+                        myBook: bookChoiced,
+                        bookExchange: titleBook,
+                        idUserOwner: idUser
+                    }
+                )
+
+                setErrorInput({ date: false, book: false})
+                setBookId('')
+                setDateIsChoiced(false)
+                setBookChoiced('')
+                setDateString('')
+                onClose()
+            
+            }catch(error) {
+                console.log('deu ruim')
+                Alert.alert('Erro', error)
+            }
+
         } else {
             setErrorInput({...errorInput, date: dateString.trim() ? true : true})
             setErrorInput({...errorInput, book: bookId ? false : true})
@@ -240,6 +269,8 @@ export default function ExchangeForm({ visibleExchangeForm, onClose }) {
                                         onPress={() => {
                                             setBookId(book.id)
                                             setBookChoiced(book.title)
+                                            setBookImage(book.image)
+                                            setBookWriter(book.authors)
                                         }}
                                     >
                                         {

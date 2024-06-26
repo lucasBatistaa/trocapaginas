@@ -20,6 +20,8 @@ export default function Profile (props) {
     
     const user = props.route.params.user
 
+    console.log(user)
+
     useEffect(() => {
         renderTabView()
 

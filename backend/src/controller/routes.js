@@ -234,6 +234,9 @@ routes.get('/notifications', async (req, res) => {
         const ownerBook = await database.getUserOwnerInfo();
         const receiverBook = await database.getReceiverBookInfo();
 
+        console.log(ownerBook)
+        console.log(receiverBook)
+
         notifications.push(ownerBook, receiverBook);
 
         console.log(notifications)
@@ -282,6 +285,11 @@ routes.post('/save-book', async (req, res) => {
 
         if(choiceUser === 'hasInterest') {
             const interests = await database.getInterests();
+            console.log('a:', imageBook)
+
+            interests.forEach((interest) => {
+                console.log(interest.imagebook)
+            })
 
             if(!interests.find((interest) => interest.imagebook === imageBook)) {
                 await database.setInterest(id_user, titleBook, imageBook, writerBook);
@@ -413,13 +421,13 @@ routes.get('/loadComments', async(req, res) => {
 });
 
 routes.post('/exchange', async(req, res) => {
-    const {email, dateExchange, localExchange, myBook, bookExchange, emailOwnerBook} = req.body;
+    const {email, dateExchange, myBook, bookExchange, idUserOwner} = req.body;
 
     const idUserReceiver = await controller.getUserByEmail(email);
-    const idUserOwner = await controller.getUserByEmail(emailOwnerBook);
 
+    console.log(email, dateExchange, myBook, bookExchange, idUserOwner)
     try{
-        await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange);
+        await database.setExchangeWish(idUserOwner, idUserReceiver, 'pendente', myBook, bookExchange, dateExchange);
 
         return res.status(200).send('Troca solicitada com sucesso!');
     
@@ -479,13 +487,13 @@ routes.get('/get-like', async(req, res) => {
     }
 });
 
-routes.get('/my-exchange', async (req, res) => {
-    const {email} = req.query;
+routes.get('/book-exchanges', async (req, res) => {
+    const {titleBook} = req.query;
 
     try {
-        const loadExchange = await database.getExchangeBooks(email);
-        console.log('Esse é o resultado da consulta',loadExchange);
+        const loadExchange = await database.getExchangeBooks(titleBook);
         return res.status(200).send(loadExchange);
+
     } catch (error) {
         return res.status(500).send('Erro interno ao carregar as o livros para troca');
     }

@@ -9,7 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 
 import { useNavigation } from '@react-navigation/native';
 
-export default function ExchangeBook({ idUser, username, imageUser }) {
+export default function ExchangeBook({ idUser, username, imageUser, titleBook }) {
     const [ visibleExchangeForm, setVisibleExchangeForm ] = useState(false)
     const navigation = useNavigation()
 
@@ -20,7 +20,7 @@ export default function ExchangeBook({ idUser, username, imageUser }) {
                 // onPress={() => navigation.navigate('Profile', {user: idUser})}
             >
                 <Image 
-                    source={imageUser}
+                    source={{uri: imageUser}}
                     style={styles.image}
                     width={32}
                     height={32}
@@ -46,6 +46,8 @@ export default function ExchangeBook({ idUser, username, imageUser }) {
             <ExchangeForm 
                 visibleExchangeForm={visibleExchangeForm}
                 onClose={() => setVisibleExchangeForm(false)}
+                titleBook={titleBook}
+                idUser={idUser}
             />
         </View>
     )

@@ -31,7 +31,6 @@ export default function EditProfile () {
                 newPassword: password
             })
 
-            user.name = newName
             newInfoUser(user)
 
             Alert.alert('Sucesso', 'Informações do perfil atualizadas!', [

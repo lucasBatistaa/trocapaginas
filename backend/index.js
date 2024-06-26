@@ -75,8 +75,10 @@ passport.use(
 
             }else {
                 await database.updatePhotoUser(user.email, user.photo);
-                user.name = await database.getUsername(user.email);
-                
+                const username = await database.getUsername(user.email);
+
+                user.name = username[0].name;
+
                 console.log('Usuário já cadastrado!');
             }
 

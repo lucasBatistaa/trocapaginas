@@ -407,9 +407,5 @@ CREATE TABLE comment (
 `.then(() => {
 	console.log('tabela de likes criada')
 })*/
-
-const users = await sql `
-	select * from users
-`
-
-console.log(users)
+const username = await sql `select name from users where email = ${'mariaeduardadefaria15@gmail.com'}`
+console.log(username[0].name)

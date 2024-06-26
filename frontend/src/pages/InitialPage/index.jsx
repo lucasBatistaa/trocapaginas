@@ -30,6 +30,7 @@ export default function InitialPage(props) {
     let bookExchange;
 
     useEffect(()=> {
+
         // user.logout()
 
         if(props.route.params?.page) {
@@ -59,6 +60,7 @@ export default function InitialPage(props) {
             const response = await axios.get('https://trocapaginas-server.onrender.com/login/success')
             
             if(response.data?.email !== null) {
+                console.log(response.data);
                 //setUserData(response.data);
                 saveUser(response.data);
 
@@ -73,16 +75,21 @@ export default function InitialPage(props) {
 
     const getNotifications = async () => {
         try {
-            const response = await axios.get('https://trocapaginas-server.onrender.com/notifications');
+            const response = await axios.get('http://192.168.43.70:6005/notifications');
             const notifications = response.data;
 
             const ownerBook = notifications[0]
             const receiverBook = notifications[1]
 
+            console.log('owner: ', ownerBook)
+            console.log('receiver: ', receiverBook)
+
             ownerBook.forEach(async (userOwner) => {
                 if((userOwner?.email === user?.email) && userOwner.status === 'pendente') {
                     receiverBook.forEach(async (userReceiver) => {
+                        console.log(userOwner.id_interest)
                         if(userReceiver.id_interest === userOwner.id_interest) {
+                            console.log(userReceiver.name)
                             await Notifications.scheduleNotificationAsync({
                                 content: {
                                   title: `Interesse no livro "${userOwner.title}"`,

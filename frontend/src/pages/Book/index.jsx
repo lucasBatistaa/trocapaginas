@@ -21,13 +21,10 @@ export default function Book() {
     const route = useRoute()
     const { bookId, bookImage, bookTitle, bookAuthor, bookDescription } = route.params
 
-    const [ reviews, setReviews ] = useState([])
     const [ messageError, setMessageError ] = useState('')
-    const [ bookExchanges, setBookExchanges ] = useState([])
-    const [ commentsBook, setCommentsBook ] = useState([])
-
     const [ tabView, setTabView ] = useState('review')
     const [ avaliation, setAvalation ] = useState(0)
+    const [ tabContent, setTabContent ] = useState(null) 
     
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
     const [ modalAvaliationVisible, setModalAvaliationVisible ] = useState(false)
@@ -39,25 +36,10 @@ export default function Book() {
     const stars = Array.from({ length: 5 }, (_, index) => index <= avaliation - 1 ? true : false)
 
     useEffect(() => {
-        setLoading(true)
-        // CHAMADAS DA API
-
-        // AVALIAÇÃO DO LIVRO
         getRatingBook()
+        renderTabView() 
 
-        // PUBLICAÇÕES REFERENTES AO LIVRO (ID - bookId)
-        getBookReviews()
-
-        // TROCAS DISPONÍVEIS
-        //getExchanges()
-
-        //TESTE 
-        setBookExchanges([
-            {idUser: '3', username: 'Lucas', imageUser: 'book.png'},
-            {idUser: '5', username: 'Stephanie', imageUser: 'book.png'}
-        ])
-
-    }, [])
+    }, [tabView])
 
     const getBookReviews = async() => {
         try {
@@ -69,7 +51,7 @@ export default function Book() {
 
             const reviews = response.data
 
-            reviews.length > 0 && tabView === 'review' ? setReviews(reviews) : setMessageError('Nenhuma resenha disponível para esse livro')
+            reviews.length > 0 ? setTabContent(<TabReviews publications={reviews} />) : setTabContent(<Text style={THEME.fonts.h2.bold}> Nenhuma resenha disponível para esse livro </Text>)
 
         } catch (error) {
             setMessageError(error)
@@ -81,13 +63,18 @@ export default function Book() {
     
     const getExchanges = async () => {
         try {
-            const response = await axios.get()
-            const exchanges = response.data
+            const response = await axios.get('http://192.168.1.64:6005/book-exchanges', {
+                params: {
+                    titleBook: bookTitle
+                }
+            })
+    
+            const exchanges = response.data;
 
-            setBookExchanges(exchanges)
+            exchanges.length > 0 ? setTabContent(<TabExchanges bookExchanges={exchanges} />) : setTabContent(<Text style={THEME.fonts.h2.bold}> Nenhuma troca disponível para esse livro </Text>)
 
         } catch (error) {
-            console.error(error)
+            setMessageError('Erro ao buscar trocas, tente novamente mais tarde!')
 
         } finally {
             setLoading(false)
@@ -109,13 +96,18 @@ export default function Book() {
         }
     }
 
-    const renderTabView = () => {
+    const renderTabView = async() => {
+        setLoading(true)
+        setTabContent(null)
+
         switch (tabView) {
             case 'review':
-                return <TabReviews publications={reviews} />
+                await getBookReviews()
+                break 
         
             case 'exchange': 
-                return <TabExchanges bookExchanges={bookExchanges} />
+                await getExchanges()
+                break
         }
     }
 
@@ -217,16 +209,17 @@ export default function Book() {
 
             {/* Conteúdo das Abas */}
 
-            {/* {
+            {
                 messageError && <Text style={[THEME.fonts.h2.bold, {marginTop: 20, marginLeft: 20}]}>{messageError}</Text>
-            } */}
+            }
 
             <ScrollView
                 contentContainerStyle={styles.viewContentOfTab}
                 showsVerticalScrollIndicator={false}
             >
                 { 
-                    renderTabView()
+                    tabContent
+                    
                 }
             </ScrollView>
 

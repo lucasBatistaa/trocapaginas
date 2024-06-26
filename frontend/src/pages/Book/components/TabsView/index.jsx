@@ -20,11 +20,13 @@ function TabExchanges({ bookExchanges }) {
         <>
             {
                 bookExchanges.map((exchange, index) => (
+                    console.log(exchange),
                     <ExchangeBook 
                         key={index}
-                        idUser={exchange.idUser}
-                        imageUser={exchange.imageUser}
-                        username={exchange.username}
+                        idUser={exchange.id_user}
+                        imageUser={exchange.photo}
+                        username={exchange.name}
+                        titleBook= {exchange.titlebook}
                     />
                 ))
             }
