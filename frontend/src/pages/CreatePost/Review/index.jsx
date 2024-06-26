@@ -48,7 +48,7 @@ export default function Review({ onSubmit, isLoading=false}) {
     }
 
     const validateForm = () => {
-        if (title.trim() && text.trim() && nameBook.trim()) return true
+        if (title.trim() && text.trim() && nameBook.trim() && totalStarsAvaliation > 0) return true
        
         title.trim() ? setErrorTitle(false) : setErrorTitle(true)
         text.trim() ? setErrorText(false) : setErrorText(true)

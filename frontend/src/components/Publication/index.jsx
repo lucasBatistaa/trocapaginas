@@ -17,6 +17,8 @@ export default function Publication({ publication }) {
 
     const stars = new Array(5).fill(null)
 
+    console.log(publication.rating)
+
     const navigation = useNavigation()
 
     const id_publication = publication.id_post !== undefined ? publication.id_post : publication.id_review;
@@ -134,12 +136,21 @@ export default function Publication({ publication }) {
 
 
                     <View style={styles.viewStars}>
-                        { 
-                            publication.rating &&
-                                stars.map((star, index) => (
-                                    <Ionicons name={publication.rating - 1 >= index ? 'star' : 'star-outline'} size={16} color={THEME.colors.brownLight} />
+                        {
+                            parseInt(publication.rating) > 0 && (
+                                stars.map((_, index) => (
+                                    <Text key={index}>
+                                        <Ionicons
+                                            name={publication.rating - 1 >= index ? 'star' : 'star-outline'}
+                                            size={16}
+                                            color={THEME.colors.brownLight}
+                                        />
+                                    </Text>
                                 ))
+                            )
                         }
+
+                        
                     </View>
 
                     <View style={styles.icons}>
