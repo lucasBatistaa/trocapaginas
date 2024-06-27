@@ -31,8 +31,9 @@ export default function EditProfile () {
                 newPassword: password
             })
 
-            newInfoUser(user)
 
+            user.name = newName
+            
             Alert.alert('Sucesso', 'Informações do perfil atualizadas!', [
                 {text: 'OK', onPress: () => navigation.navigate('Profile', {user: user})}
             ])

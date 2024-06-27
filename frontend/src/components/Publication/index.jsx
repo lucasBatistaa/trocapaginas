@@ -16,9 +16,6 @@ export default function Publication({ publication }) {
     const [ modalCommentVisible, setModalCommentVisible ] = useState(false)
 
     const stars = new Array(5).fill(null)
-
-    console.log(publication.rating)
-
     const navigation = useNavigation()
 
     const id_publication = publication.id_post !== undefined ? publication.id_post : publication.id_review;
@@ -31,16 +28,17 @@ export default function Publication({ publication }) {
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: `${publication.textPost}`,
+                message: `*Olha esse post do Troca Páginas!* \n\n> ${publication.content}\n\nConfira: https://ifspcaragua.com/index.php/2024/03/15/troca-paginas/`,
                 // url: `../../assets/foto-perfil.png`
             })
 
             if (result.action === Share.sharedAction) {
-                console.log(result)
-                console.log('Compartilhado')
+                console.log('Compartilhado com sucesso!')
 
             } else if (result.action === Share.dismissedAction) {
-                console.log('Não compartilhado')
+                Alert.alert('Não compartilhado', 'Não foi possível compartilhar a publicação', [
+                    {text: 'Ok'}
+                ])
             }
         } catch (error) {
             console.log(error.message)

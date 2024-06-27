@@ -127,8 +127,6 @@ export default function InitialPage(props) {
 
                             let message = `${userOwner.name} ${userDecision} a troca do livro "${userOwner.title}" por "${userReceiver.title}".`
 
-                            console.log('recebedor : ', userReceiver)
-
                             userDecision === 'aceitou' ? message += `\n\nRetire o livro solicitado na FUNDACC (R. Santa Cruz, 396 - Centro) no dia ${userReceiver.dateexchange} e deixe o livro "${userReceiver.title}" na mesma data. \n\nAguardamos você!` : message = message
 
                             await Notifications.scheduleNotificationAsync({
@@ -248,7 +246,6 @@ export default function InitialPage(props) {
             const response = await axios.get('https://trocapaginas-server.onrender.com/publications')
             const posts = response.data
     
-            console.log(posts[0])
             setPublications(posts)
             setPageIsLoading(false)
         }catch (error) {

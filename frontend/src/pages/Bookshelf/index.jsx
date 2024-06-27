@@ -16,33 +16,45 @@ export default function Bookshelf() {
     useEffect(() => {
         googleBooks()
 
+
     }, [])
 
     const googleBooks = async () => {
-        const response = await axios.get('https://www.googleapis.com/books/v1/volumes?', {
-            params: {
-                q: search,
-                subject: search,
-                fields: 'items(id,volumeInfo(title,authors,description,imageLinks))',
-                maxResults: 40,
-                langRestrict: 'pt',
-                printType: 'books',
-                lang: 'pt-BR',
-                // 'key': 'AIzaSyCdXretFQnJh86xMg1HvIlEVDloTNHo3BE'
-            }}
-        )
+        try {
+            const response = await axios.get('https://www.googleapis.com/books/v1/volumes?', {
+                params: {
+                    q: search,
+                    subject: search,
+                    fields: 'items(id,volumeInfo(title,authors,description,imageLinks))',
+                    maxResults: 40,
+                    langRestrict: 'pt',
+                    printType: 'books',
+                    lang: 'pt-BR',
+                    // 'key': 'AIzaSyCdXretFQnJh86xMg1HvIlEVDloTNHo3BE'
+                }
+            })
 
-        const books = response.data.items
+            const booksAPI = response.data.items
 
-        setBooks(
-            books.map(book => ({
-                id: book.id,
-                image: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : null,
-                title: book.volumeInfo.title ? book.volumeInfo.title : 'Título desconhecido',
-                authors: book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Autor desconhecido',
-                description: book.volumeInfo.description
-            }))
-        )
+            booksAPI.map((book) => {
+                if(book.volumeInfo.imageLinks) {
+                    book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace('http', 'https')
+                }
+            })
+
+            setBooks(
+                booksAPI.map(book => ({
+                    id: book.id,
+                    image: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : null,
+                    title: book.volumeInfo.title ? book.volumeInfo.title : 'Título desconhecido',
+                    authors: book.volumeInfo.authors ? book.volumeInfo.authors[0] : 'Autor desconhecido',
+                    description: book.volumeInfo.description
+                }))
+            )
+        }catch (error) {
+            console.log(error)
+        }
+        
     }
 
     return (

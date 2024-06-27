@@ -47,6 +47,12 @@ export default function ListOfBooks({title, visibleModal, onClose, bookId, setNa
             )
     
             let booksOfAPI = response.data.items
+
+            booksOfAPI.map((book) => {
+                if(book.volumeInfo.imageLinks) {
+                    book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace('http', 'https')
+                }
+            })
     
             setBooks(
                 booksOfAPI.map(book => ({

@@ -407,5 +407,19 @@ CREATE TABLE comment (
 `.then(() => {
 	console.log('tabela de likes criada')
 })*/
-const username = await sql `select name from users where email = ${'mariaeduardadefaria15@gmail.com'}`
-console.log(username[0].name)
+
+
+const booksImage = await sql `select imagebook from myexchanges`
+
+booksImage.map((book) => {
+	if(book.imagebook.split(':')[0] === 'http') {
+		const aux = book.imagebook
+
+		book.imagebook = book.imagebook.replace('http', 'https')
+
+		sql `update myexchanges
+		set imagebook = ${book.imagebook} where imagebook = ${aux}`.then(() => {
+			console.log('ok')
+		})
+	}
+})

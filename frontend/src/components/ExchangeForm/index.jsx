@@ -60,6 +60,12 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
             )
     
             let booksOfAPI = response.data.items
+
+            booksOfAPI.map((book) => {
+                if(book.volumeInfo.imageLinks) {
+                    book.volumeInfo.imageLinks.thumbnail = book.volumeInfo.imageLinks.thumbnail.replace('http', 'https')
+                }
+            })
     
             setBooks(
                 booksOfAPI.map(book => ({
@@ -116,7 +122,7 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
         if (dateString && bookId) {
             try {
 
-                await axios.post('http://192.168.1.64:6005/save-book', {
+                await axios.post('https://trocapaginas-server.onrender.com/save-book', {
                     userEmail: user.email,
                     imageBook: bookImage,
                     titleBook: bookChoiced,
@@ -126,7 +132,7 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
                     choiceUser: 'exchange'
                 })
 
-                const response = await axios.post('http://192.168.1.64:6005/exchange', {
+                const response = await axios.post('https://trocapaginas-server.onrender.com/exchange', {
                         email: user.email,
                         dateExchange: dateString,
                         myBook: bookChoiced,
@@ -145,7 +151,6 @@ export default function ExchangeForm({ visibleExchangeForm, onClose, titleBook, 
                 Alert.alert(`${response.data[0]}`, `${response.data[1]}`)
             
             }catch(error) {
-                console.log('deu ruim')
                 Alert.alert('Erro', error)
             }
 
